@@ -1,0 +1,2232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>PIVOT — Church Edition</title>
+    <script data-goatcounter="https://pivot.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+        overscroll-behavior-y: contain;
+    }
+
+    body {
+        min-height: 100vh;
+        background: linear-gradient(160deg, #0d3349 0%, #1a5276 55%, #0d3349 100%);
+        font-family: Georgia, serif;
+        color: #f0ede6;
+        padding: 10px 10px 28px;
+        -webkit-text-size-adjust: 100%;
+        overscroll-behavior-y: contain;
+    }
+
+    h1 {
+        font-size: 23px;
+        color: #f9d976;
+        letter-spacing: 3px;
+        text-align: center;
+        margin: 0;
+    }
+
+    .eyebrow, .sub {
+        font-size: 10px;
+        letter-spacing: 4px;
+        color: #a8c8e8;
+        text-align: center;
+    }
+
+    .eyebrow {
+        margin-bottom: 2px;
+    }
+
+    .sub {
+        margin-top: 2px;
+    }
+
+    .badge-row {
+        text-align: center;
+        margin: 5px 0 9px;
+    }
+
+    .pts-badge {
+        display: inline-block;
+        background: #f9d976;
+        color: #0d3349;
+        border-radius: 20px;
+        padding: 4px 16px;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    #header {
+        transition: max-height 0.4s ease, opacity 0.4s ease, margin 0.4s ease;
+        overflow: hidden;
+        max-height: 120px;
+        opacity: 1;
+    }
+
+    body.playing #header {
+        max-height: 0;
+        opacity: 0;
+        margin: 0;
+    }/* Floating bar */
+
+    #scorebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 999;
+        background: rgba(13, 51, 73, 0.95);
+        backdrop-filter: blur(6px);
+        padding: 6px 14px;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 1px solid rgba(249, 217, 118, 0.2);
+    }
+
+    .card {
+        background: rgba(255, 255, 255, 0.07);
+        border-radius: 13px;
+        padding: 10px 12px;
+        margin-bottom: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .card.instr {
+        background: rgba(255, 255, 255, 0.93);
+        border: none;
+    }
+
+    .card.instr .slabel {
+        color: #1a5276;
+    }
+
+    .card.instr p {
+        color: #2c3e50;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .card.instr strong {
+        color: #0d3349;
+    }
+
+    .card.result-win {
+        background: rgba(39, 174, 96, 0.2);
+        border: 2px solid rgba(46, 204, 113, 0.6);
+    }
+
+    .card.result-loss {
+        background: rgba(192, 57, 43, 0.18);
+        border: 2px solid rgba(231, 76, 60, 0.5);
+    }
+
+    .slabel {
+        font-size: 10px;
+        letter-spacing: 3px;
+        color: #a8c8e8;
+        text-transform: uppercase;
+        margin-bottom: 7px;
+    }
+
+    .card.instr .slabel {
+        color: #1a5276;
+    }
+
+    #flash {
+        position: fixed;
+        top: 60px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 900;
+        padding: 8px 20px;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: bold;
+        display: none;
+        white-space: nowrap;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+
+    #flash.ok {
+        background: rgba(46, 204, 113, 0.2);
+        color: #2ecc71;
+        border: 1px solid rgba(46, 204, 113, 0.4);
+    }
+
+    #flash.er {
+        background: rgba(231, 76, 60, 0.2);
+        color: #e74c3c;
+        border: 1px solid rgba(231, 76, 60, 0.4);
+    }
+
+    #flash.in {
+        background: rgba(255, 255, 255, 0.1);
+        color: #f0ede6;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    #flash.hint {
+        background: rgba(243, 156, 18, 0.25);
+        color: #fff;
+        border: 1px solid rgba(243, 156, 18, 0.6);
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+    }/* Grid */
+
+    #grid {
+        display: grid;
+        gap: 4px;
+        background: rgba(0, 0, 0, 0.2);
+        padding: 7px;
+        border-radius: 11px;
+        width: fit-content;
+    }
+
+    .cell {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        border-radius: 7px;
+        border: 2px solid transparent;
+        background: rgba(255, 255, 255, 0.09);
+        color: #f0ede6;
+        cursor: pointer;
+        user-select: none;
+        touch-action: manipulation;
+    }
+
+    .cell.found {
+        background: #2ecc71;
+        color: #fff;
+        border-color: #27ae60;
+    }
+
+    .cell.pivot-found {
+        background: #e8734a;
+        color: #fff;
+        border-color: #c85a2e;
+        box-shadow: 0 0 8px rgba(232, 115, 74, 0.6);
+    }
+
+    .cell.sel, .cell.sel-found {
+        background: #f9d976;
+        color: #0d3349;
+        border-color: #f9d976;
+        box-shadow: 0 0 7px rgba(249, 217, 118, 0.5);
+    }
+
+    .cell.hint {
+        background: rgba(249, 217, 118, 0.35);
+        border-color: rgba(249, 217, 118, 0.7);
+    }
+
+    .cell.hint-found {
+        background: #2ecc71;
+        color: #fff;
+        border-color: #f9d976;
+        box-shadow: 0 0 8px rgba(249, 217, 118, 0.7);
+    }
+
+    .cell.nonadj {
+        opacity: 0.35;
+    }/* Chips */
+
+    #word-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-bottom: 7px;
+    }
+
+    .chip {
+        padding: 3px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: bold;
+        background: rgba(255, 255, 255, 0.08);
+        color: #a8c8e8;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .chip.done {
+        background: #27ae60;
+        color: #fff;
+        border-color: #27ae60;
+    }
+
+    .chip.pivot {
+        background: #e8734a;
+        color: #fff;
+        border-color: #c85a2e;
+        animation: pivotpulse 1.5s ease-in-out 3;
+    }
+
+    @keyframes pivotpulse {
+        0%, 100% {
+            box-shadow: 0 0 8px rgba(232, 115, 74, 0.4);
+        }
+
+        50% {
+            box-shadow: 0 0 18px rgba(232, 115, 74, 0.9);
+        }
+    }
+    @keyframes bounceDown {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(5px); }
+    }/* Hint penalty badge */
+
+    #hint-cost {
+        font-size: 12px;
+        color: #fff;
+        margin-left: 8px;
+        font-weight: bold;
+    }/* Buttons */
+
+    .btn {
+        padding: 9px 13px;
+        border-radius: 9px;
+        font-family: Georgia, serif;
+        font-size: 12px;
+        font-weight: bold;
+        cursor: pointer;
+        border: none;
+        color: #f0ede6;
+        touch-action: manipulation;
+        margin: 0 4px 5px 0;
+        min-height: 42px;
+        -webkit-appearance: none;
+    }
+
+    .btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    .bd {
+        background: rgba(255, 255, 255, 0.14);
+    }
+
+    .bh {
+        background: rgba(52, 152, 219, 0.8);
+    }
+
+    .bx {
+        background: rgba(231, 76, 60, 0.75);
+    }/* Pool */
+
+    #pool-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        align-items: center;
+        margin: 4px 0 6px;
+    }
+
+    .pstack {
+        position: relative;
+        width: 44px;
+        height: 44px;
+        cursor: pointer;
+        touch-action: manipulation;
+        user-select: none;
+        flex-shrink: 0;
+    }
+
+    .pstack.empty {
+        opacity: 0.15;
+        cursor: default;
+        pointer-events: none;
+    }
+
+    .pstack.elim-stack {
+        opacity: 0.2;
+        cursor: default;
+        pointer-events: none;
+    }
+
+    .pstack.used-stack {
+        opacity: 0.35;
+        cursor: default;
+        pointer-events: none;
+    }
+
+    .pcard-top {
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: bold;
+        border-radius: 8px;
+        background: rgba(30, 60, 80, 0.95);
+        color: #f9d976;
+        border: 2px solid rgba(249, 217, 118, 0.55);
+    }
+
+    .pstack.elim-stack .pcard-top {
+        background: rgba(255, 255, 255, 0.04);
+        color: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.1);
+        text-decoration: line-through;
+    }
+
+    .pcard-top.correct {
+        background: #2ecc71;
+        border-color: #27ae60;
+        color: #fff;
+    }
+
+    .pcard-top.present {
+        background: #f39c12;
+        border-color: #e67e22;
+        color: #fff;
+    }
+
+    .pcard-top.absent {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.25);
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .pcount {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #f9d976;
+        color: #0d3349;
+        border-radius: 10px;
+        font-size: 10px;
+        font-weight: bold;
+        min-width: 16px;
+        height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 3;
+        padding: 0 3px;
+    }
+
+    .ptile.submit {
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: bold;
+        border-radius: 8px;
+        background: rgba(46, 204, 113, 0.85);
+        color: #fff;
+        border: 2px solid #27ae60;
+        cursor: pointer;
+        touch-action: manipulation;
+        user-select: none;
+        flex-shrink: 0;
+    }/* Guess display */
+
+    #guess-display {
+        display: flex;
+        gap: 5px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 8px 0 10px;
+    }
+
+    .gslot {
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 19px;
+        font-weight: bold;
+        border-radius: 7px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: #f9d976;
+        cursor: pointer;
+        touch-action: manipulation;
+    }
+
+    .gslot.filled {
+        background: rgba(249, 217, 118, 0.15);
+        border-color: rgba(249, 217, 118, 0.5);
+    }/* Wordle results */
+
+    .guess-row {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        margin-bottom: 6px;
+    }
+
+    .gcell {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+        font-weight: bold;
+        border-radius: 7px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        background: rgba(255, 255, 255, 0.06);
+    }
+
+    .gcell.correct {
+        background: #2ecc71;
+        border-color: #27ae60;
+    }
+
+    .gcell.present {
+        background: #f39c12;
+        border-color: #e67e22;
+    }
+
+    .gcell.absent {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .erow {
+        margin-left: 5px;
+        display: flex;
+        gap: 2px;
+        font-size: 14px;
+    }
+
+    .hbox {
+        background: linear-gradient(135deg, rgba(249,217,118,0.2), rgba(249,217,118,0.08));
+        border: 2px solid rgba(249,217,118,0.7);
+        border-radius: 11px;
+        padding: 14px 16px;
+        margin-bottom: 10px;
+        font-size: 16px;
+        color: #fff;
+        font-style: normal;
+        font-weight: bold;
+        line-height: 1.5;
+    }/* Hint buttons compact */
+
+    .hbtn {
+        padding: 7px 11px;
+        border-radius: 8px;
+        font-family: Georgia, serif;
+        font-size: 12px;
+        font-weight: bold;
+        cursor: pointer;
+        border: none;
+        color: #f0ede6;
+        touch-action: manipulation;
+        min-height: 38px;
+        background: rgba(52, 152, 219, 0.75);
+    }
+
+    .hbtn:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+    }
+
+    .hbtn.bxs {
+        background: rgba(231, 76, 60, 0.7);
+    }
+
+    #s2 .card { padding: 8px 10px; margin-bottom: 6px; }
+    #hcard2 { padding: 6px 10px; margin-top: 4px; }/* End cards */
+
+    #win-card, #loss-card {
+        text-align: center;
+    }
+
+    .eemoji {
+        font-size: 44px;
+        margin-bottom: 6px;
+    }
+
+    .eword {
+        color: #f9d976;
+        font-size: 24px;
+        letter-spacing: 3px;
+        margin: 0 0 6px;
+    }
+
+    .escore {
+        font-size: 20px;
+        font-weight: bold;
+        color: #f9d976;
+    }/* Modal */
+
+    #modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.65);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        touch-action: pan-y;
+        display: none;
+    }
+
+    #modal-box {
+        background: linear-gradient(160deg, #0d3349, #1a5276);
+        border: 1px solid rgba(249, 217, 118, 0.4);
+        border-radius: 16px;
+        padding: 22px 20px;
+        max-width: 320px;
+        width: 100%;
+        text-align: center;
+    }
+
+    #modal-box h3 {
+        color: #f9d976;
+        font-size: 18px;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+    }
+
+    #modal-box p {
+        color: #a8c8e8;
+        font-size: 13px;
+        line-height: 1.5;
+        margin-bottom: 18px;
+    }
+
+    .modal-btn {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        font-family: Georgia, serif;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        border: none;
+        margin-bottom: 8px;
+        touch-action: manipulation;
+        -webkit-appearance: none;
+    }
+
+    .modal-btn.primary {
+        background: #f9d976;
+        color: #0d3349;
+    }
+
+    .modal-btn.secondary {
+        background: rgba(255, 255, 255, 0.12);
+        color: #f0ede6;
+    }/* Fireworks */
+
+    #fwcanvas {
+        position: fixed;
+        inset: 0;
+        z-index: 2000;
+        pointer-events: none;
+        display: none;
+    }/* Share */
+
+    #shareoverlay {
+        position: fixed;
+        inset: 0;
+        z-index: 2001;
+        background: rgba(0, 0, 0, 0.7);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    #sharebox {
+        background: linear-gradient(160deg, #0d3349, #1a5276);
+        border: 1px solid rgba(249, 217, 118, 0.4);
+        border-radius: 16px;
+        padding: 22px 20px;
+        max-width: 320px;
+        width: 100%;
+        text-align: center;
+        position: relative;
+        z-index: 2002;
+    }
+
+    #sharebox h3 {
+        color: #f9d976;
+        font-size: 17px;
+        margin-bottom: 8px;
+    }
+
+    #shareresult {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 10px;
+        padding: 10px 14px;
+        margin-bottom: 16px;
+        font-size: 13px;
+        color: #f0ede6;
+        text-align: left;
+        line-height: 1.6;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    .share-btn {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        font-family: Georgia, serif;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        border: none;
+        margin-bottom: 8px;
+        touch-action: manipulation;
+        -webkit-appearance: none;
+    }
+
+    .share-wa {
+        background: #25D366;
+        color: #fff;
+    }
+
+    .share-em {
+        background: rgba(52, 152, 219, 0.8);
+        color: #fff;
+    }
+
+    .share-cp {
+        background: rgba(255, 255, 255, 0.14);
+        color: #f0ede6;
+    }
+
+    .share-cl {
+        background: transparent;
+        color: rgba(168, 200, 232, 0.6);
+        font-size: 12px;
+        padding: 6px;
+    }
+
+    .footer {
+        text-align: center;
+        font-size: 10px;
+        color: rgba(168, 200, 232, 0.3);
+        margin-top: 4px;
+        letter-spacing: 2px;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+    </style>
+</head>
+<body>
+    <div id="scorebar">
+        <span id="sbpts" style="color:#f9d976;font-weight:bold;font-size:16px;font-family:Georgia,serif;"></span>
+    </div>
+    <div id="header">
+        <p class="eyebrow">CHURCH EDITION <span style="opacity:0.5;font-size:8px;letter-spacing:1px;">v1.24</span></p>
+        <h1>PIVOT<span style="color:#a8c8e8;font-size:16px;letter-spacing:2px;font-weight:normal;"> : </span><span id="theme-label" style="color:#fff;font-size:20px;letter-spacing:4px;">…</span></h1>
+        <div class="badge-row">
+            <span class="pts-badge" id="pts">⏱ 0:00</span>
+        </div>
+    </div>
+    <div id="loading-msg" style="text-align:center;padding:40px 20px;color:#a8c8e8;font-family:Georgia,serif;font-size:16px;letter-spacing:1px;">
+        Loading puzzle…
+    </div>
+    <div id="flash"></div>
+
+    <div id="s1" style="display:none">
+        <div class="card">
+            <p class="slabel">Step 1 — Word Search</p>
+            <p style="font-size:12px;color:#a8c8e8;margin-bottom:10px;">Tap connected letters to spell each hidden word. Words go in any direction. Tap the last letter again to undo.</p>
+            <div id="grid"></div>
+        </div>
+        <div class="card">
+            <p class="slabel" style="margin-bottom:5px;">
+                Words to Find 
+                <span id="fc">(0/7)</span>
+            </p>
+            <div id="word-chips"></div>
+            <div style="display:flex;align-items:center;gap:10px;margin-top:6px;">
+                <button class="btn bh" id="hintbtn">
+                    Get Hint 
+                    <span id="hint-cost">+5 sec</span>
+                </button>
+                <div style="flex:1;display:flex;justify-content:flex-end;">
+                    <div id="scroll-down-arrow" style="display:none;align-items:center;justify-content:center;gap:8px;cursor:pointer;touch-action:manipulation;background:#e8734a;border-radius:9px;padding:9px 13px;min-height:42px;font-family:Georgia,serif;" onclick="document.getElementById('s2').scrollIntoView({behavior:'smooth',block:'start'})">
+                        <span style="font-size:12px;color:#fff;font-weight:bold;letter-spacing:1px;text-transform:uppercase;">Part 2</span>
+                        <svg width="18" height="22" viewBox="0 0 18 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation:bounceDown 1.2s ease-in-out infinite;flex-shrink:0;">
+                            <path d="M9 2 L9 16 M3 11 L9 18 L15 11" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="s2" style="display:none">
+        <div class="card instr" id="instrcard" style="position:relative;">
+            <button id="closeinstr" style="position:absolute;top:7px;right:9px;background:none;border:none;font-size:18px;cursor:pointer;color:#666;line-height:1;padding:0;touch-action:manipulation;">✕</button>
+            <p style="font-size:14px;font-weight:bold;color:#1a5276;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;padding-right:22px;">Find Today's Word</p>
+            <p id="instrtext" style="font-size:15px;line-height:1.6;"></p>
+        </div>
+        <div class="card">
+            <p id="wordlen" style="display:none;"></p>
+            <div id="pool-wrap"></div>
+        </div>
+        <div class="card hidden" id="hcard2">
+            <div id="hbox2"></div>
+        </div>
+        <div class="card" id="gcard">
+            <div id="grows"></div>
+            <div id="guess-display"></div>
+
+        </div>
+        <div id="actcard">
+            <p id="hint-cost2" style="font-size:13px;color:#fff;font-weight:bold;margin-bottom:6px;"></p>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <button class="hbtn" id="latbtn">🔀 Lateral hint</button>
+                <button class="hbtn" id="pivbtn">🪸 Pivot hint</button>
+                <button class="hbtn bxs" id="elimbtn">✂️ Cut a letter</button>
+            </div>
+        </div>
+        <div class="card result-win hidden" id="wincard">
+            <div class="eemoji">🎉</div>
+            <h2 class="eword" id="winword"></h2>
+            <p style="color:#a8c8e8;margin:0 0 10px;font-size:13px;" id="wintext"></p>
+            <div class="escore" id="winscore"></div>
+        </div>
+        <div class="card result-loss hidden" id="losscard">
+            <div class="eemoji">😔</div>
+            <h2 style="color:#e74c3c;margin:0 0 6px;font-size:20px;" id="lossword"></h2>
+            <p style="color:#a8c8e8;font-size:13px;" id="losstext"></p>
+        </div>
+    </div>
+
+    <p class="footer">PIVOT · CHURCH EDITION</p>
+    <canvas id="fwcanvas">
+    </canvas>
+    <div id="shareoverlay">
+        <div id="sharebox">
+            <h3>Share your result?</h3>
+            <div id="shareresult"></div>
+            <button class="share-btn share-wa" id="sharebtn-wa">📱 WhatsApp</button>
+            <button class="share-btn share-em" id="sharebtn-em">✉️ Email</button>
+            <button class="share-btn share-cp" id="sharebtn-cp">📋 Copy to clipboard</button>
+            <button class="share-btn share-cl" id="sharebtn-cl">Not now</button>
+        </div>
+    </div>
+    <div id="modal-overlay">
+        <div id="modal-box">
+            <h3 id="modal-title">🪸 Clue word found!</h3>
+            <p id="modal-body">This word is your clue to Part 2. Jump down now or keep searching to shrink your letter pool.</p>
+            <button class="modal-btn primary" id="modal-jump">→ Jump to Part 2</button>
+            <button class="modal-btn secondary" id="modal-stay">Keep searching</button>
+        </div>
+    </div>
+
+    <script>
+    // ── BLOCK PULL-TO-REFRESH ───────────────────────────────────────────────────
+    // overscroll-behavior (above, in CSS) handles this on most browsers. Older
+    // iOS Safari doesn't honor that property, so this is a fallback: if the user
+    // is already scrolled to the very top and pulls down further, swallow the
+    // gesture so it can't trigger a refresh and wipe game state.
+    (function () {
+        let startY = 0;
+        document.addEventListener('touchstart', function (e) {
+            startY = e.touches[0].clientY;
+        }, { passive: true });
+        document.addEventListener('touchmove', function (e) {
+            const atTop = window.scrollY <= 0;
+            const pullingDown = e.touches[0].clientY > startY;
+            if (atTop && pullingDown) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    })();
+
+    // ── PUZZLE (CHURCH EDITION) ─────────────────────────────────────────────────
+    // No Google Sheets, no daily date-matching — just one fixed puzzle that
+    // everyone plays until you swap it out. To put up a new puzzle, edit the
+    // values below and replace this file wherever it's hosted. That's it.
+    const P = {
+        theme: "KINDNESS",
+        words: ["TRUTH", "GRIEF", "HOLY", "BUILD", "KIND", "SEAL", "GIVE"],
+        SIZE: 6,
+        target: "STAMP",
+        pivot: "SEAL",
+        noise: "AEIOTNSRDL",
+        latHint: "Think postage, not Scripture.",
+        pivHint: "SEAL means sealed by the Spirit here — but it's also what you do to a letter before sending it. What's stuck on an envelope?",
+        winText: "What you stick on an envelope. SEAL was the pivot — sealed by the Spirit becomes sealed with wax.",
+        lossText: "STAMP — what you stick on an envelope. SEAL was the pivot: sealed by the Spirit to sealed with wax.",
+    };
+
+    function todayISO() {
+        const d = new Date();
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return y + '-' + m + '-' + day;
+    }
+
+    // ── VALID WORDS (pre-computed for this puzzle) ─────────────────────────────
+    // (WORDBANK is defined inline below — not regenerated per puzzle)
+    const WORDBANK = new Set("AAHED AALII AARGH AARTI ABACA ABACI ABACK ABACS ABAFT ABAKA ABAMP ABAND ABASE ABASH ABASK ABATE ABAYA ABBAS ABBED ABBES ABBEY ABBOT ABCEE ABEAM ABEAR ABELE ABERS ABETS ABHOR ABIDE ABIES ABLED ABLER ABLES ABLET ABLOW ABMHO ABODE ABOHM ABOIL ABOMA ABOON ABORD ABORE ABORT ABOUT ABOVE ABRAM ABRAY ABRIM ABRIN ABRIS ABSEY ABSIT ABUNA ABUNE ABUSE ABUTS ABUZZ ABYES ABYSM ABYSS ACAIS ACARI ACCAS ACCOY ACERB ACERS ACETA ACHAR ACHED ACHES ACHOO ACIDS ACIDY ACING ACINI ACKEE ACKER ACMES ACMIC ACNED ACNES ACOCK ACOLD ACORN ACRED ACRES ACRID ACROS ACTED ACTIN ACTON ACTOR ACUTE ACYLS ADAGE ADAPT ADAWS ADAYS ADBOT ADDAX ADDED ADDER ADDIO ADDLE ADEEM ADEPT ADHAN ADIEU ADIOS ADITS ADMAN ADMEN ADMIN ADMIT ADMIX ADOBE ADOBO ADOPT ADORE ADORN ADOWN ADOZE ADRAD ADRED ADSUM ADUKI ADULT ADUNC ADUST ADVEW ADYTA ADZED ADZES AECIA AEDES AEGIS AEONS AERIE AEROS AESIR AFALD AFARA AFARS AFEAR AFFIX AFIRE AFLAJ AFOOT AFORE AFOUL AFRIT AFROS AFTER AGAIN AGAMA AGAMI AGAPE AGARS AGAST AGATE AGAVE AGAZE AGENE AGENT AGERS AGGER AGGIE AGGRI AGGRO AGGRY AGHAS AGILA AGILE AGING AGIOS AGISM AGIST AGITA AGLEE AGLET AGLEY AGLOO AGLOW AGLUS AGMAS AGOGE AGONE AGONS AGONY AGOOD AGORA AGREE AGRIA AGRIN AGROS AGUED AGUES AGUNA AGUTI AHEAD AHEAP AHENT AHIGH AHIND AHING AHINT AHOLD AHULL AHURU AIDAS AIDED AIDER AIDES AIDOI AIDOS AIERY AIGAS AIGHT AILED AIMED AIMER AINEE AINGA AIOLI AIRED AIRER AIRNS AIRTH AIRTS AISLE AITCH AITUS AIVER AIYEE AIZLE AJIES AJIVA AJUGA AJWAN AKEES AKELA AKENE AKING AKITA AKKAS ALAAP ALACK ALAMO ALAND ALANE ALANG ALANS ALANT ALAPA ALAPS ALARM ALARY ALATE ALAYS ALBAS ALBEE ALBUM ALCID ALCOS ALDEA ALDER ALDOL ALECK ALECS ALEFS ALEFT ALEPH ALERT ALEWS ALEYE ALFAS ALGAE ALGAL ALGAS ALGID ALGIN ALGOR ALGUM ALIAS ALIBI ALIEN ALIFS ALIGN ALIKE ALINE ALIST ALIVE ALIYA ALKIE ALKOS ALKYD ALKYL ALLAY ALLEE ALLEL ALLEY ALLIS ALLOD ALLOT ALLOW ALLOY ALLYL ALMAH ALMAS ALMEH ALMES ALMUD ALMUG ALODS ALOED ALOES ALOFT ALOHA ALOIN ALONE ALONG ALOOF ALOOS ALOUD ALOWE ALPHA ALTAR ALTER ALTHO ALTOS ALULA ALUMS ALURE ALVAR ALWAY AMAHS AMAIN AMASS AMATE AMAUT AMAZE AMBAN AMBER AMBIT AMBLE AMBOS AMBRY AMEBA AMEER AMEND AMENE AMENS AMENT AMIAS AMICE AMICI AMIDE AMIDO AMIDS AMIES AMIGA AMIGO AMINE AMINO AMINS AMIRS AMISS AMITY AMLAS AMMAN AMMON AMMOS AMNIA AMNIC AMNIO AMOKS AMOLE AMONG AMORT AMOUR AMOVE AMOWT AMPED AMPLE AMPLY AMPUL AMRIT AMUCK AMUSE AMYLS ANANA ANATA ANCHO ANCLE ANCON ANDRO ANEAR ANELE ANENT ANGAS ANGEL ANGER ANGLE ANGLO ANGRY ANGST ANIGH ANILE ANILS ANIMA ANIME ANIMI ANION ANISE ANKER ANKHS ANKLE ANKUS ANLAS ANNAL ANNAS ANNAT ANNEX ANNOY ANNUL ANOAS ANODE ANOLE ANOMY ANSAE ANTAE ANTAR ANTAS ANTED ANTES ANTIC ANTIS ANTRA ANTRE ANTSY ANURA ANVIL ANYON AORTA APACE APAGE APAID APART APAYD APAYS APEAK APEEK APERS APERT APERY APGAR APHID APHIS APIAN APING APIOL APISH APISM APNEA APODE APODS APOOP APORT APPAL APPAY APPEL APPLE APPLY APPRO APPUI APPUY APRES APRON APSES APSIS APSOS APTED APTER APTLY AQUAE AQUAS ARABA ARAKS ARAME ARARS ARBAS ARBOR ARCED ARCHI ARCOS ARCUS ARDEB ARDOR ARDRI AREAD AREAE AREAL AREAR AREAS ARECA AREDD AREDE AREFY AREIC ARENA ARENE AREPA ARERE ARETE ARETS ARETT ARGAL ARGAN ARGIL ARGLE ARGOL ARGON ARGOT ARGUE ARGUS ARHAT ARIAS ARIEL ARIKI ARILS ARIOT ARISE ARISH ARKED ARLED ARLES ARMED ARMER ARMET ARMIL ARMOR ARNAS ARNUT AROBA AROHA AROID AROMA AROSE ARPAS ARPEN ARRAH ARRAS ARRAY ARRET ARRIS ARROW ARROZ ARSED ARSES ARSEY ARSIS ARSON ARTAL ARTEL ARTIC ARTIS ARTSY ARUHE ARUMS ARVAL ARVEE ARVOS ARYLS ASANA ASCON ASCOT ASCUS ASDIC ASHED ASHEN ASHES ASHET ASIDE ASKED ASKER ASKEW ASKOI ASKOS ASPEN ASPER ASPIC ASPIE ASPIS ASPRO ASSAI ASSAM ASSAY ASSES ASSET ASSEZ ASSOT ASTER ASTIR ASTUN ASURA ASWAY ASWIM ASYLA ATAPS ATAXY ATIGI ATILT ATIMY ATLAS ATMAN ATMAS ATMOS ATOCS ATOKE ATOKS ATOLL ATOMS ATOMY ATONE ATONY ATOPY ATRIA ATRIP ATTAP ATTAR ATTIC ATUAS AUDAD AUDIO AUDIT AUGER AUGHT AUGUR AULAS AULIC AULOI AULOS AUMIL AUNES AUNTS AUNTY AURAE AURAL AURAR AURAS AUREI AURES AURIC AURIS AURUM AUTOS AUXIN AVAIL AVALE AVANT AVAST AVELS AVENS AVERS AVERT AVGAS AVIAN AVINE AVION AVISE AVISO AVIZE AVOID AVOWS AVYZE AWAIT AWAKE AWARD AWARE AWARN AWASH AWATO AWAVE AWAYS AWDLS AWEEL AWETO AWFUL AWING AWMRY AWNED AWNER AWOKE AWOLS AWORK AXELS AXIAL AXILE AXILS AXING AXIOM AXION AXITE AXLED AXLES AXMAN AXMEN AXOID AXONE AXONS AYAHS AYAYA AYELP AYGRE AYINS AYONT AYRES AYRIE AZANS AZIDE AZIDO AZINE AZLON AZOIC AZOLE AZONS AZOTE AZOTH AZUKI AZURE AZURN AZURY AZYGY AZYME AZYMS BAAED BAALS BABAS BABEL BABES BABKA BABOO BABUL BABUS BACCA BACCO BACCY BACHA BACHS BACKS BACON BADDY BADGE BADLY BAELS BAFFS BAFFY BAFTS BAGEL BAGGY BAGHS BAGIE BAHTS BAHUS BAHUT BAILS BAIRN BAISA BAITH BAITS BAIZA BAIZE BAJAN BAJRA BAJRI BAJUS BAKED BAKEN BAKER BAKES BAKRA BALAS BALDS BALDY BALED BALER BALES BALKS BALKY BALLS BALLY BALMS BALMY BALOO BALSA BALTI BALUN BALUS BAMBI BANAK BANAL BANCO BANCS BANDA BANDH BANDS BANDY BANED BANES BANGS BANIA BANJO BANKS BANNS BANTS BANTU BANTY BANYA BAPUS BARBE BARBS BARBY BARCA BARDE BARDO BARDS BARDY BARED BARER BARES BARFI BARFS BARGE BARIC BARKS BARKY BARMS BARMY BARNS BARNY BARON BARPS BARRA BARRE BARRO BARRY BARYE BASAL BASAN BASED BASEN BASER BASES BASHO BASIC BASIJ BASIL BASIN BASIS BASKS BASON BASSE BASSI BASSO BASSY BASTA BASTE BASTI BASTO BASTS BATCH BATED BATES BATHE BATHS BATIK BATON BATTA BATTS BATTU BATTY BAUDS BAUKS BAULK BAURS BAVIN BAWDS BAWDY BAWKS BAWLS BAWNS BAWRS BAWTY BAYED BAYER BAYES BAYLE BAYOU BAYTS BAZAR BAZOO BEACH BEADS BEADY BEAKS BEAKY BEALS BEAMS BEAMY BEANO BEANS BEANY BEARD BEARE BEARS BEAST BEATH BEATS BEATY BEAUS BEAUT BEAUX BEBOP BECAP BECKE BECKS BEDAD BEDEL BEDES BEDEW BEDIM BEDYE BEECH BEEDI BEEFS BEEFY BEEPS BEERS BEERY BEETS BEFIT BEFOG BEGAD BEGAN BEGAR BEGAT BEGEM BEGET BEGIN BEGOT BEGUM BEGUN BEIGE BEIGY BEING BEINS BEKAH BELAH BELAR BELAY BELCH BELEE BELGA BELIE BELLE BELLS BELLY BELON BELOW BELTS BEMAD BEMAS BEMIX BEMUD BENCH BENDS BENDY BENES BENET BENGA BENIS BENNE BENNI BENNY BENTO BENTS BENTY BEPAT BERAY BERES BERET BERGS BERKO BERKS BERME BERMS BEROB BERRY BERTH BERYL BESAT BESAW BESEE BESES BESET BESIT BESOM BESOT BESTI BESTS BETAS BETED BETEL BETES BETHS BETID BETON BETTA BETTY BEVEL BEVER BEVOR BEVUE BEVVY BEWET BEWIG BEZEL BEZES BEZIL BEZZY BHAIS BHAJI BHANG BHATS BHELS BHOOT BHUNA BHUTS BIACH BIALI BIALY BIBBS BIBES BIBLE BICCY BICEP BICES BIDDY BIDED BIDER BIDES BIDET BIDIS BIDON BIELD BIERS BIFFO BIFFS BIFFY BIFID BIGAE BIGGS BIGGY BIGHA BIGHT BIGLY BIGOS BIGOT BIJOU BIKED BIKER BIKES BIKIE BILBO BILBY BILED BILES BILGE BILGY BILKS BILLS BILLY BIMAH BIMAS BIMBO BINAL BINDI BINDS BINER BINES BINGE BINGO BINGS BINGY BINIT BINKS BINTS BIOGS BIOME BIONT BIOTA BIPED BIPOD BIRCH BIRDS BIRKS BIRLE BIRLS BIROS BIRRS BIRSE BIRSY BIRTH BISES BISKS BISOM BISON BITCH BITER BITES BITOS BITOU BITSY BITTE BITTS BITTY BIVIA BIVVY BIZES BIZZO BIZZY BLABS BLACK BLADE BLADS BLADY BLAER BLAES BLAFF BLAGS BLAHS BLAIN BLAME BLAMS BLAND BLANK BLARE BLART BLASE BLASH BLAST BLATE BLATS BLATT BLAUD BLAWN BLAWS BLAYS BLAZE BLEAK BLEAR BLEAT BLEBS BLECH BLEED BLEEP BLEES BLEND BLENT BLERT BLESS BLEST BLETS BLEYS BLIMP BLIMY BLIND BLING BLINI BLINK BLINS BLINY BLIPS BLISS BLIST BLITE BLITS BLITZ BLIVE BLOAT BLOBS BLOCK BLOCS BLOGS BLOKE BLOND BLOOD BLOOK BLOOM BLOOP BLORE BLOTS BLOWN BLOWS BLOWY BLUBS BLUDE BLUDS BLUDY BLUED BLUER BLUES BLUET BLUEY BLUFF BLUID BLUME BLUNK BLUNT BLURB BLURS BLURT BLUSH BLYPE BOABS BOAKS BOARD BOARS BOART BOAST BOATS BOBAC BOBAK BOBAS BOBBY BOBOL BOBOS BOCCA BOCCE BOCCI BOCHE BOCKS BODED BODES BODGE BODHI BODLE BOEPS BOETS BOEUF BOFFO BOFFS BOGAN BOGEY BOGGY BOGIE BOGLE BOGUE BOGUS BOHEA BOHOS BOILS BOING BOINK BOITE BOKED BOKEH BOKES BOKOS BOLAR BOLAS BOLDS BOLES BOLIX BOLLS BOLOS BOLTS BOLUS BOMAS BOMBE BOMBO BOMBS BONCE BONDS BONED BONER BONES BONEY BONGO BONGS BONIE BONKS BONNE BONNY BONUS BONZA BONZE BOOAI BOOAY BOOBS BOOBY BOODY BOOED BOOFY BOOGY BOOHS BOOKS BOOKY BOOLS BOOMS BOOMY BOONG BOONS BOORD BOORS BOOSE BOOST BOOTH BOOTS BOOTY BOOZE BOOZY BOPPY BORAK BORAL BORAS BORAX BORDE BORDS BORED BOREE BOREL BORER BORES BORGO BORIC BORKS BORMS BORNA BORNE BORON BORTS BORTY BORTZ BOSIE BOSKS BOSKY BOSOM BOSON BOSSY BOSUN BOTAS BOTCH BOTEL BOTES BOTHY BOTTE BOTTS BOTTY BOUGE BOUGH BOUKS BOULE BOULT BOUND BOUNS BOURD BOURG BOURN BOUSE BOUSY BOUTS BOVID BOWAT BOWED BOWEL BOWER BOWES BOWET BOWIE BOWLS BOWNE BOWRS BOWSE BOXED BOXEN BOXER BOXES BOXLA BOXTY BOYAR BOYAU BOYED BOYFS BOYGS BOYLA BOYOS BOYSY BOZOS BRAAI BRACE BRACH BRACK BRACT BRADS BRAES BRAGS BRAID BRAIL BRAIN BRAKE BRAKS BRAKY BRAME BRAND BRANE BRANK BRANS BRANT BRASH BRASS BRAST BRATS BRAVA BRAVE BRAVI BRAVO BRAWL BRAWN BRAWS BRAXY BRAYS BRAZA BRAZE BREAD BREAK BREAM BREDE BREDS BREED BREEM BREER BREES BREID BREIS BREME BRENS BRENT BRERE BRERS BREVE BREWS BREYS BRIAR BRIBE BRICK BRIDE BRIEF BRIER BRIES BRIGS BRIKI BRIKS BRILL BRIMS BRINE BRING BRINK BRINS BRINY BRIOS BRISE BRISK BRISS BRITH BRITS BRITT BRIZE BROAD BROCH BROCK BRODS BROGH BROGS BROIL BROKE BROME BROMO BRONC BROND BROOD BROOK BROOL BROOM BROOS BROSE BROSY BROTH BROWN BROWS BRUGH BRUIN BRUIT BRULE BRUME BRUNG BRUNT BRUSH BRUSK BRUST BRUTE BRUTS BUATS BUAZE BUBAL BUBAS BUBBA BUBBE BUBBY BUBUS BUCHU BUCKO BUCKS BUCKU BUDAS BUDDY BUDGE BUDIS BUDOS BUFFA BUFFE BUFFI BUFFO BUFFS BUFFY BUFOS BUFTY BUGGY BUGLE BUHLS BUHRS BUIKS BUILD BUILT BUIST BUKES BULBS BULGE BULGY BULKS BULKY BULLA BULLS BULLY BULSE BUMBO BUMFS BUMPH BUMPS BUMPY BUNAS BUNCE BUNCH BUNCO BUNDE BUNDH BUNDS BUNDT BUNDU BUNDY BUNGS BUNGY BUNIA BUNJE BUNJY BUNKO BUNKS BUNNS BUNNY BUNTS BUNTY BUNYA BUOYS BUPPY BURAN BURAS BURBS BURDS BURET BURFI BURGH BURGS BURIN BURKA BURKE BURKS BURLS BURLY BURNS BURNT BUROO BURPS BURQA BURRO BURRS BURRY BURSA BURSE BURST BUSBY BUSED BUSES BUSHY BUSKS BUSKY BUSSU BUSTI BUSTS BUSTY BUTCH BUTEO BUTES BUTLE BUTOH BUTTE BUTTS BUTTY BUTUT BUTYL BUXOM BUYER BUZZY BWANA BWAZI BYDED BYDES BYKED BYKES BYLAW BYRES BYRLS BYSSI BYTES BYWAY CAAED CABAL CABAS CABBY CABER CABIN CABLE CABOB CABOC CABRE CACAO CACAS CACHE CACKS CACKY CACTI CADDY CADEE CADES CADET CADGE CADGY CADIE CADIS CADRE CAECA CAESE CAFES CAFFS CAGED CAGER CAGES CAGEY CAGOT CAHOW CAIDS CAINS CAIRD CAIRN CAJON CAJUN CAKED CAKES CAKEY CALFS CALID CALIF CALIX CALKS CALLA CALLS CALMS CALMY CALOS CALPA CALPS CALVE CALYX CAMAN CAMAS CAMEL CAMEO CAMES CAMIS CAMOS CAMPI CAMPO CAMPS CAMPY CAMUS CANAL CANDY CANED CANEH CANER CANES CANGS CANID CANNA CANNS CANNY CANOE CANON CANSO CANST CANTO CANTS CANTY CAPAS CAPED CAPER CAPES CAPEX CAPHS CAPIZ CAPLE CAPON CAPOS CAPOT CAPRI CAPUL CAPUT CARAP CARAT CARBO CARBS CARBY CARDI CARDS CARDY CARED CARER CARES CARET CAREX CARGO CARKS CARLE CARLS CARNS CARNY CAROB CAROL CAROM CARON CARPI CARPS CARRS CARRY CARSE CARTA CARTE CARTS CARVE CARVY CASAS CASCO CASED CASES CASKS CASKY CASTE CASTS CASUS CATCH CATER CATES CATTY CAUDA CAUKS CAULD CAULK CAULS CAUMS CAUPS CAURI CAUSA CAUSE CAVAS CAVED CAVEL CAVER CAVES CAVIE CAVIL CAWED CAWKS CAXON CEASE CEAZE CEBID CECAL CECUM CEDAR CEDED CEDER CEDES CEDIS CEIBA CEILI CEILS CELEB CELLA CELLI CELLO CELLS CELOM CELTS CENSE CENTO CENTS CENTU CEORL CEPES CERCI CERED CERES CERGE CERIA CERIC CERNE CEROC CEROS CERTS CERTY CESSE CESTA CESTI CETES CETYL CEZVE CHACE CHACK CHACO CHADO CHADS CHAFE CHAFF CHAFT CHAIN CHAIR CHAIS CHALK CHALS CHAMP CHAMS CHANA CHANG CHANK CHANT CHAOS CHAPE CHAPS CHAPT CHARA CHARD CHARE CHARK CHARM CHARR CHARS CHART CHARY CHASE CHASM CHATS CHAVE CHAVS CHAWK CHAWS CHAYA CHAYS CHEAP CHEAT CHECK CHEEK CHEEP CHEER CHEFS CHEKA CHELA CHELP CHEMO CHEMS CHERE CHERT CHESS CHEST CHETH CHEVY CHEWS CHEWY CHIAO CHIAS CHIBS CHICA CHICH CHICK CHICO CHICS CHIDE CHIEF CHIEL CHIKS CHILD CHILE CHILI CHILL CHIMB CHIME CHIMO CHIMP CHINA CHINE CHING CHINK CHINO CHINS CHIPS CHIRK CHIRL CHIRM CHIRO CHIRP CHIRR CHIRT CHIRU CHITS CHIVE CHIVS CHIVY CHIZZ CHOCK CHOCO CHOCS CHODE CHOGS CHOIL CHOIR CHOKE CHOKO CHOKY CHOLA CHOLI CHOLO CHOMP CHONS CHOOF CHOOK CHOOM CHOON CHOPS CHORD CHORE CHOSE CHOTA CHOTT CHOUT CHOUX CHOWK CHOWS CHUBS CHUCK CHUFA CHUFF CHUGS CHUMP CHUMS CHUNK CHURL CHURN CHURR CHUSE CHUTE CHUTS CHYLE CHYME CHYND CIBOL CIDED CIDER CIDES CIELS CIGAR CIGGY CILIA CILLS CIMAR CIMEX CINCH CINCT CINES CINQS CIONS CIPPI CIRCA CIRCS CIRES CIRLS CIRRI CISCO CISSY CISTS CITAL CITED CITER CITES CIVES CIVET CIVIC CIVIE CIVIL CIVVY CLACH CLACK CLADE CLADS CLAES CLAGS CLAIM CLAME CLAMP CLAMS CLANG CLANK CLANS CLAPS CLAPT CLARO CLART CLARY CLASH CLASP CLASS CLAST CLATS CLAUT CLAVE CLAVI CLAWS CLAYS CLEAN CLEAR CLEAT CLECK CLEEK CLEEP CLEFS CLEFT CLEGS CLEIK CLEMS CLEPE CLEPT CLERK CLEVE CLEWS CLICK CLIED CLIES CLIFF CLIFT CLIMB CLIME CLINE CLING CLINK CLINT CLIPE CLIPS CLIPT CLITS CLOAK CLOAM CLOCK CLODS CLOFF CLOGS CLOKE CLOMB CLOMP CLONE CLONK CLONS CLOOP CLOOT CLOPS CLOSE CLOTE CLOTH CLOTS CLOUD CLOUR CLOUS CLOUT CLOVE CLOWN CLOWS CLOYE CLOYS CLOZE CLUBS CLUCK CLUED CLUES CLUEY CLUMP CLUNG CLUNK CLYPE CNIDA COACH COACT COADY COALA COALS COALY COAPT COARB COAST COATE COATI COATS COBBS COBBY COBIA COBLE COBRA COBZA COCAS COCCI COCCO COCKS COCKY COCOA COCOS CODAS CODEC CODED CODEN CODER CODES CODEX CODON COEDS COFFS COGIE COGON COGUE COHAB COHEN COHOE COHOG COHOS COIFS COIGN COILS COINS COIRS COITS COKED COKES COLAS COLBY COLDS COLED COLES COLEY COLIC COLIN COLLS COLLY COLOG COLON COLOR COLTS COLZA COMAE COMAL COMAS COMBE COMBI COMBO COMBS COMBY COMER COMES COMET COMFY COMIC COMIX COMMA COMMO COMMS COMMY COMPO COMPS COMPT COMTE COMUS CONCH CONDO CONED CONES CONEY CONFS CONGA CONGE CONGO CONIA CONIC CONIN CONKS CONKY CONNE CONNS CONTE CONTO CONUS CONVO COOCH COOED COOEE COOER COOEY COOFS COOKS COOKY COOLS COOLY COOMB COOMS COOMY COONS COOPS COOPT COOST COOTS COOZE COPAL COPAY COPED COPEN COPER COPES COPPY COPRA COPSE COPSY COQUI CORAL CORAM CORBE CORBY CORDS CORED CORER CORES COREY CORGI CORIA CORKS CORKY CORMS CORNI CORNO CORNS CORNU CORNY CORPS CORSE CORSO COSEC COSED COSES COSET COSEY COSIE COSTA COSTE COSTS COTAN COTED COTES COTHS COTTA COTTS COUCH COUDE COUGH COULD COUNT COUPE COUPS COURB COURD COURE COURS COURT COUTA COUTH COVED COVEN COVER COVES COVET COVEY COVIN COWAL COWAN COWED COWER COWKS COWLS COWPS COWRY COXAE COXAL COXED COXES COXIB COYAU COYED COYER COYLY COYPU COZED COZEN COZES COZEY COZIE CRAAL CRABS CRACK CRAFT CRAGS CRAIC CRAIG CRAKE CRAME CRAMP CRAMS CRANE CRANK CRANS CRAPE CRAPS CRAPY CRARE CRASH CRASS CRATE CRAVE CRAWL CRAWS CRAYS CRAZE CRAZY CREAK CREAM CREDO CREDS CREED CREEK CREEL CREEP CREES CREME CREMS CRENA CREPE CREPS CREPT CREPY CRESS CREST CREWE CREWS CRIAS CRIBS CRICK CRIED CRIER CRIES CRIME CRIMP CRIMS CRINE CRIOS CRIPE CRIPS CRISE CRISP CRITH CRITS CROAK CROCI CROCK CROCS CROFT CROGS CROMB CROME CRONE CRONK CRONS CRONY CROOK CROOL CROON CROPS CRORE CROSS CROST CROUP CROUT CROWD CROWN CROWS CROZE CRUCK CRUDE CRUDO CRUDS CRUDY CRUEL CRUES CRUET CRUFT CRUMB CRUMP CRUNK CRUOR CRURA CRUSE CRUSH CRUST CRUSY CRUVE CRWTH CRYER CRYPT CTENE CUBBY CUBEB CUBED CUBER CUBES CUBIC CUBIT CUDDY CUFFO CUFFS CUIFS CUING CUISH CUITS CUKES CULCH CULET CULEX CULLS CULLY CULMS CULPA CULTI CULTS CULTY CUMEC CUMIN CUNDY CUNEI CUNIT CUNTS CUPEL CUPID CUPPA CUPPY CURAT CURBS CURCH CURDS CURDY CURED CURER CURES CURET CURFS CURIA CURIE CURIO CURLI CURLS CURLY CURNS CURNY CURRS CURRY CURSE CURSI CURST CURVE CURVY CUSEC CUSHY CUSKS CUSPS CUSPY CUSSO CUSUM CUTCH CUTER CUTES CUTEY CUTIE CUTIN CUTIS CUTTO CUTTY CUTUP CUVEE CUZES CWTCH CYANO CYANS CYBER CYCAD CYCAS CYCLE CYCLO CYDER CYLIX CYMAE CYMAR CYMAS CYMES CYMOL CYNIC CYSTS CYTES CYTON CZARS DAALS DABBA DACES DACHA DACKS DADAH DADAS DADDY DADOS DAFFS DAFFY DAGGA DAGGY DAGOS DAHLS DAIKO DAILY DAINE DAINT DAIRY DAISY DAKER DALED DALES DALIS DALLE DALLY DALTS DAMAN DAMAR DAMES DAMME DAMNS DAMPS DAMPY DANCE DANCY DANDY DANGS DANIO DANKS DANNY DANTS DARAF DARBS DARCY DARED DARER DARES DARGA DARGS DARIC DARIS DARKS DARKY DARNS DARRE DARTS DARZI DASHI DASHY DATAL DATED DATER DATES DATOS DATTO DATUM DAUBE DAUBS DAUBY DAUDS DAULT DAUNT DAURS DAUTS DAVEN DAVIT DAWAH DAWDS DAWED DAWEN DAWKS DAWNS DAWTS DAYAN DAYCH DAYNT DAZED DAZER DAZES DEADS DEAIR DEALS DEALT DEANS DEARE DEARN DEARS DEARY DEASH DEATH DEAVE DEAWS DEAWY DEBAG DEBAR DEBBY DEBEL DEBES DEBIT DEBTS DEBUD DEBUG DEBUR DEBUS DEBUT DEBYE DECAD DECAF DECAL DECAN DECAY DECKO DECKS DECOR DECOS DECOY DECRY DEDAL DEEDS DEEDY DEELY DEEMS DEENS DEEPS DEERE DEERS DEETS DEEVE DEEVS DEFAT DEFER DEFFO DEFIS DEFOG DEGAS DEGUM DEGUS DEICE DEIDS DEIFY DEIGN DEILS DEISM DEIST DEITY DEKED DEKES DEKKO DELAY DELED DELES DELFS DELFT DELIS DELLS DELLY DELOS DELPH DELTA DELTS DELVE DEMAN DEMES DEMIC DEMIT DEMOB DEMOI DEMON DEMOS DEMPT DEMUR DENAR DENAY DENCH DENES DENET DENIM DENIS DENSE DENTS DEOXY DEPOT DEPTH DERAT DERAY DERBY DERED DERES DERIG DERMA DERMS DERNS DERNY DEROS DERRO DERRY DERTH DERVS DESEX DESHI DESIS DESKS DESSE DETER DETOX DEUCE DEVAS DEVEL DEVIL DEVIS DEVON DEVOS DEVOT DEWAN DEWAR DEWAX DEWED DEXES DEXIE DHABA DHAKS DHALS DHIKR DHOBI DHOLE DHOLL DHOLS DHOTI DHOWS DHUTI DIACT DIALS DIANE DIARY DIAZO DIBBS DICED DICER DICES DICEY DICHT DICKS DICKY DICOT DICTA DICTS DICTY DIDDY DIDIE DIDOS DIDST DIEBS DIELS DIENE DIETS DIFFS DIGHT DIGIT DIKAS DIKED DIKER DIKES DIKEY DILDO DILLI DILLS DILLY DIMBO DIMER DIMES DIMLY DIMPS DINAR DINED DINER DINES DINGE DINGO DINGS DINGY DINIC DINKS DINKY DINNA DINOS DINTS DIODE DIOLS DIOTA DIPPY DIPSO DIRAM DIRER DIRGE DIRKE DIRKS DIRLS DIRTS DIRTY DISAS DISCI DISCO DISCS DISHY DISKS DISME DITAL DITAS DITCH DITED DITES DITSY DITTO DITTS DITTY DITZY DIVAN DIVAS DIVED DIVER DIVES DIVIS DIVNA DIVOS DIVOT DIVVY DIWAN DIXIE DIXIT DIYAS DIZEN DIZZY DJINN DJINS DOABS DOATS DOBBY DOBES DOBIE DOBLA DOBRA DOBRO DOCHT DOCKS DOCOS DOCUS DODDY DODGE DODGY DODOS DOEKS DOERS DOEST DOETH DOFFS DOGAN DOGES DOGEY DOGGO DOGGY DOGIE DOGMA DOHYO DOILT DOILY DOING DOITS DOJOS DOLCE DOLCI DOLED DOLES DOLIA DOLLS DOLLY DOLMA DOLOR DOLOS DOLTS DOMAL DOMED DOMES DOMIC DONAH DONAS DONEE DONER DONGA DONGS DONKO DONNA DONNE DONNY DONOR DONSY DONUT DOOBS DOOCE DOODY DOOKS DOOLE DOOLS DOOLY DOOMS DOOMY DOONA DOORN DOORS DOOZY DOPAS DOPED DOPER DOPES DOPEY DORAD DORBA DORBS DOREE DORES DORIC DORIS DORKS DORKY DORMS DORMY DORPS DORRS DORSA DORSE DORTS DORTY DOSAI DOSAS DOSED DOSEH DOSER DOSES DOSHA DOTAL DOTED DOTER DOTES DOTTY DOUAR DOUBT DOUCE DOUCS DOUGH DOUKS DOULA DOUMA DOUMS DOUPS DOURA DOUSE DOUTS DOVED DOVEN DOVER DOVES DOVIE DOWAR DOWDS DOWDY DOWED DOWEL DOWER DOWIE DOWLE DOWLS DOWLY DOWNA DOWNS DOWNY DOWPS DOWRY DOWSE DOWTS DOXED DOXES DOXIE DOYEN DOYLY DOZED DOZEN DOZER DOZES DRABS DRACK DRACO DRAFF DRAFT DRAGS DRAIL DRAIN DRAKE DRAMA DRAMS DRANK DRANT DRAPE DRAPS DRATS DRAVE DRAWL DRAWN DRAWS DRAYS DREAD DREAM DREAR DRECK DREED DREER DREES DREGS DREKS DRENT DRERE DRESS DREST DREYS DRIBS DRICE DRIED DRIER DRIES DRIFT DRILL DRILY DRINK DRIPS DRIPT DRIVE DROID DROIL DROIT DROKE DROLE DROLL DROME DRONE DRONY DROOB DROOG DROOK DROOL DROOP DROPS DROPT DROSS DROUK DROVE DROWN DROWS DRUBS DRUGS DRUID DRUMS DRUNK DRUPE DRUSE DRUSY DRUXY DRYAD DRYAS DRYER DRYLY DSOBO DSOMO DUADS DUALS DUANS DUARS DUBBO DUCAL DUCAT DUCES DUCHY DUCKS DUCKY DUCTS DUDDY DUDED DUDES DUELS DUETS DUETT DUFFS DUFUS DUING DUITS DUKAS DUKED DUKES DUKKA DULCE DULES DULIA DULLS DULLY DULSE DUMAS DUMBO DUMBS DUMKA DUMKY DUMMY DUMPS DUMPY DUNAM DUNCE DUNCH DUNES DUNGS DUNGY DUNKS DUNNO DUNNY DUNSH DUNTS DUOMI DUOMO DUPED DUPER DUPES DUPLE DUPLY DUPPY DURAL DURAS DURED DURES DURGY DURNS DUROC DUROS DUROY DURRA DURRS DURRY DURST DURUM DURZI DUSKS DUSKY DUSTS DUSTY DUTCH DUVET DUXES DWAAL DWALE DWALM DWAMS DWANG DWARF DWAUM DWEEB DWELL DWELT DWILE DWINE DYADS DYERS DYING DYKED DYKES DYKEY DYKON DYNEL DYNES DZHOS EAGER EAGLE EAGRE EALED EALES EANED EARDS EARED EARLS EARLY EARNS EARNT EARST EARTH EASED EASEL EASER EASES EASLE EASTS EATEN EATER EATHE EAVED EAVES EBBED EBBET EBONS EBONY EBOOK ECADS ECHED ECHES ECHOS ECLAT ECRUS EDEMA EDGED EDGER EDGES EDICT EDIFY EDILE EDITS EDUCE EDUCT EEJIT EENSY EERIE EEVEN EEVNS EFFED EGADS EGERS EGEST EGGAR EGGED EGGER EGMAS EGRET EHING EIDER EIDOS EIGHT EIGNE EIKED EIKON EILDS EISEL EJECT EJIDO EKING EKKAS ELAIN ELAND ELANS ELATE ELBOW ELCHI ELDER ELDIN ELECT ELEGY ELEMI ELFED ELFIN ELIAD ELIDE ELINT ELITE ELMEN ELOGE ELOGY ELOIN ELOPE ELOPS ELPEE ELSIN ELUDE ELUTE ELVAN ELVEN ELVER ELVES EMACS EMAIL EMBAR EMBAY EMBED EMBER EMBOG EMBOW EMBOX EMBUS EMCEE EMEER EMEND EMERG EMERY EMEUS EMICS EMIRS EMITS EMMAS EMMER EMMET EMMEW EMMYS EMOJI EMONG EMOTE EMOVE EMPTS EMPTY EMULE EMURE EMYDE EMYDS ENACT ENARM ENATE ENDED ENDER ENDEW ENDOW ENDUE ENEMA ENEMY ENEWS ENFIX ENIAC ENJOY ENLIT ENMEW ENNOG ENNUI ENOKI ENOLS ENORM ENOWS ENROL ENSEW ENSKY ENSUE ENTER ENTIA ENTRY ENURE ENURN ENVOI ENVOY ENZYM EORLS EOSIN EPACT EPEES EPHAH EPHAS EPHOD EPHOR EPICS EPOCH EPODE EPOPT EPOXY EPRIS EQUAL EQUES EQUID EQUIP ERASE ERBIA ERECT EREVS ERGON ERGOS ERGOT ERHUS ERICA ERICK ERICS ERING ERNED ERNES ERODE EROSE ERRED ERROR ERSES ERUCT ERUGO ERUPT ERUVS ERVEN ERVIL ESCAR ESCOT ESILE ESKAR ESKER ESNES ESSAY ESSES ESTER ESTOC ESTOP ESTRO ETAGE ETAPE ETATS ETENS ETHAL ETHER ETHIC ETHNE ETHOS ETHYL ETICS ETNAS ETTIN ETTLE ETUDE ETUIS ETWEE ETYMA EUGHS EUKED EUPAD EUROS EUSOL EVADE EVENS EVENT EVERT EVERY EVETS EVHOE EVICT EVILS EVITE EVOHE EVOKE EWERS EWEST EWHOW EWKED EXACT EXALT EXAMS EXCEL EXEAT EXECS EXEEM EXEME EXERT EXFIL EXIES EXILE EXINE EXING EXIST EXITS EXODE EXOME EXONS EXPAT EXPEL EXPOS EXTOL EXTRA EXUDE EXULS EXULT EXURB EYASS EYERS EYING EYOTS EYRAS EYRES EYRIE EYRIR EZINE FABBY FABLE FACED FACER FACES FACET FACIA FACTA FACTS FADDY FADED FADER FADES FADGE FADOS FAENA FAERY FAFFS FAFFY FAGGY FAGIN FAGOT FAIKS FAILS FAINE FAINS FAINT FAIRS FAIRY FAITH FAKED FAKER FAKES FAKEY FAKIE FAKIR FALAJ FALLS FALSE FAMED FAMES FANAL FANCY FANDS FANES FANGA FANGO FANGS FANKS FANNY FANON FANOS FANUM FAQIR FARAD FARCE FARCI FARCY FARDS FARED FARER FARES FARLE FARLS FARMS FAROS FARRO FARSE FARTS FASCI FASTI FASTS FATAL FATED FATES FATLY FATSO FATTY FATWA FAUGH FAULD FAULT FAUNA FAUNS FAURD FAUTS FAUVE FAVAS FAVEL FAVER FAVES FAVOR FAVUS FAWNS FAWNY FAXED FAXES FAYED FAYER FAYNE FAYRE FAZED FAZES FEALS FEARE FEARS FEART FEASE FEAST FEATS FEAZE FECAL FECES FECHT FECIT FECKS FEDEX FEEBS FEEDS FEELS FEENS FEERS FEESE FEEZE FEHME FEIGN FEINT FEIST FELCH FELID FELLA FELLS FELLY FELON FELTS FELTY FEMAL FEMES FEMME FEMMY FEMUR FENCE FENDS FENDY FENIS FENKS FENNY FENTS FEODS FEOFF FERAL FERER FERES FERIA FERLY FERMI FERMS FERNS FERNY FERRY FESSE FESTA FESTS FESTY FETAL FETAS FETCH FETED FETES FETID FETOR FETTA FETTS FETUS FETWA FEUAR FEUDS FEUED FEVER FEWER FEYED FEYER FEYLY FEZES FEZZY FIARS FIATS FIBER FIBRE FIBRO FICES FICHE FICHU FICIN FICOS FICUS FIDES FIDGE FIDOS FIEFS FIELD FIEND FIENT FIERE FIERS FIERY FIEST FIFED FIFER FIFES FIFIS FIFTH FIFTY FIGGY FIGHT FIGOS FIKED FIKES FILAR FILCH FILED FILER FILES FILET FILII FILKS FILLE FILLO FILLS FILLY FILMI FILMS FILMY FILOS FILTH FILUM FINAL FINCA FINCH FINDS FINED FINER FINES FINIS FINKS FINNY FINOS FIORD FIQHS FIQUE FIRED FIRER FIRES FIRIE FIRKS FIRMS FIRNS FIRRY FIRST FIRTH FISCS FISHY FISKS FISTS FISTY FITCH FITLY FITNA FITTE FITTS FIVER FIVES FIXED FIXER FIXES FIXIT FIZZY FJELD FJORD FLABS FLACK FLAFF FLAGS FLAIL FLAIR FLAKE FLAKS FLAKY FLAME FLAMM FLAMS FLAMY FLANE FLANK FLANS FLAPS FLARE FLARY FLASH FLASK FLATS FLAVA FLAWN FLAWS FLAWY FLAXY FLAYS FLEAM FLEAS FLECK FLEEK FLEER FLEES FLEET FLEGS FLEME FLESH FLEUR FLEWS FLEXI FLEXO FLEYS FLICK FLICS FLIED FLIER FLIES FLIMP FLIMS FLING FLINT FLIPS FLIRS FLIRT FLISK FLITE FLITS FLITT FLOAT FLOBS FLOCK FLOCS FLOES FLOGS FLONG FLOOD FLOOR FLOPS FLORA FLORS FLORY FLOSH FLOSS FLOTA FLOTE FLOUR FLOUT FLOWN FLOWS FLUBS FLUED FLUES FLUEY FLUFF FLUID FLUKE FLUKY FLUME FLUMP FLUNG FLUNK FLUOR FLURR FLUSH FLUTE FLUTY FLUYT FLYBY FLYER FLYPE FLYTE FOALS FOAMS FOAMY FOCAL FOCUS FOEHN FOGEY FOGGY FOGIE FOGLE FOGOU FOHNS FOIDS FOILS FOINS FOIST FOLDS FOLEY FOLIA FOLIC FOLIE FOLIO FOLKS FOLKY FOLLY FOMES FONDA FONDS FONDU FONES FONLY FONTS FOODS FOODY FOOLS FOOTS FOOTY FORAM FORAY FORBS FORBY FORCE FORDO FORDS FOREL FORES FOREX FORGE FORGO FORKS FORKY FORME FORMS FORTE FORTH FORTS FORTY FORUM FORZA FORZE FOSSA FOSSE FOUAT FOUDS FOUER FOUET FOULE FOULS FOUND FOUNT FOURS FOUTH FOVEA FOWLS FOWTH FOXED FOXES FOXIE FOYER FOYLE FOYNE FRABS FRACK FRACT FRAGS FRAIL FRAIM FRAME FRANC FRANK FRAPE FRAPS FRASS FRATE FRATI FRATS FRAUD FRAUS FRAYS FREAK FREED FREER FREES FREET FREIT FREMD FRENA FREON FRERE FRESH FRETS FRIAR FRIBS FRIED FRIER FRIES FRIGS FRILL FRISE FRISK FRIST FRITH FRITS FRITT FRITZ FRIZE FRIZZ FROCK FROES FROGS FROND FRONS FRONT FRORE FRORN FRORY FROSH FROST FROTH FROWN FROWS FROWY FROZE FRUGS FRUIT FRUMP FRUSH FRUST FRYER FUBAR FUBBY FUBSY FUCKS FUCUS FUDDY FUDGE FUDGY FUELS FUERO FUFFS FUFFY FUGAL FUGGY FUGIE FUGIO FUGLE FUGLY FUGUE FUGUS FUJIS FULLS FULLY FUMED FUMER FUMES FUMET FUNDI FUNDS FUNDY FUNGI FUNGO FUNGS FUNKS FUNKY FUNNY FURAL FURAN FURCA FURLS FUROL FUROR FURRS FURRY FURTH FURZE FURZY FUSED FUSEE FUSEL FUSES FUSIL FUSKS FUSSY FUSTS FUSTY FUTON FUZED FUZEE FUZES FUZIL FUZZY FYCES FYKED FYKES FYLES FYRDS FYTTE GABBA GABBY GABLE GADDI GADES GADGE GADID GADIS GADJE GADJO GADSO GAFFE GAFFS GAGED GAGER GAGES GAIDS GAILY GAINS GAIRS GAITA GAITS GAITT GAJOS GALAH GALAS GALAX GALEA GALED GALES GALLS GALLY GALOP GALUT GALVO GAMAS GAMAY GAMBA GAMBE GAMBO GAMBS GAMED GAMER GAMES GAMEY GAMIC GAMIN GAMMA GAMME GAMMY GAMPS GAMUT GANCH GANDY GANEF GANEV GANGS GANJA GANOF GANTS GAOLS GAPED GAPER GAPES GAPOS GAPPY GARBE GARBO GARBS GARDA GARES GARIS GARMS GARNI GARRE GARTH GARUM GASES GASPS GASPY GASSY GASTS GATCH GATED GATER GATES GATHS GATOR GAUCH GAUCY GAUDS GAUDY GAUGE GAUJE GAULT GAUMS GAUMY GAUNT GAUPS GAURS GAUSS GAUZE GAUZY GAVEL GAVOT GAWCY GAWDS GAWKS GAWKY GAWPS GAWSY GAYAL GAYER GAYLY GAZAL GAZAR GAZED GAZER GAZES GAZON GAZOO GEALS GEANS GEARE GEARS GEATS GEBUR GECKO GECKS GEEKS GEEKY GEEPS GEESE GEEST GEIST GEITS GELDS GELEE GELID GELLY GELTS GEMEL GEMMA GEMMY GEMOT GENAL GENAS GENES GENET GENIC GENIE GENII GENIP GENNY GENOA GENOM GENRE GENRO GENTS GENTY GENUA GENUS GEODE GEOID GERAH GERBE GERES GERLE GERMS GERMY GERNE GESSE GESSO GESTE GESTS GETAS GETUP GEUMS GEYAN GEYER GHAST GHATS GHAUT GHAZI GHEES GHEST GHOST GHOUL GHYLL GIANT GIBED GIBEL GIBER GIBES GIBLI GIBUS GIDDY GIFTS GIGAS GIGHE GIGOT GIGUE GILAS GILDS GILET GILLS GILLY GILPY GILTS GIMEL GIMME GIMPS GIMPY GINCH GINGE GINGS GINKS GINNY GINZO GIPON GIPPO GIPPY GIPSY GIRDS GIRLS GIRLY GIRNS GIRON GIROS GIRRS GIRSH GIRTH GIRTS GISMO GISMS GISTS GITCH GITES GIUST GIVED GIVEN GIVER GIVES GIZMO GLACE GLADE GLADS GLADY GLAIK GLAIR GLAMS GLAND GLANS GLARE GLARY GLASS GLAUM GLAUR GLAZE GLAZY GLEAM GLEAN GLEBA GLEBE GLEBY GLEDE GLEDS GLEED GLEEK GLEES GLEET GLEIS GLENS GLENT GLEYS GLIAL GLIAS GLIBS GLIDE GLIFF GLIFT GLIKE GLIME GLIMS GLINT GLISK GLITS GLITZ GLOAM GLOAT GLOBE GLOBI GLOBS GLOBY GLODE GLOGG GLOMS GLOOM GLOOP GLOPS GLORY GLOSS GLOST GLOUT GLOVE GLOWS GLOZE GLUED GLUER GLUES GLUEY GLUGS GLUME GLUMS GLUON GLUTE GLUTS GLYPH GNARL GNARR GNARS GNASH GNATS GNAWN GNAWS GNOME GNOWS GOADS GOAFS GOALS GOARY GOATS GOATY GOBAN GOBAR GOBBI GOBBO GOBBY GOBIS GOBOS GODET GODLY GODSO GOELS GOERS GOEST GOETH GOETY GOFER GOFFS GOGGA GOGOS GOIER GOING GOJIS GOLDS GOLDY GOLEM GOLES GOLFS GOLLY GOLPE GOLPS GOMBO GOMER GOMPA GONAD GONCH GONEF GONER GONGS GONIA GONIF GONKS GONNA GONOF GONYS GONZO GOOBY GOODS GOODY GOOEY GOOFS GOOFY GOOGS GOOKS GOOKY GOOLD GOOLS GOOLY GOONS GOONY GOOPS GOOPY GOORS GOORY GOOSE GOOSY GOPAK GOPIK GORAL GORAS GORED GORES GORGE GORIS GORMS GORMY GORPS GORSE GORSY GOSHT GOSSE GOTCH GOTHS GOTHY GOTTA GOUCH GOUGE GOUKS GOURA GOURD GOUTS GOUTY GOWAN GOWDS GOWFS GOWKS GOWLS GOWNS GOXES GOYIM GOYLE GRAAL GRABS GRACE GRADE GRADS GRAFF GRAFT GRAIL GRAIN GRAIP GRAMA GRAME GRAMP GRAMS GRANA GRAND GRANS GRANT GRAPE GRAPH GRAPY GRASP GRASS GRATE GRAVE GRAVS GRAVY GRAYS GRAZE GREAT GREBE GREBO GRECE GREED GREEK GREEN GREES GREET GREGE GREGO GREIN GRENS GRESE GREVE GREWS GREYS GRICE GRIDE GRIDS GRIEF GRIFF GRIFT GRIGS GRIKE GRILL GRIME GRIMY GRIND GRINS GRIOT GRIPE GRIPS GRIPT GRIPY GRISE GRIST GRISY GRITH GRITS GRIZE GROAN GROAT GRODY GROGS GROIN GROKS GROMA GRONE GROOF GROOM GROPE GROSS GROSZ GROTS GROUF GROUP GROUT GROVE GROVY GROWL GROWN GROWS GRRLS GRRRL GRUBS GRUED GRUEL GRUES GRUFE GRUFF GRUME GRUMP GRUND GRUNT GRYCE GRYDE GRYKE GRYPE GRYPT GUACO GUANA GUANO GUANS GUARD GUARS GUAVA GUCKS GUCKY GUDES GUESS GUEST GUFFS GUGAS GUIDE GUIDS GUILD GUILE GUILT GUIMP GUIRO GUISE GULAG GULAR GULAS GULCH GULES GULET GULFS GULFY GULLS GULLY GULPH GULPS GULPY GUMBO GUMMA GUMMI GUMMY GUMPS GUNDY GUNGE GUNGY GUNKS GUNKY GUNNY GUPPY GUQIN GURDY GURGE GURLS GURLY GURNS GURRY GURSH GURUS GUSHY GUSLA GUSLE GUSLI GUSSY GUSTO GUSTS GUSTY GUTSY GUTTA GUTTY GUYED GUYLE GUYOT GUYSE GWINE GYALS GYANS GYBED GYBES GYELD GYMPS GYNAE GYNIE GYNNY GYNOS GYOZA GYPOS GYPPO GYPPY GYPSY GYRAL GYRED GYRES GYRON GYROS GYRUS GYTES GYVED GYVES HAAFS HAARS HABIT HABLE HABUS HACEK HACKS HADAL HADED HADES HADJI HADST HAEMS HAETS HAFFS HAFIZ HAFTS HAGGS HAHAS HAICK HAIKA HAIKS HAIKU HAILS HAILY HAINS HAINT HAIRS HAIRY HAITH HAJES HAJIS HAJJI HAKAM HAKAS HAKEA HAKES HAKIM HAKUS HALAL HALED HALER HALES HALFA HALFS HALID HALLO HALLS HALMA HALMS HALON HALOS HALSE HALTS HALVA HALVE HALWA HAMAL HAMBA HAMED HAMES HAMMY HAMZA HANAP HANCE HANCH HANDS HANDY HANGI HANGS HANKS HANKY HANSA HANSE HANTS HAOLE HAOMA HAPAX HAPLY HAPPI HAPPY HAPUS HARAM HARDS HARDY HARED HAREM HARES HARIM HARKS HARLS HARMS HARNS HAROS HARPS HARPY HARRY HARSH HARTS HASHY HASKS HASPS HASTA HASTE HASTY HATCH HATED HATER HATES HATHA HAUDS HAUFS HAUGH HAULD HAULM HAULS HAULT HAUNS HAUNT HAUSE HAUTE HAVEN HAVER HAVES HAVOC HAWED HAWKS HAWMS HAWSE HAYED HAYER HAYEY HAYLE HAZAN HAZED HAZEL HAZER HAZES HEADS HEADY HEALD HEALS HEAME HEAPS HEAPY HEARD HEARE HEARS HEART HEAST HEATH HEATS HEAVE HEAVY HEBEN HEBES HECHT HECKS HEDER HEDGE HEDGY HEEDS HEEDY HEELS HEEZE HEFTE HEFTS HEFTY HEIDS HEIGH HEILS HEIRS HEIST HEJAB HEJRA HELED HELES HELIO HELIX HELLO HELLS HELMS HELOS HELOT HELPS HELVE HEMAL HEMES HEMIC HEMIN HEMPS HEMPY HENCE HENCH HENDS HENGE HENNA HENNY HENRY HENTS HEPAR HERBS HERBY HERDS HERES HERLS HERMA HERMS HERNS HERON HEROS HERRY HERSE HERTZ HERYE HESPS HESTS HETES HETHS HEUCH HEUGH HEVEA HEWED HEWER HEWGH HEXAD HEXED HEXER HEXES HEXYL HEYED HIANT HICKS HIDED HIDER HIDES HIEMS HIGHS HIGHT HIJAB HIJRA HIKED HIKER HIKES HIKOI HILAR HILCH HILLO HILLS HILLY HILTS HILUM HILUS HIMBO HINAU HINDS HINGE HINGS HINKY HINNY HINTS HIOIS HIPLY HIPPO HIPPY HIRED HIREE HIRER HIRES HISSY HISTS HITCH HITHE HIVED HIVER HIVES HIZEN HOAED HOAGY HOARD HOARS HOARY HOAST HOBBY HOBOS HOCKS HOCUS HODAD HODJA HOERS HOGAN HOGEN HOGGS HOGHS HOHED HOICK HOIED HOIKS HOING HOISE HOIST HOKAS HOKED HOKES HOKEY HOKIS HOKKU HOKUM HOLDS HOLED HOLES HOLEY HOLKS HOLLA HOLLO HOLLY HOLME HOLMS HOLON HOLOS HOLTS HOMAS HOMED HOMER HOMES HOMEY HOMIE HOMME HOMOS HONAN HONDA HONDS HONED HONER HONES HONEY HONGI HONGS HONKS HONKY HONOR HOOCH HOODS HOODY HOOEY HOOFS HOOKA HOOKS HOOKY HOOLY HOONS HOOPS HOORD HOORS HOOSH HOOTS HOOTY HOOVE HOPAK HOPED HOPER HOPES HOPPY HORAH HORAL HORAS HORDE HORIS HORKS HORME HORNS HORNY HORSE HORST HORSY HOSED HOSEL HOSEN HOSER HOSES HOSEY HOSTA HOSTS HOTCH HOTEL HOTEN HOTLY HOTTY HOUFF HOUFS HOUGH HOUND HOURI HOURS HOUSE HOUTS HOVEA HOVED HOVEL HOVEN HOVER HOVES HOWBE HOWDY HOWES HOWFF HOWFS HOWKS HOWLS HOWRE HOWSO HOXED HOXES HOYAS HOYED HOYLE HUBBY HUCKS HUDNA HUDUD HUERS HUFFS HUFFY HUGER HUGGY HUHUS HUIAS HULAS HULES HULKS HULKY HULLO HULLS HULLY HUMAN HUMAS HUMFS HUMIC HUMID HUMOR HUMPH HUMPS HUMPY HUMUS HUNCH HUNKS HUNKY HUNTS HURDS HURLS HURLY HURRA HURRY HURST HURTS HUSHY HUSKS HUSKY HUSOS HUSSY HUTCH HUTIA HUZZA HUZZY HWYLS HYDRA HYDRO HYENA HYENS HYGGE HYING HYKES HYLAS HYLEG HYLES HYLIC HYMEN HYMNS HYNDE HYOID HYPED HYPER HYPES HYPHA HYPHY HYPOS HYRAX HYSON HYTHE IAMBI IAMBS IBRIK ICERS ICHED ICHES ICHOR ICIER ICILY ICING ICKER ICKLE ICONS ICTAL ICTIC ICTUS IDANT IDEAL IDEAS IDEES IDENT IDIOM IDIOT IDLED IDLER IDLES IDOLA IDOLS IDYLL IDYLS IFTAR IGAPO IGGED IGLOO IGLUS IHRAM IKANS IKATS IKONS ILEAC ILEAL ILEUM ILEUS ILIAC ILIAD ILIAL ILIUM ILLER ILLTH IMAGE IMAGO IMAMS IMARI IMAUM IMBAR IMBED IMBUE IMIDE IMIDO IMIDS IMINE IMINO IMMEW IMMIT IMMIX IMPED IMPEL IMPIS IMPLY IMPOT IMPRO IMSHI IMSHY INANE INAPT INARM INBOX INBYE INCEL INCLE INCOG INCUR INCUS INCUT INDEW INDEX INDIA INDIE INDOL INDOW INDRI INDUE INEPT INERM INERT INFER INFIX INFOS INFRA INGAN INGLE INGOT INION INKED INKER INKLE INLAY INLET INNED INNER INNIT INORB INPUT INRUN INSET INSPO INTEL INTER INTIL INTIS INTRA INTRO INULA INURE INURN INUST INVAR INWIT IODIC IODID IODIN IONIC IOTAS IPPON IRADE IRATE IRIDS IRING IRKED IROKO IRONE IRONS IRONY ISBAS ISHES ISLED ISLES ISLET ISNAE ISSEI ISSUE ISTLE ITCHY ITEMS ITHER IVIED IVIES IVORY IXIAS IXNAY IXORA IXTLE IZARD IZARS IZZAT JAAPS JABOT JACAL JACKS JACKY JADED JADES JAFAS JAFFA JAGAS JAGER JAGGS JAGGY JAGIR JAGRA JAILS JAKER JAKES JAKEY JALAP JALOP JAMBE JAMBO JAMBS JAMBU JAMES JAMMY JAMON JANES JANNS JANNY JANTY JAPAN JAPED JAPER JAPES JARKS JARLS JARPS JARTA JARUL JASEY JASPE JASPS JATOS JAUKS JAUNT JAUPS JAVAS JAVEL JAWAN JAWED JAXIE JAZZY JEANS JEATS JEBEL JEDIS JEELS JEELY JEEPS JEERS JEEZE JEFES JEFFS JEHAD JEHUS JELAB JELLO JELLS JELLY JEMBE JEMMY JENNY JEONS JERID JERKS JERKY JERRY JESSE JESTS JESUS JETES JETON JETTY JEUNE JEWED JEWEL JEWIE JHALA JIAOS JIBBA JIBBS JIBED JIBER JIBES JIFFS JIFFY JIGGY JIGOT JIHAD JILLS JILTS JIMMY JIMPY JINGO JINKS JINNE JINNI JINNS JIRDS JIRGA JIRRE JISMS JIVED JIVER JIVES JIVEY JNANA JOBED JOBES JOCKO JOCKS JOCKY JOCOS JODEL JOEYS JOHNS JOINS JOINT JOIST JOKED JOKER JOKES JOKEY JOKOL JOLED JOLES JOLLS JOLLY JOLTS JOLTY JOMON JOMOS JONES JONGS JONTY JOOKS JORAM JORUM JOTAS JOTTY JOTUN JOUAL JOUGS JOUKS JOULE JOURS JOUST JOWAR JOWED JOWLS JOWLY JOYED JUBAS JUBES JUCOS JUDAS JUDGE JUDGY JUDOS JUGAL JUGUM JUICE JUICY JUJUS JUKED JUKES JUKUS JULEP JUMAR JUMBO JUMBY JUMPS JUMPY JUNCO JUNKS JUNKY JUNTA JUNTO JUPES JUPON JURAL JURAT JUREL JURES JUROR JUSTS JUTES JUTTY JUVES JUVIE KAAMA KABAB KABAR KABOB KACHA KACKS KADAI KADES KADIS KAFIR KAGOS KAGUS KAHAL KAIAK KAIDS KAIES KAIFS KAIKA KAIKS KAILS KAIMS KAING KAINS KAKAS KAKIS KALAM KALES KALIF KALIS KALPA KAMAS KAMES KAMIK KAMIS KAMME KANAE KANAS KANDY KANEH KANES KANGA KANGS KANJI KANTS KANZU KAONS KAPAS KAPHS KAPOK KAPOW KAPPA KAPUS KAPUT KARAS KARAT KARKS KARMA KARNS KAROO KAROS KARRI KARST KARSY KARTS KARZY KASHA KASME KATAL KATAS KATIS KATTI KAUGH KAURI KAURU KAURY KAVAL KAVAS KAWAS KAWAU KAWED KAYAK KAYLE KAYOS KAZIS KAZOO KBARS KEBAB KEBAR KEBOB KECKS KEDGE KEDGY KEECH KEEFS KEEKS KEELS KEEMA KEENO KEENS KEEPS KEETS KEEVE KEFIR KEHUA KEIRS KELEP KELIM KELLS KELLY KELPS KELPY KELTS KELTY KEMBO KEMBS KEMPS KEMPT KEMPY KENAF KENCH KENDO KENOS KENTE KENTS KEPIS KERBS KEREL KERFS KERKY KERMA KERNE KERNS KEROS KERRY KERVE KESAR KESTS KETAS KETCH KETES KETOL KEVEL KEVIL KEXES KEYED KEYER KHADI KHAFS KHAKI KHANS KHAPH KHATS KHAYA KHAZI KHEDA KHETH KHETS KHOJA KHORS KHOUM KHUDS KIAAT KIACK KIANG KIBBE KIBBI KIBEI KIBES KIBLA KICKS KICKY KIDDO KIDDY KIDEL KIDGE KIEFS KIERS KIEVE KIEVS KIGHT KIKES KIKOI KILEY KILIM KILLS KILNS KILOS KILPS KILTS KILTY KIMBO KINAS KINDA KINDS KINDY KINES KINGS KININ KINKS KINKY KINOS KIORE KIOSK KIPES KIPPA KIPPS KIRBY KIRKS KIRNS KIRRI KISAN KISSY KISTS KITED KITER KITES KITHE KITHS KITTY KITUL KIVAS KIWIS KLANG KLAPS KLETT KLICK KLIEG KLIKS KLONG KLOOF KLUGE KLUTZ KNACK KNAGS KNAPS KNARL KNARS KNAUR KNAVE KNAWE KNEAD KNEED KNEEL KNEES KNELL KNELT KNIFE KNISH KNITS KNIVE KNOBS KNOCK KNOLL KNOPS KNOSP KNOTS KNOUT KNOWE KNOWN KNOWS KNUBS KNURL KNURR KNURS KNUTS KOALA KOANS KOAPS KOBAN KOBOS KOELS KOFFS KOFTA KOGAL KOHAS KOHEN KOHLS KOINE KOJIS KOKAM KOKAS KOKER KOKRA KOKUM KOLAS KOLOS KOMBU KONBU KONDO KONKS KOOKS KOOKY KOORI KOPEK KOPHS KOPJE KOPPA KORAI KORAS KORAT KORES KORMA KOROS KORUN KORUS KOSES KOTCH KOTOS KOTOW KOURA KRAAL KRABS KRAFT KRAIS KRAIT KRANG KRANS KRANZ KRAUT KRAYS KREEP KRENG KREWE KRILL KRONA KRONE KROON KRUBI KRUNK KSARS KUBIE KUDOS KUDUS KUDZU KUFIS KUGEL KUIAS KUKRI KUKUS KULAK KULAN KULAS KULFI KUMIS KUMYS KURIS KURRE KURTA KURUS KUSSO KUTAS KUTCH KUTIS KUTUS KUZUS KVASS KVELL KWELA KYACK KYAKS KYANG KYARS KYATS KYBOS KYDST KYLES KYLIE KYLIN KYLIX KYLOE KYNDE KYNDS KYPES KYRIE KYTES KYTHE LAARI LABDA LABEL LABIA LABIS LABOR LABRA LACED LACER LACES LACET LACEY LACKS LADDY LADED LADEN LADER LADES LADLE LAERS LAEVO LAGAN LAGER LAHAL LAHAR LAICH LAICS LAIDS LAIGH LAIKA LAIKS LAIRD LAIRS LAIRY LAITH LAITY LAKED LAKER LAKES LAKHS LAKIN LAKSA LALDY LALLS LAMAS LAMBS LAMBY LAMED LAMER LAMES LAMIA LAMMY LAMPS LANAI LANAS LANCE LANCH LANDE LANDS LANES LANKS LANKY LANTS LAPEL LAPIN LAPIS LAPJE LAPSE LARCH LARDS LARDY LAREE LARES LARGE LARGO LARIS LARKS LARKY LARNS LARNT LARUM LARVA LASED LASER LASES LASSI LASSO LASSU LASSY LASTS LATAH LATCH LATED LATEN LATER LATEX LATHE LATHI LATHS LATHY LATKE LATTE LATUS LAUAN LAUCH LAUDS LAUFS LAUGH LAUND LAURA LAVAL LAVAS LAVED LAVER LAVES LAVRA LAVVY LAWED LAWER LAWIN LAWKS LAWNS LAWNY LAXED LAXER LAXES LAXLY LAYED LAYER LAYIN LAYUP LAZAR LAZED LAZES LAZOS LAZZI LAZZO LEACH LEADS LEADY LEAFS LEAFY LEAKS LEAKY LEAMS LEANS LEANT LEANY LEAPS LEAPT LEARE LEARN LEARS LEARY LEASE LEASH LEAST LEATS LEAVE LEAVY LEAZE LEBEN LECCY LEDES LEDGE LEDGY LEDUM LEEAR LEECH LEEKS LEEPS LEERS LEERY LEESE LEETS LEEZE LEFTE LEFTS LEFTY LEGAL LEGER LEGES LEGGE LEGGO LEGGY LEGIT LEHRS LEHUA LEIRS LEISH LEMAN LEMED LEMEL LEMES LEMMA LEMME LEMON LEMUR LENDS LENES LENGS LENIS LENOS LENSE LENTI LENTO LEONE LEPER LEPID LEPRA LEPTA LERED LERES LERPS LESBO LESES LESTS LETCH LETHE LETUP LEUCH LEUCO LEUDS LEUGH LEVAS LEVEE LEVEL LEVER LEVES LEVIN LEVIS LEWIS LEXES LEXIS LEZES LEZZA LEZZY LIANA LIANE LIANG LIARD LIARS LIART LIBEL LIBER LIBRA LIBRI LICHI LICHT LICIT LICKS LIDAR LIDOS LIEFS LIEGE LIENS LIERS LIEUS LIEVE LIFER LIFES LIFTS LIGAN LIGER LIGGE LIGHT LIGNE LIKED LIKEN LIKER LIKES LIKIN LILAC LILLS LILOS LILTS LIMAN LIMAS LIMAX LIMBA LIMBI LIMBO LIMBS LIMBY LIMED LIMEN LIMES LIMEY LIMIT LIMMA LIMNS LIMOS LIMPA LIMPS LINAC LINCH LINDS LINDY LINED LINEN LINER LINES LINEY LINGA LINGO LINGS LINGY LININ LINKS LINKY LINNS LINNY LINOS LINTS LINTY LINUM LINUX LIONS LIPAS LIPES LIPID LIPIN LIPOS LIPPY LIRAS LIRKS LIROT LISKS LISLE LISPS LISTS LITAI LITAS LITED LITER LITES LITHE LITHO LITHS LITRE LIVED LIVEN LIVER LIVES LIVID LIVOR LIVRE LLAMA LLANO LOACH LOADS LOAFS LOAMS LOAMY LOANS LOAST LOATH LOAVE LOBAR LOBBY LOBED LOBES LOBOS LOBUS LOCAL LOCHE LOCHS LOCIE LOCIS LOCKS LOCOS LOCUM LOCUS LODEN LODES LODGE LOESS LOFTS LOFTY LOGAN LOGES LOGGY LOGIA LOGIC LOGIE LOGIN LOGOI LOGON LOGOS LOHAN LOIDS LOINS LOIPE LOIRS LOKES LOLLS LOLLY LOLOG LOMAS LOMED LOMES LONER LONGA LONGE LONGS LOOBY LOOED LOOEY LOOFA LOOFS LOOIE LOOKS LOOKY LOOMS LOONS LOONY LOOPS LOOPY LOORD LOOSE LOOTS LOPED LOPER LOPES LOPPY LORAL LORAN LORDS LORDY LOREL LORES LORIC LORIS LORRY LOSED LOSEL LOSEN LOSER LOSES LOSSY LOTAH LOTAS LOTES LOTIC LOTOS LOTSA LOTTA LOTTE LOTTO LOTUS LOUED LOUGH LOUIE LOUIS LOUMA LOUND LOUNS LOUPE LOUPS LOURE LOURS LOURY LOUSE LOUSY LOUTS LOVAT LOVED LOVER LOVES LOVEY LOVIE LOWAN LOWED LOWER LOWES LOWLY LOWND LOWNE LOWNS LOWPS LOWRY LOWSE LOWTS LOXED LOXES LOYAL LOZEN LUACH LUAUS LUBED LUBES LUBRA LUCES LUCID LUCKS LUCKY LUCRE LUDES LUDIC LUDOS LUFFA LUFFS LUGED LUGER LUGES LULLS LULUS LUMAS LUMBI LUMEN LUMME LUMMY LUMPS LUMPY LUNAR LUNAS LUNCH LUNES LUNET LUNGE LUNGI LUNGS LUNKS LUNTS LUPIN LUPUS LURCH LURED LURER LURES LUREX LURGI LURGY LURID LURKS LURRY LURVE LUSER LUSHY LUSKS LUSTS LUSTY LUSUS LUTEA LUTED LUTER LUTES LUVVY LUXED LUXER LUXES LWEIS LYAMS LYARD LYART LYASE LYCEA LYCEE LYCRA LYING LYMES LYMPH LYNCH LYNES LYRES LYRIC LYSED LYSES LYSIN LYSIS LYSOL LYSSA LYTED LYTES LYTHE LYTIC LYTTA MAAED MAARE MAARS MABES MACAS MACAW MACED MACER MACES MACHE MACHI MACHO MACHS MACKS MACLE MACON MACRO MADAM MADGE MADID MADLY MADRE MAERL MAFIA MAFIC MAGES MAGGS MAGIC MAGMA MAGOT MAGUS MAHOE MAHUA MAHWA MAIDS MAIKO MAIKS MAILE MAILL MAILS MAIMS MAINS MAIRE MAIRS MAISE MAIST MAIZE MAJOR MAKAR MAKER MAKES MAKIS MAKOS MALAM MALAR MALAS MALAX MALES MALIC MALIK MALIS MALLS MALMS MALMY MALTS MALTY MALUS MALVA MALWA MAMAS MAMBA MAMBO MAMEE MAMEY MAMIE MAMMA MAMMY MANAS MANAT MANDI MANEB MANED MANEH MANES MANET MANGA MANGE MANGO MANGS MANGY MANIA MANIC MANIS MANKY MANLY MANNA MANOR MANOS MANSE MANTA MANTO MANTY MANUL MANUS MAPAU MAPLE MAQUI MARAE MARAH MARAS MARCH MARCS MARDY MARES MARGE MARGS MARIA MARID MARKA MARKS MARLE MARLS MARLY MARMS MARON MAROR MARRA MARRI MARRY MARSE MARSH MARTS MARVY MASAS MASED MASER MASES MASHY MASKS MASON MASSA MASSE MASSY MASTS MASTY MASUS MATAI MATCH MATED MATER MATES MATEY MATHS MATIN MATLO MATTE MATTS MATZA MATZO MAUBY MAUDS MAULS MAUND MAURI MAUSY MAUTS MAUVE MAUZY MAVEN MAVIE MAVIN MAVIS MAWED MAWKS MAWKY MAWNS MAWRS MAXED MAXES MAXIM MAXIS MAYAN MAYAS MAYBE MAYED MAYOR MAYOS MAYST MAZED MAZER MAZES MAZEY MAZUT MBIRA MEADS MEALS MEALY MEANE MEANS MEANT MEANY MEARE MEASE MEATH MEATS MEATY MEBOS MECCA MECHS MECKS MEDAL MEDIA MEDIC MEDII MEDLE MEEDS MEERS MEETS MEFFS MEINS MEINT MEINY MEITH MEKKA MELAS MELBA MELDS MELEE MELIC MELIK MELLS MELON MELTS MELTY MEMES MEMOS MENAD MENDS MENED MENES MENGE MENGS MENSA MENSE MENSH MENTA MENTO MENUS MEOUS MEOWS MERCH MERCS MERCY MERDE MERED MEREL MERER MERES MERGE MERIL MERIS MERIT MERKS MERLE MERLS MERRY MERSE MESAL MESAS MESEL MESES MESHY MESIC MESNE MESON MESSY MESTO METAL METED METER METES METHO METHS METIC METIF METIS METOL METRE METRO MEUSE MEVED MEVES MEWED MEWLS MEYNT MEZES MEZZE MEZZO MHORR MIAOU MIAOW MIASM MIAUL MICAS MICHE MICHT MICKS MICKY MICOS MICRA MICRO MIDDY MIDGE MIDGY MIDIS MIDST MIENS MIEVE MIFFS MIFFY MIFTY MIGGS MIGHT MIHAS MIHIS MIKED MIKES MIKRA MIKVA MILCH MILDS MILER MILES MILFS MILIA MILKO MILKS MILKY MILLE MILLS MILOR MILOS MILPA MILTS MILTY MILTZ MIMED MIMEO MIMER MIMES MIMIC MIMSY MINAE MINAR MINAS MINCE MINCY MINDS MINED MINER MINES MINGE MINGS MINGY MINIM MINIS MINKE MINKS MINNY MINOR MINOS MINTS MINTY MINUS MIRED MIRES MIREX MIRID MIRIN MIRKS MIRKY MIRLY MIROS MIRTH MIRVS MIRZA MISCH MISDO MISER MISES MISGO MISOS MISSA MISSY MISTS MISTY MITCH MITER MITES MITIS MITRE MITTS MIXED MIXEN MIXER MIXES MIXTE MIXUP MIZEN MIZZY MNEME MOANS MOATS MOBBY MOBES MOBEY MOBIE MOBLE MOCHA MOCHI MOCHS MOCHY MOCKS MODAL MODEL MODEM MODER MODES MODGE MODII MODUS MOERS MOFOS MOGGY MOGUL MOHEL MOHOS MOHRS MOHUA MOHUR MOILE MOILS MOIRA MOIRE MOIST MOITS MOJOS MOKES MOKIS MOKOS MOLAL MOLAR MOLAS MOLDS MOLDY MOLED MOLES MOLLA MOLLS MOLLY MOLTO MOLTS MOLYS MOMES MOMMA MOMMY MOMUS MONAD MONAL MONAS MONDE MONDO MONER MONEY MONGO MONGS MONIC MONIE MONKS MONOS MONTE MONTH MONTY MOOBS MOOCH MOODS MOODY MOOED MOOKS MOOLA MOOLI MOOLS MOOLY MOONG MOONS MOONY MOOPS MOORS MOORY MOOSE MOOTS MOOVE MOPED MOPER MOPES MOPEY MOPPY MOPSY MOPUS MORAE MORAL MORAS MORAT MORAY MOREL MORES MORIA MORNE MORNS MORON MORPH MORRA MORRO MORSE MORTS MOSED MOSES MOSEY MOSKS MOSSO MOSSY MOSTE MOSTS MOTED MOTEL MOTEN MOTES MOTET MOTEY MOTHS MOTHY MOTIF MOTIS MOTOR MOTTE MOTTO MOTTS MOTTY MOTUS MOTZA MOUCH MOUES MOULD MOULS MOULT MOUND MOUNT MOUPS MOURN MOUSE MOUST MOUSY MOUTH MOVED MOVER MOVES MOVIE MOWAS MOWED MOWER MOWRA MOXAS MOXIE MOYAS MOYLE MOYLS MOZED MOZES MOZOS MPRET MUCHO MUCIC MUCID MUCIN MUCKS MUCKY MUCOR MUCRO MUCUS MUDDY MUDGE MUDIR MUDRA MUFFS MUFTI MUGGA MUGGS MUGGY MUHLY MUIDS MUILS MUIRS MUIST MUJIK MULCH MULCT MULED MULES MULEY MULGA MULIE MULLA MULLS MULSE MULSH MUMMS MUMMY MUMPS MUMSY MUMUS MUNCH MUNGA MUNGE MUNGO MUNGS MUNIS MUNTS MUNTU MUONS MURAL MURAS MURED MURES MUREX MURID MURKS MURKY MURLS MURLY MURRA MURRE MURRI MURRS MURRY MURTI MURVA MUSAR MUSCA MUSED MUSER MUSES MUSET MUSHA MUSHY MUSIC MUSIT MUSKS MUSKY MUSOS MUSSE MUSSY MUSTH MUSTS MUSTY MUTCH MUTED MUTER MUTES MUTHA MUTIS MUTON MUTTS MUXED MUXES MUZAK MUZZY MVULE MYALL MYLAR MYNAH MYNAS MYOID MYOMA MYOPE MYOPS MYOPY MYRRH MYSID MYTHI MYTHS MYTHY MYXOS MZEES NAAMS NAANS NABES NABIS NABKS NABLA NABOB NACHE NACHO NACRE NADAS NADIR NAEVE NAEVI NAFFS NAGAS NAGGY NAGOR NAHAL NAIAD NAIFS NAIKS NAILS NAIRA NAIRU NAIVE NAKED NAKER NAKFA NALAS NALED NALLA NAMED NAMER NAMES NAMMA NAMUS NANAS NANCE NANCY NANDU NANNA NANNY NANOS NANUA NAPAS NAPED NAPES NAPOO NAPPA NAPPE NAPPY NARAS NARCO NARCS NARDS NARES NARIC NARIS NARKS NARKY NARRE NASAL NASHI NASTY NATAL NATCH NATES NATIS NATTY NAUCH NAUNT NAVAL NAVAR NAVEL NAVES NAVEW NAVVY NAWAB NAZES NAZIR NAZIS NDUJA NEAFE NEALS NEAPS NEARS NEATH NEATS NEBEK NEBEL NECKS NEDDY NEEDS NEEDY NEELD NEELE NEEMB NEEMS NEEPS NEESE NEEZE NEGRO NEGUS NEIFS NEIGH NEIST NEIVE NELIS NELLY NEMAS NEMNS NEMPT NENES NEONS NEPER NEPIT NERAL NERDS NERDY NERKA NERKS NEROL NERTS NERTZ NERVE NERVY NESTS NETES NETOP NETTS NETTY NEUKS NEUME NEUMS NEVEL NEVER NEVES NEVUS NEWBS NEWED NEWEL NEWER NEWIE NEWLY NEWSY NEWTS NEXTS NEXUS NGAIO NGANA NGATI NGOMA NGWEE NICAD NICER NICHE NICHT NICKS NICOL NIDAL NIDED NIDES NIDOR NIDUS NIECE NIEFS NIEVE NIFES NIFFS NIFFY NIFTY NIGER NIGHS NIGHT NIHIL NIKAB NIKAH NIKAU NILLS NIMBI NIMBS NIMPS NINER NINES NINJA NINNY NINON NINTH NIPAS NIPPY NIQAB NIRLS NIRLY NISEI NISSE NISUS NITER NITES NITID NITON NITRE NITRO NITRY NITTY NIVAL NIXED NIXER NIXES NIXIE NIZAM NKOSI NOAHS NOBBY NOBLE NOBLY NOCKS NODAL NODDY NODES NODUS NOELS NOGGS NOHOW NOILS NOILY NOINT NOIRS NOISE NOISY NOLES NOLLS NOLOS NOMAD NOMAS NOMEN NOMES NOMIC NOMOI NOMOS NONAS NONCE NONES NONET NONGS NONIS NONNY NONYL NOOBS NOOIT NOOKS NOOKY NOONS NOOPS NOOSE NOPAL NORIA NORIS NORKS NORMA NORMS NORTH NOSED NOSER NOSES NOSEY NOTAL NOTCH NOTED NOTER NOTES NOTUM NOULD NOULE NOULS NOUNS NOUNY NOUPS NOVAE NOVAS NOVEL NOVUM NOWAY NOWED NOWLS NOWTS NOWTY NOXAL NOXES NOYAU NOYED NOYES NUBBY NUBIA NUCHA NUDDY NUDER NUDES NUDGE NUDIE NUDZH NUFFS NUGAE NUKED NUKES NULLA NULLS NUMBS NUMEN NUMMY NUNNY NURDS NURDY NURLS NURRS NURSE NUTSO NUTSY NUTTY NYAFF NYALA NYING NYLON NYMPH NYSSA OAKED OAKEN OAKER OAKUM OARED OASES OASIS OASTS OATEN OATER OATHS OAVES OBANG OBEAH OBELI OBESE OBEYS OBIAS OBIED OBIIT OBITS OBJET OBOES OBOLE OBOLI OBOLS OCCAM OCCUR OCEAN OCHER OCHES OCHRE OCHRY OCKER OCREA OCTAD OCTAL OCTAN OCTAS OCTET OCTYL OCULI ODAHS ODALS ODDER ODDLY ODEON ODEUM ODISM ODIST ODIUM ODORS ODOUR ODYLE ODYLS OFAYS OFFAL OFFED OFFER OFFIE OFLAG OFTEN OFTER OGAMS OGEED OGEES OGGIN OGHAM OGIVE OGLED OGLER OGLES OGMIC OGRES OHIAS OHING OHMIC OHONE OIDIA OILED OILER OINKS OINTS OJIME OKAPI OKAYS OKEHS OKRAS OKTAS OLDEN OLDER OLDIE OLEIC OLEIN OLENT OLEOS OLEUM OLIOS OLIVE OLLAS OLLAV OLLER OLLIE OLOGY OLPAE OLPES OMASA OMBER OMBRE OMBUS OMEGA OMENS OMERS OMITS OMLAH OMOVS OMRAH ONCER ONCES ONCET ONCUS ONELY ONERS ONERY ONION ONIUM ONKUS ONLAY ONNED ONSET ONTIC OOBIT OOHED OOMPH OONTS OOPED OORIE OOSES OOTID OOZED OOZES OPAHS OPALS OPENS OPEPE OPERA OPINE OPING OPIUM OPPOS OPSIN OPTED OPTER OPTIC ORACH ORACY ORALS ORANG ORANT ORATE ORBED ORBIT ORCAS ORCIN ORDER ORDOS OREAD ORFES ORGAN ORGIA ORGIC ORGUE ORIBI ORIEL ORIXA ORLES ORLON ORLOP ORMER ORNIS ORPIN ORRIS ORTHO ORVAL ORZOS OSCAR OSHAC OSIER OSMIC OSMOL OSSIA OSTIA OTAKU OTARY OTHER OTTAR OTTER OTTOS OUBIT OUCHT OUENS OUGHT OUIJA OULKS OUMAS OUNCE OUNDY OUPAS OUPED OUPHE OUPHS OURIE OUSEL OUSTS OUTBY OUTDO OUTED OUTER OUTGO OUTRE OUTRO OUTTA OUZEL OUZOS OVALS OVARY OVATE OVELS OVENS OVERS OVERT OVINE OVIST OVOID OVOLI OVOLO OVULE OWCHE OWIES OWING OWLED OWLER OWLET OWNED OWNER OWRES OWRIE OWSEN OXBOW OXERS OXEYE OXIDE OXIDS OXIES OXIME OXIMS OXLIP OXTER OYERS OZEKI OZONE OZZIE PAALS PAANS PACAS PACED PACER PACES PACEY PACHA PACKS PACOS PACTA PACTS PADDY PADIS PADLE PADMA PADRE PADRI PAEAN PAEDO PAEON PAGAN PAGED PAGER PAGES PAGLE PAGOD PAGRI PAIKS PAILS PAINS PAINT PAIRE PAIRS PAISA PAISE PAKKA PALAS PALAY PALEA PALED PALER PALES PALET PALIS PALKI PALLA PALLS PALLY PALMS PALMY PALPI PALPS PALSA PALSY PAMPA PANAX PANCE PANDA PANDS PANDY PANED PANEL PANES PANGA PANGS PANIC PANIM PANKO PANNE PANNI PANSY PANTO PANTS PANTY PAOLI PAOLO PAPAL PAPAS PAPAW PAPER PAPES PAPPI PAPPY PARAE PARAS PARCH PARDI PARDS PARDY PARED PAREN PAREO PARER PARES PAREU PAREV PARGE PARGO PARIS PARKA PARKI PARKS PARKY PARLE PARLY PARMA PAROL PARPS PARRA PARRS PARRY PARSE PARTI PARTS PARTY PARVE PARVO PASEO PASES PASHA PASHM PASKA PASPY PASSE PASTA PASTE PASTS PASTY PATCH PATED PATEN PATER PATES PATHS PATIN PATIO PATKA PATLY PATSY PATTE PATTY PATUS PAUAS PAULS PAUSE PAVAN PAVED PAVEN PAVER PAVES PAVID PAVIN PAVIS PAWAS PAWAW PAWED PAWER PAWKS PAWKY PAWLS PAWNS PAXES PAYED PAYEE PAYER PAYOR PAYSD PEACE PEACH PEAGE PEAGS PEAKS PEAKY PEALS PEANS PEARE PEARL PEARS PEART PEASE PEATS PEATY PEAVY PEAZE PEBAS PECAN PECHS PECKE PECKS PECKY PEDAL PEDES PEDIS PEDRO PEECE PEEKS PEELS PEENS PEEOY PEEPE PEEPS PEERS PEERY PEEVE PEGGY PEGHS PEINS PEISE PEIZE PEKAN PEKES PEKIN PEKOE PELAS PELAU PELES PELFS PELLS PELMA PELON PELTA PELTS PENAL PENCE PENDS PENDU PENED PENES PENGO PENIE PENIS PENKS PENNA PENNE PENNI PENNY PENTS PEONS PEONY PEPLA PEPOS PEPPY PEPSI PERAI PERCE PERCH PERCS PERDU PERDY PEREA PERES PERIL PERIS PERKS PERKY PERMS PERNS PEROG PERPS PERRY PERSE PERST PERTS PERVE PERVO PERVS PERVY PESKY PESOS PESTO PESTS PESTY PETAL PETAR PETER PETIT PETRE PETRI PETTI PETTO PETTY PEWEE PEWIT PEYSE PHAGE PHANG PHARE PHARM PHASE PHEER PHENE PHEON PHESE PHIAL PHISH PHIZZ PHLOX PHOCA PHONE PHONO PHONS PHONY PHOTO PHOTS PHPHT PHUTS PHYLA PHYLE PIANI PIANO PIANS PIBAL PICAL PICAS PICCY PICKS PICKY PICOT PICRA PICUL PIECE PIEND PIERS PIERT PIETA PIETS PIETY PIEZO PIGGY PIGHT PIGMY PIING PIKAS PIKAU PIKED PIKER PIKES PIKEY PIKIS PIKUL PILAE PILAF PILAO PILAR PILAU PILAW PILCH PILEA PILED PILEI PILER PILES PILIS PILLS PILOT PILOW PILUM PILUS PIMAS PIMPS PINAS PINCH PINED PINES PINEY PINGO PINGS PINKO PINKS PINKY PINNA PINNY PINON PINOT PINTA PINTO PINTS PINUP PIONS PIONY PIOUS PIOYE PIOYS PIPAL PIPAS PIPED PIPER PIPES PIPET PIPIS PIPIT PIPPY PIPUL PIQUE PIRAI PIRLS PIRNS PIROG PISCO PISES PISKY PISOS PISSY PISTE PITAS PITCH PITHS PITHY PITON PITOT PITTA PIUMS PIVOT PIXEL PIXES PIXIE PIZED PIZES PIZZA PLAAS PLACE PLACK PLAGE PLAID PLAIN PLAIT PLANE PLANK PLANS PLANT PLAPS PLASH PLASM PLAST PLATE PLATS PLATT PLATY PLAYA PLAYS PLAZA PLEAD PLEAS PLEAT PLEBE PLEBS PLENA PLEON PLESH PLEWS PLICA PLIED PLIER PLIES PLIMS PLING PLINK PLOAT PLODS PLONG PLONK PLOOK PLOPS PLOTS PLOTZ PLOUK PLOWS PLOYE PLOYS PLUCK PLUES PLUFF PLUGS PLUMB PLUME PLUMP PLUMS PLUMY PLUNK PLUOT PLUSH PLUTO PLYER POACH POAKA POAKE POBOY POCKS POCKY PODAL PODDY PODEX PODGE PODGY PODIA POEMS POEPS POESY POETS POGEY POGGE POGOS POHED POILU POIND POINT POISE POKAL POKED POKER POKES POKEY POKIE POLAR POLED POLER POLES POLEY POLIO POLIS POLJE POLKA POLKS POLLS POLLY POLOS POLTS POLYP POLYS POMBE POMES POMMY POMOS POMPS PONCE PONCY PONDS PONES PONEY PONGA PONGO PONGS PONGY PONKS PONTS PONTY PONZU POOCH POODS POOED POOFS POOFY POOHS POOJA POOKA POOKS POOLS POONS POOPS POOPY POORI POORT POOTS POOVE POOVY POPES POPPA POPPY POPSY PORAE PORAL PORCH PORED PORER PORES PORGE PORGY PORIN PORKS PORKY PORNO PORNS PORNY PORTA PORTS PORTY POSED POSER POSES POSEY POSHO POSIT POSSE POSTS POTAE POTCH POTED POTES POTIN POTOO POTSY POTTO POTTS POTTY POUCH POUFF POUFS POUKE POUKS POULE POULP POULT POUND POUPE POUPT POURS POUTS POUTY POWAN POWER POWIN POWND POWNS POWNY POWRE POXED POXES POYNT POYOU POYSE POZZY PRAAM PRADS PRAHU PRAMS PRANA PRANG PRANK PRAOS PRASE PRATE PRATS PRATT PRATY PRAUS PRAWN PRAYS PREDY PREED PREEN PREES PREIF PREMS PREMY PRENT PREON PREOP PREPS PRESA PRESE PRESS PREST PREVE PREXY PREYS PRIAL PRICE PRICK PRICY PRIDE PRIED PRIEF PRIER PRIES PRIGS PRILL PRIMA PRIME PRIMI PRIMO PRIMP PRIMS PRIMY PRINK PRINT PRION PRIOR PRISE PRISM PRISS PRIVY PRIZE PROAS PROBE PROBS PRODS PROEM PROFS PROGS PROIN PROKE PROLE PROLL PROMO PROMS PRONE PRONG PRONK PROOF PROPS PRORE PROSE PROSO PROSS PROST PROSY PROTO PROUD PROUL PROVE PROWL PROWS PROXY PROYN PRUDE PRUNE PRUNT PRUTA PRYER PRYSE PSALM PSEUD PSHAW PSION PSOAE PSOAI PSOAS PSORA PSYCH PSYOP PUBCO PUBES PUBIC PUBIS PUCAN PUCER PUCES PUCKA PUCKS PUDDY PUDGE PUDGY PUDIC PUDOR PUDSY PUDUS PUERS PUFFA PUFFS PUFFY PUGGY PUGIL PUHAS PUJAH PUJAS PUKAS PUKED PUKER PUKES PUKEY PUKKA PUKUS PULAO PULAS PULED PULER PULES PULIK PULIS PULKA PULKS PULLI PULLS PULLY PULMO PULPS PULPY PULSE PULUS PUMAS PUMIE PUMPS PUNAS PUNCE PUNCH PUNGA PUNGS PUNJI PUNKA PUNKS PUNKY PUNNY PUNTO PUNTS PUNTY PUPAE PUPAL PUPAS PUPIL PUPPY PUPUS PURDA PURED PUREE PURER PURES PURGE PURIN PURIS PURLS PURPY PURRS PURSE PURSY PURTY PUSES PUSHY PUSLE PUSSY PUTID PUTON PUTTI PUTTO PUTTS PUTTY PUZEL PWNED PYATS PYETS PYGAL PYGMY PYINS PYLON PYNED PYNES PYOID PYOTS PYRAL PYRAN PYRES PYREX PYRIC PYROS PYXED PYXES PYXIE PYXIS PZAZZ QADIS QAIDS QAJAQ QANAT QAPIK QIBLA QOPHS QORMA QUACK QUADS QUAFF QUAGS QUAIL QUAIR QUAIS QUAKE QUAKY QUALE QUALM QUANT QUARE QUARK QUART QUASH QUASI QUASS QUATE QUATS QUAYD QUAYS QUBIT QUEAN QUEEN QUEER QUELL QUEME QUENA QUERN QUERY QUEST QUEUE QUEYN QUEYS QUICH QUICK QUIDS QUIET QUIFF QUILL QUILT QUIMS QUINA QUINE QUINO QUINS QUINT QUIPO QUIPS QUIPU QUIRE QUIRK QUIRT QUIST QUITE QUITS QUOAD QUODS QUOIF QUOIN QUOIT QUOLL QUONK QUOPS QUOTA QUOTE QUOTH QURSH QUYTE RABAT RABBI RABIC RABID RABIS RACED RACER RACES RACHE RACKS RACON RADAR RADGE RADII RADIO RADIX RADON RAFFS RAFTS RAGAS RAGDE RAGED RAGEE RAGER RAGES RAGGA RAGGS RAGGY RAGIS RAGUS RAHED RAHUI RAIAS RAIDS RAIKS RAILE RAILS RAINE RAINS RAINY RAIRD RAISE RAITA RAITS RAJAH RAJAS RAJES RAKED RAKEE RAKER RAKES RAKIA RAKIS RAKUS RALES RALLY RALPH RAMAL RAMEE RAMEN RAMET RAMIE RAMIN RAMIS RAMMY RAMPS RAMUS RANAS RANCE RANCH RANDS RANDY RANEE RANGA RANGE RANGI RANGS RANGY RANID RANIS RANKE RANKS RANTS RAPED RAPER RAPES RAPHE RAPID RAPPE RARED RAREE RARER RARES RARKS RASED RASER RASES RASPS RASPY RASSE RASTA RATAL RATAN RATAS RATCH RATED RATEL RATER RATES RATHA RATHE RATHS RATIO RATOO RATOS RATTY RATUS RAUNS RAUPO RAVED RAVEL RAVEN RAVER RAVES RAVEY RAVIN RAWER RAWIN RAWLY RAWNS RAXED RAXES RAYAH RAYAS RAYED RAYLE RAYNE RAYON RAZED RAZEE RAZER RAZES RAZOO RAZOR REACH REACT READD READS READY REAIS REAKS REALM REALO REALS REAME REAMS REAMY REANS REAPS REARM REARS REAST REATA REATE REAVE REBAR REBBE REBEC REBEL REBID REBIT REBOP REBUS REBUT REBUY RECAL RECAP RECCE RECCO RECCY RECIT RECKS RECON RECTA RECTI RECTO RECUR RECUT REDAN REDDS REDDY REDED REDES REDIA REDID REDIP REDLY REDON REDOS REDOX REDRY REDUB REDUX REDYE REECH REEDE REEDS REEDY REEFS REEFY REEKS REEKY REELS REENS REEST REEVE REFED REFEL REFER REFFO REFIS REFIT REFIX REFLY REFRY REGAL REGAR REGES REGGO REGIE REGMA REGNA REGOS REGUR REHAB REHEM REIFS REIFY REIGN REIKI REIKS REINK REINS REIRD REIST REIVE REJIG REJON REKED REKES REKEY RELAX RELAY RELET RELIC RELIE RELIT RELLO REMAN REMAP REMEN REMET REMEX REMIT REMIX RENAL RENAY RENDS RENEW RENEY RENGA RENIG RENIN RENNE RENOS RENTE RENTS REOIL REORG REPAY REPEG REPEL REPIN REPLA REPLY REPOS REPOT REPPS REPRO RERAN RERIG RERUN RESAT RESAW RESAY RESEE RESES RESET RESEW RESID RESIN RESIT RESOD RESOW RESTO RESTS RESTY RESUS RETAG RETAX RETCH RETEM RETIA RETIE RETOX RETRO RETRY REUSE REVEL REVET REVIE REVUE REWAN REWAX REWED REWET REWIN REWON REWTH REXES REZES RHEAS RHEME RHEUM RHIES RHIME RHINE RHINO RHODY RHOMB RHONE RHUMB RHYME RHYNE RHYTA RIADS RIALS RIANT RIATA RIBAS RIBBY RIBES RICED RICER RICES RICEY RICHT RICIN RICKS RIDER RIDES RIDGE RIDGY RIDIC RIELS RIEMS RIEVE RIFER RIFFS RIFLE RIFTE RIFTS RIFTY RIGGS RIGHT RIGID RIGOL RIGOR RILED RILES RILEY RILLE RILLS RIMAE RIMED RIMER RIMES RIMUS RINDS RINDY RINES RINGS RINKS RINSE RIOJA RIOTS RIPED RIPEN RIPER RIPES RIPPS RISEN RISER RISES RISHI RISKS RISKY RISPS RISUS RITES RITTS RITZY RIVAL RIVAS RIVED RIVEL RIVEN RIVER RIVES RIVET RIYAL RIZAS ROACH ROADS ROAMS ROANS ROARS ROARY ROAST ROATE ROBED ROBES ROBIN ROBLE ROBOT ROCKS ROCKY RODED RODEO RODES ROGER ROGUE ROGUY ROHES ROIDS ROILS ROILY ROINS ROIST ROJAK ROJIS ROKED ROKER ROKES ROLAG ROLES ROLFS ROLLS ROMAL ROMAN ROMEO ROMPS RONDE RONDO RONEO RONES RONIN RONNE RONTE RONTS ROODS ROOFS ROOFY ROOKS ROOKY ROOMS ROOMY ROONS ROOPS ROOPY ROOSA ROOSE ROOST ROOTS ROOTY ROPED ROPER ROPES ROPEY ROQUE RORAL RORES RORIC RORID RORIE RORTS RORTY ROSED ROSES ROSET ROSHI ROSIN ROSIT ROSTI ROSTS ROTAL ROTAN ROTAS ROTCH ROTED ROTES ROTIS ROTLS ROTON ROTOR ROTOS ROTTE ROUEN ROUES ROUGE ROUGH ROULE ROULS ROUMS ROUND ROUPS ROUPY ROUSE ROUST ROUTE ROUTH ROUTS ROVED ROVEN ROVER ROVES ROWAN ROWDY ROWED ROWEL ROWEN ROWER ROWIE ROWME ROWND ROWTH ROWTS ROYAL ROYNE ROYST ROZET ROZIT RUANA RUBAI RUBBY RUBEL RUBES RUBIN RUBLE RUBLI RUBUS RUCHE RUCKS RUDAS RUDDS RUDDY RUDER RUDES RUDIE RUDIS RUEDA RUERS RUFFE RUFFS RUGAE RUGAL RUGBY RUGGY RUING RUINS RUKHS RULED RULER RULES RUMAL RUMBA RUMBO RUMEN RUMES RUMLY RUMMY RUMOR RUMPO RUMPS RUMPY RUNCH RUNDS RUNED RUNES RUNGS RUNIC RUNNY RUNTS RUNTY RUPEE RUPIA RURAL RURPS RURUS RUSAS RUSES RUSHY RUSKS RUSMA RUSSE RUSTS RUSTY RUTHS RUTIN RUTTY RYALS RYBAT RYKED RYKES RYMME RYNDS RYOTS RYPER SAAGS SABAL SABED SABER SABES SABHA SABIN SABIR SABLE SABOT SABRA SABRE SACKS SACRA SADDO SADES SADHE SADHU SADIS SADLY SADOS SADZA SAFED SAFER SAFES SAGAS SAGER SAGES SAGGY SAGOS SAGUM SAHEB SAHIB SAICE SAICK SAICS SAIDS SAIGA SAILS SAIMS SAINE SAINS SAINT SAIRS SAIST SAITH SAJOU SAKAI SAKER SAKES SAKIA SAKIS SAKTI SALAD SALAL SALAT SALEP SALES SALET SALIC SALIX SALLE SALLY SALMI SALOL SALON SALOP SALPA SALPS SALSA SALSE SALTO SALTS SALTY SALUE SALUT SALVE SALVO SAMAN SAMAS SAMBA SAMBO SAMEK SAMEL SAMEN SAMES SAMEY SAMFU SAMMY SAMPI SAMPS SANDS SANDY SANED SANER SANES SANGA SANGH SANGO SANGS SANKO SANSA SANTO SANTS SAOLA SAPAN SAPID SAPOR SAPPY SARAN SARDS SARED SAREE SARGE SARGO SARIN SARIS SARKS SARKY SAROD SAROS SARUS SASER SASIN SASSE SASSY SATAI SATAY SATED SATEM SATES SATIN SATIS SATYR SAUBA SAUCE SAUCH SAUCY SAUGH SAULS SAULT SAUNA SAUNT SAURY SAUTE SAUTS SAVED SAVER SAVES SAVEY SAVIN SAVOR SAVOY SAVVY SAWAH SAWED SAWER SAXES SAYED SAYER SAYID SAYNE SAYON SAYST SAZES SCABS SCADS SCAFF SCAGS SCAIL SCALA SCALD SCALE SCALL SCALP SCALY SCAMP SCAMS SCAND SCANS SCANT SCAPA SCAPE SCAPI SCARE SCARF SCARP SCARS SCART SCARY SCATH SCATS SCATT SCAUD SCAUP SCAUR SCAWS SCEAT SCENA SCEND SCENE SCENT SCHAV SCHMO SCHUL SCHWA SCION SCLIM SCODY SCOFF SCOGS SCOLD SCONE SCOOG SCOOP SCOOT SCOPA SCOPE SCOPS SCORE SCORN SCOTS SCOUG SCOUP SCOUR SCOUT SCOWL SCOWP SCOWS SCRAB SCRAE SCRAG SCRAM SCRAN SCRAP SCRAT SCRAW SCRAY SCREE SCREW SCRIM SCRIP SCROB SCROD SCROG SCROW SCRUB SCRUM SCUBA SCUDI SCUDO SCUDS SCUFF SCUFT SCUGS SCULK SCULL SCULP SCULS SCUMS SCUPS SCURF SCURS SCUSE SCUTA SCUTE SCUTS SCUZZ SCYES SDAYN SDEIN SEALS SEAME SEAMS SEAMY SEANS SEARE SEARS SEASE SEATS SEAZE SEBUM SECCO SECHS SECTS SEDAN SEDER SEDES SEDGE SEDGY SEDUM SEEDS SEEDY SEEKS SEELD SEELS SEELY SEEMS SEEPS SEEPY SEERS SEFER SEGAR SEGNI SEGNO SEGOL SEGOS SEGUE SEHRI SEIFS SEILS SEINE SEIRS SEISE SEISM SEITY SEIZA SEIZE SEKOS SEKTS SELAH SELES SELFS SELLA SELLE SELLS SELVA SEMEE SEMEN SEMES SEMIE SEMIS SENAS SENDS SENES SENGI SENNA SENOR SENSA SENSE SENSI SENTE SENTI SENTS SENVY SENZA SEPAD SEPAL SEPIA SEPIC SEPOY SEPTA SEPTS SERAC SERAI SERAL SERED SERER SERES SERFS SERGE SERIC SERIF SERIN SERKS SERON SEROW SERRA SERRE SERRS SERRY SERUM SERVE SERVO SESEY SESSA SETAE SETAL SETON SETTS SETUP SEVEN SEVER SEWAN SEWAR SEWED SEWEL SEWEN SEWER SEWIN SEXED SEXER SEXES SEXTO SEXTS SEYEN SHACK SHADE SHADS SHADY SHAFT SHAGS SHAHS SHAKE SHAKO SHAKT SHAKY SHALE SHALL SHALM SHALT SHALY SHAMA SHAME SHAMS SHAND SHANK SHANS SHAPE SHAPS SHARD SHARE SHARK SHARN SHARP SHASH SHAUL SHAVE SHAWL SHAWM SHAWN SHAWS SHAYA SHAYS SHCHI SHEAF SHEAL SHEAR SHEAS SHEDS SHEEL SHEEN SHEEP SHEER SHEET SHEIK SHELF SHELL SHEND SHENT SHEOL SHERD SHERE SHERO SHETS SHEVA SHEWN SHEWS SHIAI SHIED SHIEL SHIER SHIES SHIFT SHILL SHILY SHIMS SHINE SHINS SHINY SHIPS SHIRE SHIRK SHIRR SHIRS SHIRT SHISH SHISO SHIST SHITE SHITS SHIUR SHIVA SHIVE SHIVS SHLEP SHLUB SHMEK SHMOE SHOAL SHOAT SHOCK SHOED SHOER SHOES SHOGI SHOGS SHOJI SHOJO SHOLA SHONE SHOOK SHOOL SHOON SHOOS SHOOT SHOPE SHOPS SHORE SHORL SHORN SHORT SHOTE SHOTS SHOTT SHOUT SHOVE SHOWD SHOWN SHOWS SHOWY SHOYU SHRED SHREW SHRIS SHROW SHRUB SHRUG SHTIK SHTUM SHTUP SHUCK SHULE SHULN SHULS SHUNS SHUNT SHURA SHUSH SHUTE SHUTS SHWAS SHYER SHYLY SIALS SIBBS SIBYL SICES SICHT SICKO SICKS SICKY SIDAS SIDED SIDER SIDES SIDHA SIDHE SIDLE SIEGE SIELD SIENS SIENT SIETH SIEUR SIEVE SIFTS SIGHS SIGHT SIGIL SIGLA SIGMA SIGNA SIGNS SIJOS SIKAS SIKER SIKES SILDS SILED SILEN SILER SILES SILEX SILKS SILKY SILLS SILLY SILOS SILTS SILTY SILVA SIMAR SIMAS SIMBA SIMIS SIMPS SIMUL SINCE SINDS SINED SINES SINEW SINGE SINGS SINHS SINKS SINKY SINUS SIPED SIPES SIPPY SIRED SIREE SIREN SIRES SIRIH SIRIS SIROC SIRRA SIRUP SISAL SISES SISSY SISTA SISTS SITAR SITED SITES SITHE SITKA SITUP SITUS SIVER SIXER SIXES SIXMO SIXTE SIXTH SIXTY SIZAR SIZED SIZEL SIZER SIZES SKAGS SKAIL SKALD SKANK SKART SKATE SKATS SKATT SKAWS SKEAN SKEAR SKEDS SKEED SKEEF SKEEN SKEER SKEES SKEET SKEGG SKEGS SKEIN SKELF SKELL SKELM SKELP SKENE SKENS SKEOS SKEPS SKERS SKETS SKEWS SKIDS SKIED SKIER SKIES SKIEY SKIFF SKILL SKIMO SKIMP SKIMS SKINK SKINS SKINT SKIOS SKIPS SKIRL SKIRR SKIRT SKITE SKITS SKIVE SKIVY SKLIM SKOAL SKODY SKOFF SKOGS SKOLS SKOOL SKORT SKOSH SKRAN SKRIK SKUAS SKUGS SKULK SKULL SKUNK SKYED SKYER SKYEY SKYFS SKYRE SKYRS SKYTE SLABS SLACK SLADE SLAES SLAGS SLAID SLAIN SLAKE SLAMS SLANE SLANG SLANK SLANT SLAPS SLART SLASH SLATE SLATS SLATY SLAVE SLAWS SLAYS SLEBS SLEDS SLEEK SLEEP SLEER SLEET SLEPT SLEWS SLEYS SLICE SLICK SLIDE SLIER SLILY SLIME SLIMS SLIMY SLING SLINK SLIPE SLIPS SLIPT SLISH SLITS SLIVE SLOAN SLOBS SLOES SLOGS SLOID SLOJD SLOMO SLOOM SLOOP SLOOT SLOPE SLOPS SLOPY SLORM SLOSH SLOTH SLOTS SLOVE SLOWS SLOYD SLUBB SLUBS SLUED SLUES SLUFF SLUGS SLUIT SLUMP SLUMS SLUNG SLUNK SLURB SLURP SLURS SLUSE SLUSH SLUTS SLYER SLYLY SLYPE SMAAK SMACK SMAIK SMALL SMALM SMALT SMARM SMART SMASH SMAZE SMEAR SMEEK SMEES SMEIK SMEKE SMELL SMELT SMERK SMEWS SMILE SMIRK SMIRR SMIRS SMITE SMITH SMITS SMOCK SMOGS SMOKE SMOKO SMOKY SMOLT SMOOR SMOOT SMORE SMORG SMOTE SMOUT SMOWT SMUGS SMURS SMUSH SMUTS SNABS SNACK SNAFU SNAGS SNAIL SNAKE SNAKY SNAPS SNARE SNARF SNARK SNARL SNARS SNARY SNASH SNATH SNAWS SNEAD SNEAK SNEAP SNEBS SNECK SNEDS SNEED SNEER SNEES SNELL SNIBS SNICK SNIDE SNIES SNIFF SNIFT SNIGS SNIPE SNIPS SNIPY SNIRT SNITS SNOBS SNODS SNOEK SNOEP SNOGS SNOKE SNOOD SNOOK SNOOL SNOOP SNOOT SNORE SNORT SNOTS SNOUT SNOWK SNOWS SNOWY SNUBS SNUCK SNUFF SNUGS SNUSH SNYES SOAKS SOAPS SOAPY SOARE SOARS SOAVE SOBAS SOBER SOCAS SOCES SOCKO SOCKS SOCLE SODAS SODDY SODIC SODOM SOFAR SOFAS SOFTA SOFTS SOFTY SOGER SOGGY SOHUR SOILS SOILY SOJAS SOJUS SOKAH SOKEN SOKES SOKOL SOLAH SOLAN SOLAR SOLAS SOLDE SOLDI SOLDO SOLDS SOLED SOLEI SOLER SOLES SOLID SOLON SOLOS SOLUM SOLUS SOLVE SOMAN SOMAS SONAR SONCE SONDE SONES SONGS SONIC SONLY SONNE SONNY SONSE SONSY SOOEY SOOKS SOOKY SOOLE SOOLS SOOMS SOOPS SOOTE SOOTH SOOTS SOOTY SOPHS SOPHY SOPOR SOPPY SOPRA SORAL SORAS SORBO SORBS SORDA SORDO SORDS SORED SOREE SOREL SORER SORES SOREX SORGO SORNS SORRA SORRY SORTA SORTS SORUS SOTHS SOTOL SOUCE SOUCT SOUGH SOUKS SOULS SOUMS SOUND SOUPS SOUPY SOURS SOUSE SOUTH SOUTS SOWAR SOWCE SOWED SOWER SOWFF SOWFS SOWLE SOWLS SOWMS SOWND SOWNE SOWPS SOWSE SOWTH SOYAS SOYLE SOYUZ SOZIN SPACE SPACY SPADE SPADO SPAED SPAER SPAES SPAGS SPAHI SPAIL SPAIN SPAIT SPAKE SPALD SPALE SPALL SPALT SPAMS SPANE SPANG SPANK SPANS SPARD SPARE SPARK SPARS SPART SPASM SPATE SPATS SPAUL SPAWL SPAWN SPAWS SPAYD SPAYS SPAZA SPAZZ SPEAK SPEAL SPEAN SPEAR SPEAT SPECK SPECS SPECT SPEED SPEEL SPEER SPEIL SPEIR SPEKS SPELD SPELK SPELL SPELT SPEND SPENT SPEOS SPERM SPETS SPEUG SPEWS SPEWY SPIAL SPICA SPICE SPICK SPICS SPICY SPIDE SPIED SPIEL SPIER SPIES SPIFF SPIFS SPIKE SPIKS SPIKY SPILE SPILL SPILT SPIMS SPINA SPINE SPINK SPINS SPINY SPIRE SPIRT SPIRY SPITE SPITS SPITZ SPIVS SPLAT SPLAY SPLIT SPLOG SPODE SPODS SPOIL SPOKE SPOOF SPOOK SPOOL SPOOM SPOON SPOOR SPOOT SPORE SPORK SPORT SPOSH SPOTS SPOUT SPRAD SPRAG SPRAT SPRAY SPRED SPREE SPREW SPRIG SPRIT SPROD SPROG SPRUE SPRUG SPUDS SPUED SPUER SPUES SPUGS SPULE SPUME SPUMY SPUNK SPURN SPURS SPURT SPUTA SPYAL SPYRE SQUAB SQUAD SQUAT SQUAW SQUEG SQUIB SQUID SQUIT SQUIZ STABS STACK STADE STAFF STAGE STAGS STAGY STAID STAIG STAIN STAIR STAKE STALE STALK STALL STAMP STAND STANE STANG STANK STAPH STAPS STARE STARK STARN STARR STARS START STASH STATE STATS STAUN STAVE STAWS STAYS STEAD STEAK STEAL STEAM STEAN STEAR STEDD STEDE STEDS STEED STEEK STEEL STEEM STEEN STEEP STEER STEIL STEIN STELA STELE STELL STEME STEMS STEND STENO STENS STENT STEPS STEPT STERE STERN STETS STEWS STEWY STEYS STICH STICK STIED STIES STIFF STILB STILE STILL STILT STIME STIMS STIMY STING STINK STINT STIPA STIPE STIRE STIRK STIRP STIRS STIVE STIVY STOAE STOAI STOAS STOAT STOBS STOCK STOEP STOGY STOIC STOIT STOKE STOLE STOLN STOMA STOMP STOND STONE STONG STONK STONN STONY STOOD STOOK STOOL STOOP STOOR STOPE STOPS STOPT STORE STORK STORM STORY STOSS STOTS STOTT STOUN STOUP STOUR STOUT STOVE STOWN STOWP STOWS STRAD STRAE STRAG STRAK STRAP STRAW STRAY STREP STREW STRIA STRIG STRIM STRIP STROP STROW STROY STRUM STRUT STUBS STUCK STUDE STUDS STUDY STUFF STULL STULM STUMM STUMP STUMS STUNG STUNK STUNS STUNT STUPA STUPE STURE STURT STYED STYES STYLE STYLI STYLO STYME STYMY STYRE STYTE SUAVE SUBAH SUBAS SUBBY SUBER SUBHA SUCCI SUCKS SUCKY SUCRE SUDDS SUDOR SUDSY SUEDE SUENT SUERS SUETE SUETS SUETY SUGAN SUGAR SUGHS SUGOS SUHUR SUIDS SUING SUINT SUITE SUITS SUJEE SUKHS SUKUK SULCI SULFA SULFO SULKS SULKY SULLY SULPH SULUS SUMAC SUMIS SUMMA SUMOS SUMPH SUMPS SUNIS SUNKS SUNNA SUNNS SUNNY SUNUP SUPER SUPES SUPRA SURAH SURAL SURAS SURAT SURDS SURED SURER SURES SURFS SURFY SURGE SURGY SURLY SURRA SUSED SUSES SUSHI SUSUS SUTOR SUTRA SUTTA SWABS SWACK SWADS SWAGE SWAGS SWAIL SWAIN SWALE SWALY SWAMI SWAMP SWAMY SWANG SWANK SWANS SWAPS SWAPT SWARD SWARE SWARF SWARM SWART SWASH SWATH SWATS SWAYL SWAYS SWEAL SWEAR SWEAT SWEDE SWEED SWEEL SWEEP SWEER SWEES SWEET SWEIR SWELL SWELT SWEPT SWERF SWEYS SWIES SWIFT SWIGS SWILE SWILL SWIMS SWINE SWING SWINK SWIPE SWIRE SWIRL SWISH SWISS SWITH SWITS SWIVE SWIZZ SWOBS SWOLE SWOLN SWOON SWOOP SWOPS SWOPT SWORD SWORE SWORN SWOTS SWOUN SWUNG SYBBE SYBIL SYBOE SYBOW SYCEE SYCES SYCON SYENS SYKER SYKES SYLIS SYLPH SYLVA SYMAR SYNCH SYNCS SYNDS SYNED SYNES SYNOD SYNTH SYPED SYPES SYPHS SYRAH SYREN SYRUP SYSOP SYTHE SYVER TAALS TAATA TABBY TABER TABES TABID TABIS TABLA TABLE TABOO TABOR TABUN TABUS TACAN TACES TACET TACHE TACHO TACHS TACIT TACKS TACKY TACOS TACTS TAELS TAFFY TAFIA TAGGY TAGMA TAHAS TAHRS TAIGA TAIGS TAIKO TAILS TAINS TAINT TAIRA TAISH TAITS TAJES TAKAS TAKEN TAKER TAKES TAKHI TAKIN TAKIS TAKKY TALAK TALAQ TALAR TALAS TALCS TALCY TALEA TALER TALES TALKS TALKY TALLS TALLY TALMA TALON TALPA TALUK TALUS TAMAL TAMED TAMER TAMES TAMIN TAMIS TAMMY TAMPS TANAS TANGA TANGI TANGO TANGS TANGY TANHS TANKA TANKS TANKY TANNA TANSY TANTI TANTO TANTY TAPAS TAPED TAPEN TAPER TAPES TAPET TAPIR TAPIS TAPPA TAPUS TARAS TARDO TARDY TARED TARES TARGA TARGE TARNS TAROC TAROK TAROS TAROT TARPS TARRE TARRY TARSI TARTS TARTY TASAR TASED TASER TASES TASKS TASSA TASSE TASSO TASTE TASTY TATAR TATER TATES TATHS TATIE TATOU TATTS TATTY TATUS TAUBE TAULD TAUNT TAUON TAUPE TAUTS TAVAH TAVAS TAVER TAWAI TAWAS TAWED TAWER TAWIE TAWNY TAWSE TAWTS TAXED TAXER TAXES TAXIS TAXOL TAXON TAXOR TAXUS TAYRA TAZZA TAZZE TEACH TEADE TEADS TEAED TEAKS TEALS TEAMS TEARS TEARY TEASE TEATS TEAZE TECHS TECHY TECTA TEDDY TEELS TEEMS TEEND TEENE TEENS TEENY TEERS TEETH TEFFS TEGGS TEGUA TEGUS TEHRS TEIID TEILS TEIND TEINS TELAE TELCO TELES TELEX TELIA TELIC TELLS TELLY TELOI TELOS TEMED TEMES TEMPI TEMPO TEMPS TEMPT TEMSE TENCH TENDS TENDU TENES TENET TENGE TENIA TENNE TENNO TENNY TENON TENOR TENSE TENTH TENTS TENTY TENUE TEPAL TEPAS TEPEE TEPID TEPOY TERAI TERAS TERCE TEREK TERES TERFE TERFS TERGA TERMS TERNE TERNS TERRA TERRY TERSE TERTS TESLA TESTA TESTE TESTS TESTY TETES TETHS TETRA TETRI TEUCH TEUGH TEWED TEWEL TEWIT TEXAS TEXES TEXTS THACK THAGI THAIM THALE THALI THANA THANE THANG THANK THANS THANX THARM THARS THAWS THAWY THEBE THECA THEED THEEK THEES THEFT THEGN THEIC THEIN THEIR THELF THEMA THEME THENS THEOW THERE THERM THESE THESP THETA THETE THEWS THEWY THICK THIEF THIGH THIGS THILK THILL THINE THING THINK THINS THIOL THIRD THIRL THOFT THOLE THOLI THONG THORN THORO THORP THOSE THOUS THOWL THRAE THRAW THREE THREW THRID THRIP THROB THROE THROW THRUM THUDS THUGS THUJA THUMB THUMP THUNK THURL THUYA THYME THYMI THYMY TIANS TIARA TIARS TIBIA TICAL TICCA TICED TICES TICHY TICKS TICKY TIDAL TIDDY TIDED TIDES TIERS TIFFS TIFOS TIFTS TIGER TIGES TIGHT TIGON TIKAS TIKES TIKIS TIKKA TILAK TILDE TILED TILER TILES TILLS TILLY TILTH TILTS TIMBO TIMED TIMER TIMES TIMID TIMON TIMPS TINAS TINCT TINDS TINEA TINED TINES TINGE TINGS TINKS TINNY TINTS TINTY TIPIS TIPPY TIPSY TIRED TIRES TIRLS TIROS TIRRS TITAN TITCH TITER TITHE TITIS TITLE TITRE TITTY TITUP TIYIN TIYNS TIZES TIZZY TOADS TOADY TOAST TOAZE TOCKS TOCKY TOCOS TODAY TODDE TODDY TOEAS TOFFS TOFFY TOFTS TOFUS TOGAE TOGAS TOGED TOGES TOGUE TOHOS TOILE TOILS TOING TOISE TOITS TOKAY TOKED TOKEN TOKER TOKES TOKOS TOLAN TOLAR TOLAS TOLED TOLES TOLLS TOLLY TOLTS TOLUS TOLYL TOMAN TOMBS TOMES TOMIA TOMMY TOMOS TONAL TONDI TONDO TONED TONER TONES TONEY TONGA TONGS TONIC TONKA TONKS TONNE TONUS TOOLS TOOMS TOONS TOOTH TOOTS TOPAZ TOPED TOPEE TOPEK TOPER TOPES TOPHE TOPHI TOPHS TOPIC TOPIS TOPOI TOPOS TOPPY TOQUE TORAH TORAN TORAS TORCH TORCS TORES TORIC TORII TOROS TOROT TORRS TORSE TORSI TORSK TORSO TORTA TORTE TORTS TORUS TOSAS TOSED TOSES TOSHY TOSSY TOTAL TOTED TOTEM TOTER TOTES TOTTY TOUCH TOUGH TOUKS TOUNS TOURS TOUSE TOUSY TOUTS TOUZE TOUZY TOWED TOWEL TOWER TOWIE TOWNS TOWNY TOWSE TOWSY TOWTS TOWZE TOWZY TOXIC TOXIN TOYED TOYER TOYON TOYOS TOZED TOZES TOZIE TRABS TRACE TRACK TRACT TRADE TRADS TRAGI TRAIK TRAIL TRAIN TRAIT TRAMP TRAMS TRANK TRANQ TRANS TRANT TRAPE TRAPS TRAPT TRASH TRASS TRATS TRATT TRAVE TRAWL TRAYF TRAYS TREAD TREAT TRECK TREED TREEN TREES TREFA TREIF TREKS TREMA TREMS TREND TRESS TREST TRETS TREWS TREYF TREYS TRIAC TRIAD TRIAL TRIBE TRICE TRICK TRIDE TRIED TRIER TRIES TRIFF TRIGO TRIGS TRIKE TRILD TRILL TRIMS TRINE TRINS TRIOL TRIOR TRIOS TRIPE TRIPS TRIPY TRIST TRITE TROAD TROAK TROAT TROCK TRODE TRODS TROGS TROIS TROKE TROLL TROMP TRONA TRONC TRONE TRONK TRONS TROOP TROOZ TROPE TROTH TROTS TROUT TROVE TROWS TROYS TRUCE TRUCK TRUED TRUER TRUES TRUGO TRUGS TRULL TRULY TRUMP TRUNK TRUSS TRUST TRUTH TRYER TRYKE TRYMA TRYPS TRYST TSADE TSADI TSARS TSKED TSUBA TSUBO TUANS TUART TUATH TUBAE TUBAL TUBAR TUBAS TUBBY TUBED TUBER TUBES TUCKS TUFAS TUFFE TUFFS TUFTS TUFTY TUGRA TUILE TUINA TUISM TUKTU TULES TULIP TULLE TULPA TULSI TUMID TUMMY TUMOR TUMPS TUMPY TUNAS TUNDS TUNED TUNER TUNES TUNGS TUNIC TUNNY TUPEK TUPIK TUPLE TUQUE TURBO TURDS TURFS TURFY TURKS TURME TURMS TURNS TURNT TURPS TURRS TUSHY TUSKS TUSKY TUTEE TUTOR TUTTI TUTTY TUTUS TUXES TUYER TWAES TWAIN TWALS TWANG TWANK TWATS TWAYS TWEAK TWEED TWEEL TWEEN TWEEP TWEER TWEET TWERK TWERP TWICE TWIER TWIGS TWILL TWILT TWINE TWINK TWINS TWINY TWIRE TWIRL TWIRP TWIST TWITE TWITS TWIXT TWOER TWYER TYEES TYERS TYING TYIYN TYKES TYLER TYMPS TYNDE TYNED TYNES TYPAL TYPED TYPES TYPEY TYPIC TYPOS TYPPS TYPTO TYRAN TYRED TYRES TYROS TYTHE TZARS UDALS UDDER UDONS UGALI UGGED UHLAN UHURU UKASE ULAMA ULANS ULCER ULEMA ULMIN ULNAD ULNAE ULNAR ULNAS ULPAN ULTRA ULVAS ULYIE ULZIE UMAMI UMBEL UMBER UMBLE UMBOS UMBRA UMBRE UMIAC UMIAK UMIAQ UMMAH UMMAS UMMED UMPED UMPHS UMPIE UMPTY UMRAH UMRAS UNAIS UNAPT UNARM UNARY UNAUS UNBAG UNBAN UNBAR UNBED UNBID UNBOX UNCAP UNCES UNCIA UNCLE UNCOS UNCOY UNCUS UNCUT UNDAM UNDEE UNDER UNDID UNDOS UNDUE UNDUG UNETH UNFED UNFIT UNFIX UNGAG UNGET UNGOD UNGOT UNGUM UNHAT UNHIP UNICA UNIFY UNION UNITE UNITS UNITY UNJAM UNKED UNKET UNKID UNLAW UNLAY UNLED UNLET UNLID UNLIT UNMAN UNMET UNMEW UNMIX UNPAY UNPEG UNPEN UNPIN UNRED UNRID UNRIG UNRIP UNSAW UNSAY UNSEE UNSET UNSEW UNSEX UNSOD UNTAX UNTIE UNTIL UNTIN UNWED UNWET UNWIT UNWON UNZIP UPBOW UPBYE UPDOS UPDRY UPEND UPJET UPLAY UPLED UPLIT UPPED UPPER UPRAN UPRUN UPSEE UPSET UPSEY UPTAK UPTER UPTIE URAEI URALI URAOS URARE URARI URASE URATE URBAN URBEX URBIA URDEE UREAL UREAS UREDO UREIC URENA URENT URGED URGER URGES URIAL URINE URITE URMAN URNAL URNED URPED URSAE URSID URSON URUBU URVAS USAGE USERS USHER USING USNEA USQUE USUAL USURE USURP USURY UTERI UTILE UTTER UVEAL UVEAS UVULA VACUA VADED VADES VAGAL VAGUE VAGUS VAILS VAIRE VAIRS VAIRY VAKAS VAKIL VALES VALET VALID VALIS VALOR VALSE VALUE VALVE VAMPS VAMPY VANDA VANED VANES VANGS VANTS VAPED VAPER VAPES VAPID VAPOR VARAN VARAS VARDY VAREC VARES VARIA VARIX VARNA VARUS VARVE VASAL VASES VASTS VASTY VATIC VATUS VAUCH VAULT VAUNT VAUTE VAUTS VAWTE VAXES VEALE VEALS VEALY VEENA VEEPS VEERS VEERY VEGAN VEGAS VEGES VEGIE VEGOS VEHME VEILS VEILY VEINS VEINY VELAR VELDS VELDT VELES VELLS VELUM VENAE VENAL VENDS VENDU VENEY VENGE VENIN VENOM VENTS VENUE VENUS VERBS VERGE VERRA VERRY VERSE VERSO VERST VERTS VERTU VERVE VESPA VESTA VESTS VETCH VEXED VEXER VEXES VEXIL VEZIR VIALS VIAND VIBES VIBEX VIBEY VICAR VICED VICES VICHY VIDEO VIERS VIEWS VIEWY VIFDA VIFFS VIGAS VIGIA VIGIL VIGOR VILDE VILER VILLA VILLI VILLS VIMEN VINAL VINAS VINCA VINED VINER VINES VINEW VINIC VINOS VINTS VINYL VIOLA VIOLD VIOLS VIPER VIRAL VIRED VIREO VIRES VIRGA VIRGE VIRID VIRLS VIRTU VIRUS VISAS VISED VISES VISIE VISIT VISNE VISON VISOR VISTA VISTO VITAE VITAL VITAS VITEX VITRO VITTA VIVAS VIVAT VIVDA VIVER VIVES VIVID VIXEN VIZIR VIZOR VLEIS VLIES VLOGS VOARS VOCAB VOCAL VOCES VODDY VODKA VODOU VODUN VOEMA VOGIE VOGUE VOICE VOIDS VOILA VOILE VOIPS VOLAE VOLAR VOLED VOLES VOLET VOLKS VOLTA VOLTE VOLTI VOLTS VOLVA VOLVE VOMER VOMIT VOTED VOTER VOTES VOUCH VOUGE VOULU VOWED VOWEL VOWER VOXEL VOZHD VRAIC VRILS VROOM VROUS VROUW VROWS VUGGS VUGGY VUGHS VUGHY VULGO VULNS VULVA VUTTY VYING WAACS WACKE WACKO WACKS WACKY WADDS WADDY WADED WADER WADES WADGE WADIS WADTS WAFER WAFFS WAFTS WAGED WAGER WAGES WAGGA WAGON WAGYU WAHOO WAIDE WAIFS WAIFT WAILS WAINS WAIRS WAIST WAITE WAITS WAIVE WAKAS WAKED WAKEN WAKER WAKES WAKFS WALDO WALDS WALED WALER WALES WALIE WALIS WALKS WALLA WALLS WALLY WALTY WALTZ WAMED WAMES WAMUS WANDS WANED WANES WANEY WANGS WANKS WANKY WANLE WANLY WANNA WANTS WANTY WANZE WAQFS WARBS WARBY WARDS WARED WARES WAREZ WARKS WARMS WARNS WARPS WARRE WARST WARTS WARTY WASES WASHY WASMS WASPS WASPY WASTE WASTS WATAP WATCH WATER WATTS WAUFF WAUGH WAUKS WAULK WAULS WAURS WAVED WAVER WAVES WAVEY WAWAS WAWES WAWLS WAXED WAXEN WAXER WAXES WAYED WAZIR WAZOO WEALD WEALS WEAMB WEANS WEARS WEARY WEAVE WEBBY WEBER WECHT WEDEL WEDGE WEDGY WEEDS WEEDY WEEKE WEEKS WEELS WEEMS WEENS WEENY WEEPS WEEPY WEEST WEETE WEETS WEFTE WEFTS WEIDS WEIGH WEILS WEIRD WEIRS WEISE WEIZE WEKAS WELCH WELDS WELKE WELKS WELKT WELLS WELLY WELSH WELTS WEMBS WENCH WENDS WENGE WENNY WENTS WEROS WERSH WESTS WETAS WETLY WEXED WEXES WHACK WHALE WHAMO WHAMS WHANG WHAPS WHARE WHARF WHATA WHATS WHAUP WHAUR WHEAL WHEAR WHEAT WHEEL WHEEN WHEEP WHEFT WHELK WHELM WHELP WHENS WHERE WHETS WHEWS WHEYS WHICH WHIDS WHIFF WHIFT WHIGS WHILE WHILK WHIMS WHINE WHINS WHINY WHIOS WHIPS WHIPT WHIRL WHIRR WHIRS WHISH WHISK WHISS WHIST WHITE WHITS WHITY WHIZZ WHOLE WHOMP WHOOF WHOOP WHOOT WHOPS WHORE WHORL WHORT WHOSE WHOSO WHOWS WHUMP WHUPS WHYDA WICCA WICKS WICKY WIDDY WIDEN WIDER WIDES WIDOW WIDTH WIELD WIELS WIFED WIFES WIFEY WIFIE WIFTY WIGAN WIGGA WIGGY WIGHT WIKIS WILCO WILDS WILED WILES WILGA WILIS WILJA WILLS WILLY WILTS WIMPS WIMPY WINCE WINCH WINDS WINDY WINED WINES WINEY WINGE WINGS WINGY WINKS WINNA WINNS WINOS WINZE WIPED WIPER WIPES WIRED WIRER WIRES WIRRA WISED WISER WISES WISHA WISHT WISPS WISPY WISTS WITAN WITCH WITED WITES WITHE WITHS WITHY WITTY WIVED WIVER WIVES WIZEN WIZES WOADS WOALD WOCKS WODGE WOFUL WOJUS WOKEN WOKER WOKKA WOLDS WOLFS WOLLY WOLVE WOMAN WOMBS WOMBY WOMEN WOMYN WONGA WONGI WONKS WONKY WONTS WOODS WOODY WOOED WOOER WOOFS WOOFY WOOLD WOOLS WOOLY WOONS WOOPS WOOPY WOOSE WOOSH WOOTZ WOOZY WORDS WORDY WORKS WORLD WORMS WORMY WORRY WORSE WORST WORTH WORTS WOULD WOUND WOVEN WOWED WOWEE WOXEN WRACK WRANG WRAPS WRAPT WRAST WRATE WRATH WRAWL WREAK WRECK WRENS WREST WRICK WRIED WRIER WRIES WRING WRIST WRITE WRITS WROKE WRONG WROOT WROTE WROTH WRUNG WRYER WRYLY WUDDY WUDUS WULLS WURST WUSES WUSHU WUSSY WUXIA WYLED WYLES WYNDS WYNNS WYTED WYTES XEBEC XENIA XENIC XENON XERIC XEROX XERUS XOANA XRAYS XYLAN XYLEM XYLIC XYLOL XYLYL XYSTI XYSTS YAARS YABAS YABBA YABBY YACCA YACHT YACKA YACKS YAFFS YAGER YAGES YAGIS YAHOO YAIRD YAKKA YAKOW YALES YAMEN YAMPY YAMUN YANGS YANKS YAPOK YAPON YAPPS YAPPY YARAK YARCO YARDS YARER YARFA YARKS YARNS YARRS YARTA YARTO YATES YAUDS YAULD YAUPS YAWED YAWEY YAWLS YAWNS YAWNY YAWPS YBORE YCLAD YCLED YCOND YDRAD YDRED YEADS YEAHS YEALM YEANS YEARD YEARN YEARS YEAST YECCH YECHS YECHY YEDES YEEDS YEESH YEGGS YELKS YELLS YELMS YELPS YELTS YENTA YENTE YERBA YERDS YERKS YESES YESKS YESTS YESTY YETIS YETTS YEUKS YEUKY YEVEN YEVES YEWEN YEXED YEXES YFERE YIELD YIKED YIKES YILLS YINCE YIPES YIPPY YIRDS YIRKS YIRRS YIRTH YITES YITIE YLEMS YLIKE YLKES YMOLT YMPES YOBBO YOBBY YOCKS YODEL YODHS YODLE YOGAS YOGEE YOGHS YOGIC YOGIN YOGIS YOICK YOJAN YOKED YOKEL YOKER YOKES YOKUL YOLKS YOLKY YOMIM YOMPS YONIC YONIS YONKS YOOFS YOOPS YORES YORKS YORPS YOUKS YOUNG YOURN YOURS YOURT YOUSE YOUTH YOWED YOWES YOWIE YOWLS YOWZA YRAPT YRENT YRIVD YRNEH YSAME YTOST YUANS YUCAS YUCCA YUCCH YUCKO YUCKS YUCKY YUFTS YUGAS YUKED YUKES YUKKY YUKOS YULAN YULES YUMMO YUMMY YUMPS YUPON YUPPY YURTA YURTS YUZUS ZABRA ZACKS ZAIDA ZAIDY ZAIRE ZAKAT ZAMAN ZAMBO ZAMIA ZANJA ZANTE ZANZA ZANZE ZAPPY ZARFS ZARIS ZATIS ZAXES ZAYIN ZAZEN ZEALS ZEBEC ZEBRA ZEBUB ZEBUS ZEDAS ZEINS ZENDO ZERDA ZERKS ZEROS ZESTS ZESTY ZETAS ZEXES ZEZES ZHOMO ZIBET ZIFFS ZIGAN ZILAS ZILCH ZILLA ZILLS ZIMBI ZIMBS ZINCO ZINCS ZINCY ZINEB ZINES ZINGS ZINGY ZINKE ZINKY ZIPPO ZIPPY ZIRAM ZITIS ZIZEL ZIZIT ZLOTE ZLOTY ZOAEA ZOBOS ZOBUS ZOCCO ZOEAE ZOEAL ZOEAS ZOISM ZOIST ZOMBI ZONAE ZONAL ZONDA ZONED ZONER ZONES ZONKS ZOOEA ZOOEY ZOOID ZOOKS ZOOMS ZOONS ZOOTY ZOPPA ZOPPO ZORIL ZORIS ZORRO ZOUKS ZOWEE ZOWIE ZULUS ZUPAN ZUPAS ZUPPA ZURFS ZUZIM ZYGAL ZYGON ZYMES ZYMIC".split(" "));
+    // Note: WORDBANK.add(P.target) is called in initGame() once P is loaded.
+
+    // ── BIBLE NAMES (CHURCH EDITION) ─────────────────────────────────────────
+    // 5-letter Bible names added to the dictionary so they count as valid
+    // finds if a player spells one out from the scattered letters.
+    "AARON ABDON ABIAH ABIHU ABNER ABRAM AMASA AMMON AMNON AMRAM ANNAS ARIEL ASAPH ASHER ASHUR ASSUR BALAK CALEB CHLOE CYRUS DAVID DINAH ELIAB ELIAS ELIHU ENOCH FELIX GAIUS HAGAR HAMAN HEROD HIRAM HOSEA ISAAC JABEZ JACOB JAMES JASON JESSE JESUS JOASH JONAH JONAS JORAM JOSES JUBAL JUDAH JUDAS KORAH LABAN LYDIA MICAH MOSES NABAL NADAB NAHUM NAOMI ORNAN ORPAH PEKAH PETER PHEBE RAHAB REHUM REZIN RHODA RUFUS SARAH SARAI SHAUL SIHON SILAS SIMON TAMAR TITUS TUBAL URIAH UZZAH ZADOK ZARAH ZEBUL ZIMRI"
+        .split(" ").forEach(w => WORDBANK.add(w));
+
+    // ── PLACEMENT ENGINE ─────────────────────────────────────────────────────────
+    const DIRS = [[0, 1], [0, -1], [1, 0], [-1, 0], [1, 1], [1, -1], [-1, 1], [-1, -1]];
+    // SZ is set from P.SIZE inside initGame(); use a getter so the engine works after P is loaded.
+    let SZ = 6; // default — overwritten in initGame()
+    function mkGrid() {
+        return Array.from({
+            length: SZ
+        }, () => Array(SZ).fill(null));
+    }
+    function canPlace(g, word, r, c, dr, dc) {
+        for (let i = 0; i < word.length; i++) {
+            const nr = r + dr * i,
+                nc = c + dc * i;
+            if (nr < 0 || nr >= SZ || nc < 0 || nc >= SZ)
+                return false;
+            if (g[nr][nc] !== null && g[nr][nc] !== word[i])
+                return false;
+        }
+        return true;
+    }
+    function doPlace(g, word, r, c, dr, dc) {
+        const cells = [];
+        for (let i = 0; i < word.length; i++) {
+            const nr = r + dr * i,
+                nc = c + dc * i;
+            g[nr][nc] = word[i];
+            cells.push([nr, nc]);
+        }
+        return cells;
+    }
+    function shufl(a) {
+        const b = [...a];
+        for (let i = b.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [b[i], b[j]] = [b[j], b[i]];
+        }
+        return b;
+    }
+    function buildPuzzle() {
+        const wds = [...P.words].sort((a, b) => b.length - a.length);
+        let bGrid = null,
+            bPlace = null,
+            bScore = -1;
+        for (let att = 0; att < 400; att++) {
+            const g = mkGrid(),
+                pl = {};
+            let sc = 0,
+                ok = true;
+            for (const w of wds) {
+                const pos = [];
+                for (let r = 0; r < SZ; r++)
+                    for (let c = 0; c < SZ; c++)
+                        for (const [dr, dc] of DIRS)
+                            if (canPlace(g, w, r, c, dr, dc))
+                                pos.push([r, c, dr, dc]);
+                const scored = pos.map(([r, c, dr, dc]) => {
+                    let s = 0;
+                    for (let i = 0; i < w.length; i++) {
+                        const nr = r + dr * i,
+                            nc = c + dc * i;
+                        if (g[nr][nc] === w[i])
+                            s += 3;
+                    }
+                    if (dr !== 0 && dc !== 0)
+                        s += 1;
+                    return {
+                        r,
+                        c,
+                        dr,
+                        dc,
+                        s
+                    };
+                });
+                scored.sort((a, b) => b.s - a.s);
+                if (!scored.length) {
+                    ok = false;
+                    break;
+                }
+                const topS = scored[0].s;
+                const tops = scored.filter(x => x.s >= topS - 1);
+                const pk = tops[Math.floor(Math.random() * Math.min(tops.length, 6))];
+                doPlace(g, w, pk.r, pk.c, pk.dr, pk.dc);
+                pl[w] = {
+                    cells: Array.from({
+                        length: w.length
+                    }, (_, i) => ([pk.r + pk.dr * i, pk.c + pk.dc * i])),
+                    dir: [pk.dr, pk.dc]
+                };
+                sc += pk.s;
+            }
+            if (ok && sc > bScore) {
+                bScore = sc;
+                bGrid = g.map(r => [...r]);
+                bPlace = JSON.parse(JSON.stringify(pl));
+            }
+            if (bScore >= 10)
+                break;
+        }
+        if (!bGrid) {
+            bGrid = mkGrid();
+            bPlace = {};
+            for (const w of [...P.words].sort((a, b) => b.length - a.length)) {
+                let placed = false;
+                for (let r = 0; r < SZ && !placed; r++)
+                    for (let c = 0; c < SZ && !placed; c++)
+                        for (const [dr, dc] of DIRS) {
+                            if (canPlace(bGrid, w, r, c, dr, dc)) {
+                                doPlace(bGrid, w, r, c, dr, dc);
+                                bPlace[w] = {
+                                    cells: Array.from({
+                                        length: w.length
+                                    }, (_, i) => ([r + dr * i, c + dc * i])),
+                                    dir: [dr, dc]
+                                };
+                                placed = true;
+                                break;
+                            }
+                        }
+            }
+        }
+        const occ = new Set();
+        Object.values(bPlace).forEach(p => p.cells.forEach(([r, c]) => occ.add(r + '-' + c)));
+        const free = [];
+        for (let r = 0; r < SZ; r++)
+            for (let c = 0; c < SZ; c++)
+                if (!occ.has(r + '-' + c))
+                    free.push([r, c]);
+        const finalGrid = bGrid.map(r => [...r]);
+        const tL = shufl(P.target.split(""));
+        const eC2 = free.length - tL.length;
+        // Use the puzzle-defined noise pool, shuffled — each letter appears once
+        const noiseChars = P.noise.split("");
+        const ep = shufl([...noiseChars]).slice(0, eC2);
+        const fl = [...tL, ...ep.slice(0, eC2)];
+        free.forEach(([r, c], i) => {
+            finalGrid[r][c] = fl[i] || noiseChars[i % noiseChars.length];
+        });
+        return {
+            grid: finalGrid,
+            placements: bPlace,
+            freeLetters: shufl(free.map(([r, c]) => finalGrid[r][c]))
+        };
+    }
+    let grid,
+        placements,
+        freeLetters;
+
+    // ── STATE ────────────────────────────────────────────────────────────────────
+    let stage = 1,
+        gameOver = false,
+        wordSearchDone = false,
+        jumpedEarly = false,
+        s2Initialised = false;
+    let foundWords = new Set(),
+        foundKeys = new Set(),
+        pivotCellKeys = new Set();
+    let foundOrder = []; // tracks Part 1 words in the order they were found
+    let p1EventLog = [], // chronological log of Part 1 word-found / hint-used events, for score report line breaks
+        p2EventLog = []; // chronological log of Part 2 guess-submitted / hint-used events, same purpose
+    let selCells = [],
+        hintKeys = new Set();
+    let hintCount = 0; // total hints used across both stages — escalating cost
+    // pool is populated in initGame() after the grid is built from Sheets data
+    const pool = [];
+    let guessSlots = [],
+        pastGuesses = [],
+        usedLat = false,
+        usedPiv = false,
+        p2HintLocked = false; // true once a hint's been used since the last guess — blocks another until you guess again
+    // Timer
+    let timerStart = null,
+        timerInterval = null,
+        timerStopped = false,
+        elapsedSecs = 0,
+        hintPenalty = 0,
+        p1HintPenalty = 0; // hint penalty accumulated in Part 1 only
+
+    // ── HELPERS ───────────────────────────────────────────────────────────────────
+    function ck(r, c) {
+        return r + '-' + c;
+    }
+    let flashT;
+    function flash(txt, type, ms=2500) {
+        clearTimeout(flashT);
+        const el = document.getElementById('flash');
+        el.textContent = txt;
+        el.className = type;
+        el.style.display = 'block';
+        flashT = setTimeout(() => el.style.display = 'none', ms);
+    }
+    function isAdj(r1, c1, r2, c2) {
+        return Math.abs(r1 - r2) <= 1 && Math.abs(c1 - c2) <= 1 && !(r1 === r2 && c1 === c2);
+    }
+    function fmtTime(s) {
+        return Math.floor(s / 60) + ':' + (s % 60 < 10 ? '0' : '') + s % 60;
+    }
+    function nextHintCost() {
+        return (hintCount + 1) * 5;
+    } // 5,10,15,20...
+
+    function startTimer() {
+        if (timerStart || timerStopped)
+            return;
+        timerStart = Date.now();
+        document.getElementById('scorebar').style.display = 'flex';
+        document.body.classList.add('playing');
+        timerInterval = setInterval(function() {
+            elapsedSecs = Math.floor((Date.now() - timerStart) / 1000);
+            const total = elapsedSecs + hintPenalty;
+            const totalStr = fmtTime(total);
+            const elapsedStr = fmtTime(elapsedSecs);
+            const penStr = fmtTime(hintPenalty);
+            let display;
+            if (hintPenalty > 0) {
+                display = '<span style="color:#f9d976;font-size:22px;font-weight:bold;letter-spacing:1px;">' + totalStr + '</span>'
+                + ' <span style="color:rgba(255,255,255,0.7);font-size:16px;font-weight:bold;"> = ' + elapsedStr + ' + ' + penStr + ' hints</span>';
+            } else {
+                display = '<span style="color:#f9d976;font-size:22px;font-weight:bold;letter-spacing:1px;">' + totalStr + '</span>';
+            }
+            document.getElementById('sbpts').innerHTML = display;
+            document.getElementById('pts').textContent = '⏱ ' + totalStr;
+        }, 1000);
+    }
+    function stopTimer() {
+        if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+        timerStopped = true;
+    }
+    function addHintPenalty() {
+        const cost = nextHintCost();
+        hintPenalty += cost;
+        hintCount++;
+        updateHintCostLabel();
+        return cost;
+    }
+    function updateHintCostLabel() {
+        const next = nextHintCost();
+        document.getElementById('hint-cost').textContent = '+' + next + ' sec';
+        const hc2 = document.getElementById('hint-cost2');
+        if (hc2)
+            hc2.textContent = 'Hint: +' + next + ' sec';
+    }
+
+    function wdleCheck(guess, target) {
+        const res = Array(guess.length).fill('absent');
+        const ta = target.split(''),
+            used = Array(target.length).fill(false);
+        for (let i = 0; i < guess.length; i++)
+            if (guess[i] === ta[i]) {
+                res[i] = 'correct';
+                used[i] = true;
+            }
+        for (let i = 0; i < guess.length; i++) {
+            if (res[i] === 'correct')
+                continue;
+            for (let j = 0; j < ta.length; j++)
+                if (!used[j] && guess[i] === ta[j]) {
+                    res[i] = 'present';
+                    used[j] = true;
+                    break;
+                }
+        }
+        return res;
+    }
+
+    function letterColorPlan() {
+        // For each letter, take the best (highest) correct-count and the best
+        // (highest) correct+present total seen across ALL past guesses,
+        // tracked independently — so if one guess shows a letter as "present"
+        // and a later guess proves the same letter "correct", the correct
+        // reading wins rather than getting stuck on the earlier, weaker one.
+        const maxKnown = {}, maxCorrect = {}, fullyAbsent = {};
+        pastGuesses.forEach(gu => {
+            const counts = {};
+            gu.letters.forEach((l, i) => {
+                if (!counts[l])
+                    counts[l] = { correct: 0, present: 0 };
+                if (gu.results[i] === 'correct')
+                    counts[l].correct++;
+                else if (gu.results[i] === 'present')
+                    counts[l].present++;
+            });
+            Object.entries(counts).forEach(([l, c]) => {
+                const known = c.correct + c.present;
+                if (known === 0) {
+                    fullyAbsent[l] = true;
+                } else {
+                    maxKnown[l] = Math.max(maxKnown[l] || 0, known);
+                    maxCorrect[l] = Math.max(maxCorrect[l] || 0, c.correct);
+                }
+            });
+        });
+        const plan = {};
+        new Set([...Object.keys(maxKnown), ...Object.keys(fullyAbsent)]).forEach(l => {
+            if (maxKnown[l]) {
+                // positive evidence (correct/present) always wins over an absent reading
+                const green = maxCorrect[l] || 0;
+                plan[l] = { green, yellow: maxKnown[l] - green, fullyAbsent: false };
+            } else {
+                plan[l] = { green: 0, yellow: 0, fullyAbsent: true };
+            }
+        });
+        return plan;
+    }
+
+    // ── CELL SIZE ─────────────────────────────────────────────────────────────────
+    function cellPx() {
+        const avail = Math.min(window.innerWidth, 480) - 20 - 24 - 14;
+        return Math.max(38, Math.min(Math.floor((avail - (SZ - 1) * 4) / SZ), 56));
+    }
+
+    // ── RENDER GRID ───────────────────────────────────────────────────────────────
+    function renderGrid() {
+        const cs = cellPx(),
+            g = document.getElementById('grid');
+        g.style.gridTemplateColumns = `repeat(${SZ},${cs}px)`;
+        g.innerHTML = '';
+        for (let r = 0; r < SZ; r++)
+            for (let c = 0; c < SZ; c++) {
+                const key = ck(r, c),
+                    div = document.createElement('div');
+                div.className = 'cell';
+                div.style.cssText = `width:${cs}px;height:${cs}px;font-size:${Math.round(cs * .42)}px`;
+                div.textContent = grid[r][c];
+                const isSel = selCells.some(([sr, sc]) => sr === r && sc === c);
+                const isFnd = foundKeys.has(key);
+                const isPivotCell = pivotCellKeys.has(key);
+                const isHint = hintKeys.has(key);
+                if (isSel && isFnd)
+                    div.classList.add('sel-found');
+                else if (isSel)
+                    div.classList.add('sel');
+                else if (isPivotCell)
+                    div.classList.add('pivot-found');
+                else if (isHint && isFnd)
+                    div.classList.add('hint-found');
+                else if (isFnd)
+                    div.classList.add('found');
+                else if (isHint)
+                    div.classList.add('hint');
+                else if (selCells.length > 0 && !isHint) {
+                    const adjToAny = selCells.some(([sr, sc]) => isAdj(r, c, sr, sc));
+                    if (!adjToAny)
+                        div.classList.add('nonadj');
+                }
+                div.addEventListener('touchend', e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    tapCell(r, c);
+                }, {
+                    passive: false
+                });
+                div.addEventListener('click', e => {
+                    e.preventDefault();
+                    tapCell(r, c);
+                });
+                g.appendChild(div);
+            }
+    }
+
+    function renderChips() {
+        const c = document.getElementById('word-chips');
+        c.innerHTML = '';
+        P.words.forEach(w => {
+            const s = document.createElement('span');
+            const isPivot = foundWords.has(w) && w === P.pivot;
+            s.className = 'chip' + (isPivot ? ' pivot' : foundWords.has(w) ? ' done' : '');
+            s.textContent = foundWords.has(w) ? w : '?'.repeat(w.length);
+            c.appendChild(s);
+        });
+        document.getElementById('fc').textContent = `(${foundWords.size}/${P.words.length})`;
+    }
+
+    // ── CELL TAP ─────────────────────────────────────────────────────────────────
+    function tapCell(r, c) {
+        if (wordSearchDone || gameOver) {
+            if (selCells.length > 0) { selCells = []; renderGrid(); }
+            return;
+        }
+        startTimer();
+        const key = ck(r, c);
+        if (selCells.length > 0) {
+            const [lr, lc] = selCells[selCells.length - 1];
+            if (lr === r && lc === c) {
+                selCells = selCells.slice(0, -1);
+                renderGrid();
+                return;
+            }
+        }
+        if (selCells.some(([sr, sc]) => sr === r && sc === c))
+            return;
+        if (selCells.length > 0) {
+            const adjToAny = selCells.some(([sr, sc]) => isAdj(r, c, sr, sc));
+            if (!adjToAny) {
+                flash('Tap a letter next to your selection', 'er', 1500);
+                return;
+            }
+        }
+        selCells = [...selCells, [r, c]];
+        renderGrid();
+        const selKeySet = new Set(selCells.map(([rr, cc]) => ck(rr, cc)));
+        const selLetters = selCells.map(([rr, cc]) => grid[rr][cc]).join('');
+        const selLettersRev = [...selCells].reverse().map(([rr, cc]) => grid[rr][cc]).join('');
+        for (const w of P.words) {
+            const p = placements[w];
+            if (p.cells.length !== selCells.length)
+                continue;
+            const wKeySet = new Set(p.cells.map(([rr, cc]) => ck(rr, cc)));
+            const exactMatch = [...selKeySet].every(k => wKeySet.has(k)) && [...wKeySet].every(k => selKeySet.has(k));
+            const spellsWord = (selLetters === w || selLettersRev === w);
+            if (!exactMatch && !spellsWord)
+                continue;
+            if (foundWords.has(w)) {
+                selCells.forEach(([rr, cc]) => foundKeys.add(ck(rr, cc)));
+                selCells = [];
+                hintKeys = new Set();
+                renderGrid();
+                return;
+            }
+            foundWords.add(w);
+            foundOrder.push(w); // record order found for share report
+            p1EventLog.push({ type: 'word', pivot: w === P.pivot });
+            p.cells.forEach(([rr, cc]) => foundKeys.add(ck(rr, cc)));
+            if (w === P.pivot) {
+                p.cells.forEach(([rr, cc]) => pivotCellKeys.add(ck(rr, cc)));
+            }
+            selCells = [];
+            hintKeys = new Set();
+            renderGrid();
+            renderChips();
+            // If Part 2 is already showing, update the pool immediately
+            if (s2Initialised) {
+                refreshPool();
+                renderPool();
+            }
+            if (foundWords.size === P.words.length) {
+                wordSearchDone = true;
+                s2Initialised = true;
+                jumpedEarly = true;
+                selCells = [];
+                hintKeys = new Set();
+                renderGrid();
+                document.getElementById('hintbtn').style.display = 'none';
+                setTimeout(goStage2, 900);
+                return;
+            }
+            if (w === P.pivot) {
+                document.getElementById('scroll-down-arrow').style.display = 'flex';
+                setTimeout(showPivotModal, 600);
+                // Always initialise s2 when pivot is found
+                if (!s2Initialised) {
+                    jumpedEarly = true;
+                    s2Initialised = true;
+                    setTimeout(goStage2, 700);
+                }
+            }
+            return;
+        }
+        if (selCells.length >= 9) {
+            selCells = [];
+            renderGrid();
+            flash('Not a word — try again', 'er');
+        }
+    }
+
+    // ── HINT ──────────────────────────────────────────────────────────────────────
+    function doHint() {
+        const unfound = P.words.filter(w => !foundWords.has(w));
+        if (!unfound.length)
+            return;
+        // Don't hint the pivot word until all others are found
+        const hintable = unfound.filter(w => w !== P.pivot);
+        const candidates = hintable.length > 0 ? hintable : unfound;
+        const cost = addHintPenalty();
+        p1EventLog.push({ type: 'hint' });
+        const w = candidates[Math.floor(Math.random() * candidates.length)];
+        const p = placements[w];
+        // Find the cell that contains the first letter of the word
+        const firstLetter = w[0];
+        const firstCell = p.cells.find(([r, c]) => grid[r][c] === firstLetter) || p.cells[0];
+        selCells = [];
+        hintKeys = new Set();
+        hintKeys.add(ck(firstCell[0], firstCell[1]));
+        renderGrid();
+        flash('+' + cost + ' sec', 'hint', 1800);
+        document.getElementById('s1').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ── MODAL ─────────────────────────────────────────────────────────────────────
+    function showPivotModal() {
+        document.getElementById('modal-overlay').style.display = 'flex';
+    }
+    function closeModal() {
+        document.getElementById('modal-overlay').style.display = 'none';
+    }
+
+    // ── STAGE 2 ───────────────────────────────────────────────────────────────────
+    function refreshPool() {
+        if (!s2Initialised)
+            return;
+        // Remember which letters were eliminated before rebuild
+        const elimLetters = [];
+        pool.filter(s => s.state === 'elim').forEach(s => elimLetters.push(s.l));
+
+        // Pool = every grid cell that hasn't been found (not green)
+        const allLetters = [];
+        for (let r = 0; r < SZ; r++)
+            for (let c = 0; c < SZ; c++)
+                if (!foundKeys.has(ck(r, c)))
+                    allLetters.push(grid[r][c]);
+
+        // Rebuild pool — one slot per letter instance
+        pool.length = 0;
+        shufl(allLetters).forEach(l => pool.push({ l, id: pool.length, state: 'available' }));
+
+        // Guarantee all target letters are present
+        const needed = {};
+        P.target.split('').forEach(l => needed[l] = (needed[l] || 0) + 1);
+        const have = {};
+        pool.forEach(s => have[s.l] = (have[s.l] || 0) + 1);
+        Object.entries(needed).forEach(([l, cnt]) => {
+            for (let i = (have[l] || 0); i < cnt; i++)
+                pool.push({ l, id: pool.length, state: 'available' });
+        });
+
+        // Reapply eliminations — never eliminate target letters
+        const elimCount = {};
+        elimLetters.forEach(l => elimCount[l] = (elimCount[l] || 0) + 1);
+        Object.entries(elimCount).forEach(([l, cnt]) => {
+            if (P.target.includes(l)) return;
+            let done = 0;
+            for (const s of pool) {
+                if (s.l === l && s.state === 'available' && done < cnt) {
+                    s.state = 'elim';
+                    done++;
+                }
+            }
+        });
+
+        guessSlots = guessSlots.filter(id => pool.find(s => s.id === id));
+    }
+
+    function goStage2() {
+        stage = 2;
+        p1HintPenalty = hintPenalty; // freeze Part 1 hint total
+        document.getElementById('hintbtn').style.display = 'none';
+        const instrCard = document.getElementById('instrcard');
+        const instrEl = document.getElementById('instrtext');
+        if (instrCard)
+            instrCard.style.display = 'block';
+        if (instrEl) {
+            let txt = "It is related to <strong>" + P.pivot + "</strong>.";
+            if (jumpedEarly && !wordSearchDone)
+                txt += "<br>Reduce the letter pool by finding more words above.";
+            instrEl.innerHTML = txt;
+        }
+        refreshPool();
+        renderPool();
+        renderGuessDisplay();
+        updateHintCostLabel();
+        setTimeout(() => document.getElementById('instrcard').scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        }), 400);
+    }
+
+    function renderPool() {
+        const wrap = document.getElementById('pool-wrap');
+        wrap.innerHTML = '';
+        const isFull = guessSlots.length >= P.target.length;
+        // Render one tile per pool slot
+        const sorted = [...pool].sort((a, b) => a.l.localeCompare(b.l));
+        const plan = letterColorPlan();
+        const used = {}; // letter -> { green, yellow } tiles already colored so far
+        sorted.forEach(slot => {
+            const tile = document.createElement('div');
+            const isElim = slot.state === 'elim';
+            const isUsed = slot.state === 'used';
+            const isAvail = slot.state === 'available';
+            tile.className = 'pstack'
+                + (isElim ? ' elim-stack' : '')
+                + (isUsed ? ' used-stack' : '')
+                + (!isAvail || isFull ? ' empty' : '');
+            const top = document.createElement('div');
+            top.className = 'pcard-top';
+            top.textContent = slot.l;
+            const lp = plan[slot.l];
+            if (lp) {
+                if (lp.fullyAbsent) {
+                    top.classList.add('absent');
+                } else {
+                    if (!used[slot.l])
+                        used[slot.l] = { green: 0, yellow: 0 };
+                    const u = used[slot.l];
+                    if (u.green < lp.green) {
+                        top.classList.add('correct');
+                        u.green++;
+                    } else if (u.yellow < lp.yellow) {
+                        top.classList.add('present');
+                        u.yellow++;
+                    }
+                    // any remaining copies beyond the confirmed count stay neutral —
+                    // we don't yet know if the target has more than that
+                }
+            }
+            tile.appendChild(top);
+            if (isAvail && !isFull) {
+                tile.dataset.letter = slot.l;
+                tile.dataset.availid = slot.id;
+            }
+            wrap.appendChild(tile);
+        });
+        if (!gameOver) {
+            const sub = document.createElement('div');
+            sub.className = 'ptile submit';
+            sub.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 4V13C19 14.1 18.1 15 17 15H5M5 15L9 11M5 15L9 19" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+            sub.addEventListener('touchend', e => {
+                e.preventDefault();
+                doSubmit();
+            }, {
+                passive: false
+            });
+            sub.addEventListener('click', e => {
+                e.preventDefault();
+                doSubmit();
+            });
+            wrap.appendChild(sub);
+        }
+        // Delegated touch/click on wrap
+        wrap.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            const stack = e.target.closest('.pstack');
+            if (stack && stack.dataset.availid)
+                tapPoolLetter(parseInt(stack.dataset.availid));
+        }, {
+            passive: false
+        });
+        wrap.addEventListener('click', function(e) {
+            e.preventDefault();
+            const stack = e.target.closest('.pstack');
+            if (stack && stack.dataset.availid)
+                tapPoolLetter(parseInt(stack.dataset.availid));
+        });
+        const ec = document.getElementById('elimct');
+        const elimCount = pool.filter(s => s.state === 'elim').length;
+        if (ec) ec.textContent = elimCount > 0 ? elimCount + ' letter' + (elimCount > 1 ? 's' : '') + ' eliminated' : '';
+
+    }
+
+    function tapPoolLetter(id) {
+        if (gameOver)
+            return;
+        if (guessSlots.length >= P.target.length)
+            return; // already full
+        const slot = pool.find(s => s.id === id);
+        if (!slot || slot.state !== 'available')
+            return;
+        guessSlots.push(id);
+        slot.state = 'used';
+        renderPool();
+        renderGuessDisplay();
+        if (guessSlots.length === P.target.length) {
+            const cur = guessSlots.map(sid => pool.find(s => s.id === sid).l).join('');
+            if (cur === P.target) setTimeout(doSubmit, 300);
+        }
+    }
+
+    function renderGuessDisplay() {
+        const wrap = document.getElementById('guess-display');
+        wrap.innerHTML = '';
+        guessSlots.forEach((id, i) => {
+            const slot = pool.find(s => s.id === id);
+            const d = document.createElement('div');
+            d.className = 'gslot filled';
+            d.textContent = slot.l;
+            d.addEventListener('touchend', e => {
+                e.preventDefault();
+                removeGuessSlot(i);
+            }, {
+                passive: false
+            });
+            d.addEventListener('click', e => {
+                e.preventDefault();
+                removeGuessSlot(i);
+            });
+            wrap.appendChild(d);
+        });
+        for (let i = guessSlots.length; i < P.target.length; i++) {
+            const d = document.createElement('div');
+            d.className = 'gslot';
+            wrap.appendChild(d);
+        }
+    }
+
+    function removeGuessSlot(idx) {
+        const id = guessSlots[idx];
+        const slot = pool.find(s => s.id === id);
+        if (slot)
+            slot.state = 'available';
+        guessSlots.splice(idx, 1);
+        renderPool();
+        renderGuessDisplay();
+    }
+
+    function doSubmit() {
+        if (gameOver)
+            return;
+        const guess = guessSlots.map(id => pool.find(s => s.id === id).l).join('');
+        if (guess.length !== P.target.length) {
+            flash('Word must be ' + P.target.length + ' letters', 'er');
+            return;
+        }
+        if (!WORDBANK.has(guess)) {
+            flash('"' + guess + '" not in word list', 'er', 2500);
+            guessSlots.forEach(id => {
+                const s = pool.find(x => x.id === id);
+                if (s)
+                    s.state = 'available';
+            });
+            guessSlots = [];
+            renderPool();
+            renderGuessDisplay();
+            return;
+        }
+        {
+            const avail = {};
+            pool.filter(s => s.state === 'available' || s.state === 'used').forEach(s => avail[s.l] = (avail[s.l] || 0) + 1);
+            let missing = '';
+            for (const ch of guess) {
+                if (!avail[ch]) {
+                    missing = ch;
+                    break;
+                }
+                avail[ch]--;
+            }
+            if (missing) {
+                flash('"' + missing + '" not available — find more words to unlock letters', 'er', 3000);
+                guessSlots.forEach(id => {
+                    const s = pool.find(x => x.id === id);
+                    if (s)
+                        s.state = 'available';
+                });
+                guessSlots = [];
+                renderPool();
+                renderGuessDisplay();
+                return;
+            }
+        }
+        const results = wdleCheck(guess, P.target);
+        pastGuesses.push({
+            letters: guess.split(''),
+            results
+        });
+        p2EventLog.push({ type: 'guess' });
+        p2HintLocked = false;
+        guessSlots.forEach(id => {
+            const s = pool.find(x => x.id === id);
+            if (s)
+                s.state = 'available';
+        });
+        guessSlots = [];
+        renderPool();
+        renderGuessDisplay();
+        renderPastGuesses();
+        if (guess === P.target) {
+            gameOver = true;
+            showWin();
+            return;
+        }
+        if (pastGuesses.length >= 6) {
+            gameOver = true;
+            showLoss();
+        }
+    }
+
+    function renderPastGuesses() {
+        const c = document.getElementById('grows');
+        c.innerHTML = '';
+        pastGuesses.forEach(gu => {
+            const row = document.createElement('div');
+            row.className = 'guess-row';
+            gu.letters.forEach((l, i) => {
+                const cell = document.createElement('div');
+                cell.className = 'gcell ' + gu.results[i];
+                cell.textContent = l;
+                row.appendChild(cell);
+            });
+            const er = document.createElement('div');
+            er.className = 'erow';
+            gu.results.forEach(r => {
+                const s = document.createElement('span');
+                s.textContent = r === 'correct' ? '🟩' : r === 'present' ? '🟨' : '⬛';
+                er.appendChild(s);
+            });
+            row.appendChild(er);
+            c.appendChild(row);
+        });
+    }
+
+    function saveTodayResult(won) {
+        // Lets a same-day return visit show today's result instead of a fresh
+        // playable puzzle. Wrapped in try/catch so private-browsing or storage
+        // restrictions just mean this feature silently doesn't persist —
+        // never breaks the game itself.
+        try {
+            localStorage.setItem('pivot_result_icf', JSON.stringify({
+                date: todayISO(),
+                won: won,
+                elapsedSecs: elapsedSecs,
+                hintPenalty: hintPenalty,
+                pastGuesses: pastGuesses,
+                grid: grid,
+                foundKeys: Array.from(foundKeys),
+                pivotCellKeys: Array.from(pivotCellKeys),
+                hintKeys: Array.from(hintKeys),
+                foundWords: Array.from(foundWords),
+                foundOrder: foundOrder,
+                p1HintPenalty: p1HintPenalty,
+                p1EventLog: p1EventLog,
+                p2EventLog: p2EventLog
+            }));
+        } catch (e) {
+            // storage unavailable — nothing to do
+        }
+    }
+    function showWin() {
+        stopTimer();
+        saveTodayResult(true);
+        document.getElementById('actcard').style.display = 'none';
+        document.getElementById('wincard').classList.remove('hidden');
+        document.getElementById('winword').textContent = P.target;
+        document.getElementById('wintext').textContent = P.winText;
+        const total = elapsedSecs + hintPenalty;
+        document.getElementById('winscore').innerHTML = '⏱ ' + fmtTime(total) + (hintPenalty > 0 ? ' (incl. +' + fmtTime(hintPenalty) + ' hints)' : '');
+        setTimeout(() => {
+            document.getElementById('wincard').scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+            setTimeout(() => launchFireworks(3500), 600);
+        }, 300);
+    }
+    function showLoss() {
+        stopTimer();
+        saveTodayResult(false);
+        document.getElementById('actcard').style.display = 'none';
+        document.getElementById('losscard').classList.remove('hidden');
+        document.getElementById('lossword').textContent = 'The word was ' + P.target;
+        const total = elapsedSecs + hintPenalty;
+        document.getElementById('losstext').textContent = P.lossText + ' Time: ' + fmtTime(total);
+        setTimeout(showSharePrompt, 1200);
+    }
+
+    // ── HINT BUTTONS ─────────────────────────────────────────────────────────────
+    function tap(id, fn) {
+        const el = document.getElementById(id);
+        if (!el)
+            return;
+        el.addEventListener('touchend', e => {
+            e.preventDefault();
+            fn();
+        }, {
+            passive: false
+        });
+        el.addEventListener('click', e => {
+            e.preventDefault();
+            fn();
+        });
+    }
+    tap('hintbtn', doHint);
+    tap('closeinstr', function() {
+        const p = document.getElementById('instrtext');
+        if (p)
+            p.style.display = p.style.display === 'none' ? 'block' : 'none';
+        document.getElementById('closeinstr').textContent = p && p.style.display === 'none' ? '▼' : '✕';
+    });
+    tap('latbtn', function() {
+        if (usedLat)
+            return;
+        if (p2HintLocked) {
+            flash('One hint per guess — try a guess first', 'er');
+            return;
+        }
+        const cost = addHintPenalty();
+        p2EventLog.push({ type: 'hint' });
+        p2HintLocked = true;
+        usedLat = true;
+        document.getElementById('latbtn').disabled = true;
+        document.getElementById('hcard2').classList.remove('hidden');
+        const d = document.createElement('div');
+        d.className = 'hbox';
+        d.textContent = '🔀 ' + P.latHint;
+        document.getElementById('hbox2').appendChild(d);
+        setTimeout(() => d.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+    });
+    tap('pivbtn', function() {
+        if (usedPiv)
+            return;
+        if (p2HintLocked) {
+            flash('One hint per guess — try a guess first', 'er');
+            return;
+        }
+        const cost = addHintPenalty();
+        p2EventLog.push({ type: 'hint' });
+        p2HintLocked = true;
+        usedPiv = true;
+        document.getElementById('pivbtn').disabled = true;
+        document.getElementById('hcard2').classList.remove('hidden');
+        const d = document.createElement('div');
+        d.className = 'hbox';
+        d.textContent = '🪸 ' + P.pivHint;
+        document.getElementById('hbox2').appendChild(d);
+        setTimeout(() => d.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+    });
+    tap('elimbtn', function() {
+        const safe = pool.filter(s => s.state === 'available' && !P.target.includes(s.l));
+        if (!safe.length) {
+            flash('Nothing to eliminate', 'er');
+            return;
+        }
+        if (p2HintLocked) {
+            flash('One hint per guess — try a guess first', 'er');
+            return;
+        }
+        const cost = addHintPenalty();
+        p2EventLog.push({ type: 'hint' });
+        p2HintLocked = true;
+        const pick = safe[Math.floor(Math.random() * safe.length)];
+        pick.state = 'elim';
+        renderPool();
+        flash('+' + cost + ' sec', 'hint', 1800);
+        setTimeout(() => document.getElementById('actcard').scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+    });
+
+    // ── MODAL ─────────────────────────────────────────────────────────────────────
+    document.getElementById('modal-jump').addEventListener('touchend', function(e) {
+        e.preventDefault();
+        closeModal();
+        jumpedEarly = true;
+        s2Initialised = true;
+        goStage2();
+    }, {
+        passive: false
+    });
+    document.getElementById('modal-jump').addEventListener('click', function(e) {
+        e.preventDefault();
+        closeModal();
+        jumpedEarly = true;
+        s2Initialised = true;
+        goStage2();
+    });
+    document.getElementById('modal-stay').addEventListener('touchend', function(e) {
+        e.preventDefault();
+        closeModal();
+        if (!wordSearchDone) {
+            document.getElementById('hintbtn').style.display = '';
+            document.getElementById('s1').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, {
+        passive: false
+    });
+    document.getElementById('modal-stay').addEventListener('click', function(e) {
+        e.preventDefault();
+        closeModal();
+        if (!wordSearchDone) {
+            document.getElementById('hintbtn').style.display = '';
+            document.getElementById('s1').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+    document.getElementById('modal-overlay').addEventListener('touchend', function(e) {
+        if (e.target === this) {
+            e.preventDefault();
+            closeModal();
+        }
+    }, {
+        passive: false
+    });
+    document.getElementById('modal-overlay').addEventListener('click', function(e) {
+        if (e.target === this)
+            closeModal();
+    });
+
+    // ── FIREWORKS ────────────────────────────────────────────────────────────────
+    function launchFireworks(durationMs) {
+        const canvas = document.getElementById('fwcanvas');
+        canvas.style.display = 'block';
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const ctx = canvas.getContext('2d');
+        const particles = [];
+        const COLORS = ['#f9d976', '#2ecc71', '#e8734a', '#3498db', '#e74c3c', '#9b59b6', '#1abc9c', '#fff'];
+        function Particle(x, y, color) {
+            const angle = Math.random() * Math.PI * 2,
+                speed = 2 + Math.random() * 5;
+            this.x = x;
+            this.y = y;
+            this.vx = Math.cos(angle) * speed;
+            this.vy = Math.sin(angle) * speed - 3;
+            this.alpha = 1;
+            this.color = color;
+            this.r = 2 + Math.random() * 3;
+            this.gravity = 0.12;
+        }
+        Particle.prototype.update = function() {
+            this.x += this.vx;
+            this.y += this.vy;
+            this.vy += this.gravity;
+            this.alpha -= 0.018;
+        };
+        Particle.prototype.draw = function() {
+            ctx.save();
+            ctx.globalAlpha = Math.max(0, this.alpha);
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        };
+        function burst() {
+            const x = canvas.width * 0.2 + Math.random() * canvas.width * 0.6;
+            const y = canvas.height * 0.15 + Math.random() * canvas.height * 0.45;
+            const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+            for (let i = 0; i < 55; i++)
+                particles.push(new Particle(x, y, color));
+        }
+        let elapsed = 0;
+        const burstInterval = setInterval(() => {
+            burst();
+            if (Math.random() > 0.4)
+                burst();
+        }, 400);
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].alpha <= 0)
+                    particles.splice(i, 1);
+            }
+            if (elapsed < durationMs)
+                requestAnimationFrame(animate);
+            elapsed += 16;
+        }
+        animate();
+        setTimeout(() => {
+            clearInterval(burstInterval);
+            setTimeout(() => {
+                canvas.style.display = 'none';
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                showSharePrompt();
+            }, 1200);
+        }, durationMs);
+    }
+
+    // ── SHARE ─────────────────────────────────────────────────────────────────────
+    function buildShareText() {
+        const total = elapsedSecs + hintPenalty;
+        const timeStr = '⏱ ' + fmtTime(total);
+
+        // Part 1: one continuous line — circles in order found, with an ℹ️
+        // inserted right where each hint was taken, magnifying glass for any
+        // words never found tacked onto the end.
+        const totalWords = P.words.length;
+        let p1Emoji = '';
+        p1EventLog.forEach(ev => {
+            if (ev.type === 'word') {
+                p1Emoji += ev.pivot ? '🟠' : '🟢';
+            } else if (ev.type === 'hint') {
+                p1Emoji += 'ℹ️';
+            }
+        });
+        const unfoundCount = totalWords - foundOrder.length;
+        for (let i = 0; i < unfoundCount; i++) {
+            p1Emoji += '🔍';
+        }
+
+        // Part 2: one row per guess, with an ℹ️ (or a same-width blank, so
+        // the squares stay aligned in a column) prepended to whichever
+        // guess-row comes right after a hint was taken.
+        let p2GuessIdx = 0;
+        let p2PendingHint = false;
+        const p2Lines = [];
+        const BLANK = '　'; // full-width blank space — same visual width as the emoji
+        p2EventLog.forEach(ev => {
+            if (ev.type === 'guess') {
+                const g = pastGuesses[p2GuessIdx++];
+                const marker = p2PendingHint ? 'ℹ️' : BLANK;
+                p2Lines.push(marker + g.results.map(r => r === 'correct' ? '🟩' : r === 'present' ? '🟨' : '⬛').join(''));
+                p2PendingHint = false;
+            } else if (ev.type === 'hint') {
+                p2PendingHint = true;
+            }
+        });
+        if (p2PendingHint) p2Lines.push('ℹ️'); // hint taken after the last guess (shouldn't normally happen, but don't drop it)
+        const guessEmoji = p2Lines.join('\n');
+
+        return 'PIVOT — ' + P.theme + '\n' + timeStr + '\n' + p1Emoji + '\n' + guessEmoji + '\nI played the ICF version EPHESIANS 4:17-32\nhttp://www.tinyurl.com/bible-words-ICF\nLike it? Then play the daily word puzzle here:\nhttps://tinyurl.com/pivot-en';
+    }
+    function showSharePrompt() {
+        document.getElementById('shareresult').textContent = buildShareText();
+        document.getElementById('shareoverlay').style.display = 'flex';
+    }
+    function closeShare() {
+        document.getElementById('shareoverlay').style.display = 'none';
+    }
+    (function() {
+        function addTapShare(id, fn) {
+            const el = document.getElementById(id);
+            if (!el)
+                return;
+            el.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                fn();
+            }, {
+                passive: false
+            });
+            el.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                fn();
+            });
+        }
+        addTapShare('sharebtn-wa', function() {
+            const txt = encodeURIComponent(buildShareText());
+            window.open('whatsapp://send?text=' + txt, '_blank');
+            setTimeout(closeShare, 2000);
+        });
+        addTapShare('sharebtn-em', function() {
+            window.location.href = 'mailto:?subject=PIVOT&body=' + encodeURIComponent(buildShareText());
+            setTimeout(closeShare, 1000);
+        });
+        addTapShare('sharebtn-cp', function() {
+            const txt = buildShareText();
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(txt).then(() => {
+                    document.getElementById('sharebtn-cp').textContent = '✓ Copied!';
+                    setTimeout(closeShare, 1500);
+                });
+            }
+            else {
+                const ta = document.createElement('textarea');
+                ta.value = txt;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.focus();
+                ta.select();
+                try {
+                    document.execCommand('copy');
+                } catch (e) {}
+                document.body.removeChild(ta);
+                document.getElementById('sharebtn-cp').textContent = '✓ Copied!';
+                setTimeout(closeShare, 1500);
+            }
+        });
+        addTapShare('sharebtn-cl', closeShare);
+        document.getElementById('shareoverlay').addEventListener('touchend', function(e) {
+            if (e.target === this || e.target.id === 'shareoverlay') {
+                e.preventDefault();
+                closeShare();
+            }
+        }, {
+            passive: false
+        });
+        document.getElementById('shareoverlay').addEventListener('click', function(e) {
+            if (e.target === this || e.target.id === 'shareoverlay')
+                closeShare();
+        });
+    })();
+
+    // ── SCROLL TRIGGER ────────────────────────────────────────────────────────────
+    let s2WasVisible = false;
+    window.addEventListener('scroll', function() {
+        if (!wordSearchDone) {
+            const s1 = document.getElementById('s1');
+            const rect = s1.getBoundingClientRect();
+            if (rect.bottom > 0 && rect.top < window.innerHeight)
+                document.getElementById('hintbtn').style.display = '';
+        }
+        const s2 = document.getElementById('s2');
+        const r2 = s2.getBoundingClientRect();
+        const nowVisible = r2.top < window.innerHeight - 60 && r2.bottom > 0;
+        if (nowVisible && !s2WasVisible) {
+            if (!s2Initialised && foundWords.has(P.pivot)) {
+                jumpedEarly = true;
+                s2Initialised = true;
+                goStage2();
+            } else if (!s2Initialised && !foundWords.has(P.pivot)) {
+                // Scrolled to s2 before finding pivot - show a message
+                const instrEl = document.getElementById('instrtext');
+                const instrCard = document.getElementById('instrcard');
+                if (instrCard)
+                    instrCard.style.display = 'block';
+                if (instrEl && !instrEl.innerHTML)
+                    instrEl.innerHTML = 'Find the clue word in the word search above to unlock the letter pool.';
+            } else if (s2Initialised && !gameOver && guessSlots.length === 0) {
+                refreshPool();
+                renderPool();
+                renderGuessDisplay();
+            }
+        }
+        // Also re-init if s2 visible but pool is empty (safety net)
+        if (nowVisible && s2Initialised && !gameOver) {
+            const poolWrap = document.getElementById('pool-wrap');
+            if (poolWrap && poolWrap.children.length === 0) {
+                refreshPool();
+                renderPool();
+                renderGuessDisplay();
+            }
+        }
+        if (!nowVisible && s2WasVisible)
+            s2WasVisible = false;
+        else
+            s2WasVisible = nowVisible;
+    }, {
+        passive: true
+    });
+
+    // ── INIT ──────────────────────────────────────────────────────────────────────
+    function initGame() {
+        // Populate runtime constants from the loaded puzzle
+        SZ = P.SIZE || 6;
+        try {
+            const _r = buildPuzzle();
+            grid = _r.grid;
+            placements = _r.placements;
+            freeLetters = _r.freeLetters;
+        } catch (e) {
+            document.body.innerHTML = '<p style="color:red;padding:20px;font-family:sans-serif">Puzzle error: ' + e.message + '</p>';
+            throw e;
+        }
+        // Seed the pool from the built grid
+        const allLetters = [];
+        for (let r = 0; r < SZ; r++)
+            for (let c = 0; c < SZ; c++)
+                allLetters.push(grid[r][c]);
+        shufl(allLetters).forEach(l => pool.push({ l, id: pool.length, state: 'available' }));
+        // Make sure WORDBANK includes today's target
+        WORDBANK.add(P.target.toUpperCase());
+        // Reveal game sections now that puzzle is ready
+        const s1 = document.getElementById('s1');
+        const s2 = document.getElementById('s2');
+        if (s1) s1.style.display = '';
+        if (s2) s2.style.display = '';
+        // Render everything
+        renderGrid();
+        renderChips();
+        updateHintCostLabel();
+        // Update theme label in the header
+        const themeLabel = document.getElementById('theme-label');
+        if (themeLabel) themeLabel.textContent = P.theme;
+    }
+
+    function showAlreadyPlayed(saved) {
+        // Restore just enough state to redisplay today's result, without
+        // touching the grid/pool/buildPuzzle code path at all.
+        pastGuesses = saved.pastGuesses || [];
+        elapsedSecs = saved.elapsedSecs || 0;
+        hintPenalty = saved.hintPenalty || 0;
+        p1HintPenalty = saved.p1HintPenalty || 0;
+        p1EventLog = saved.p1EventLog || [];
+        p2EventLog = saved.p2EventLog || [];
+        gameOver = true;
+
+        // Restore Part 1's board exactly as it was found, if we have it saved
+        // (older saved results from before this existed won't have it).
+        if (saved.grid) {
+            grid = saved.grid;
+            SZ = grid.length;
+            foundKeys = new Set(saved.foundKeys || []);
+            pivotCellKeys = new Set(saved.pivotCellKeys || []);
+            hintKeys = new Set(saved.hintKeys || []);
+            foundWords = new Set(saved.foundWords || []);
+            foundOrder = saved.foundOrder || [];
+            selCells = [];
+
+            const s1 = document.getElementById('s1');
+            if (s1) s1.style.display = '';
+            const hintbtn = document.getElementById('hintbtn');
+            if (hintbtn) hintbtn.style.display = 'none';
+            const scrollArrow = document.getElementById('scroll-down-arrow');
+            if (scrollArrow) scrollArrow.style.display = 'none';
+
+            renderGrid();
+            renderChips();
+        }
+
+        const themeLabel = document.getElementById('theme-label');
+        if (themeLabel) themeLabel.textContent = P.theme;
+
+        const instrcard = document.getElementById('instrcard');
+        if (instrcard) instrcard.style.display = 'none';
+
+        const s2 = document.getElementById('s2');
+        if (s2) {
+            s2.style.display = '';
+            const note = document.createElement('p');
+            note.style.cssText = 'text-align:center;color:#a8c8e8;font-size:13px;margin:0 0 14px;line-height:1.5;';
+            note.textContent = "You've already played this puzzle today — here's how it went. Come back tomorrow to play again, or check back when the puzzle changes.";
+            s2.insertBefore(note, s2.firstChild);
+        }
+
+        renderPastGuesses();
+        if (saved.won) showWin(); else showLoss();
+    }
+
+    async function loadAndStart() {
+        const loadEl = document.getElementById('loading-msg');
+        if (loadEl) loadEl.style.display = 'none';
+
+        let saved = null;
+        try {
+            saved = JSON.parse(localStorage.getItem('pivot_result_icf') || 'null');
+        } catch (e) {
+            saved = null;
+        }
+        if (saved && saved.date === todayISO()) {
+            showAlreadyPlayed(saved);
+        } else {
+            initGame();
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadAndStart);
+    } else {
+        loadAndStart();
+    }
+    window.addEventListener('resize', renderGrid);
+    </script>
+</body>
+</html>
