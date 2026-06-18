@@ -4,6 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>How to Play — PIVOT</title>
+    <script>
+    // If they've already played today's puzzle, skip the instructions
+    // entirely and go straight back to play.html, which will show their
+    // saved result instead of a fresh puzzle.
+    (function () {
+        try {
+            var saved = JSON.parse(localStorage.getItem('pivot_result_icf') || 'null');
+            var d = new Date();
+            var today = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+            if (saved && saved.date === today) {
+                window.location.replace('play.html');
+            }
+        } catch (e) {
+            // localStorage unavailable or bad data — just show the intro as normal.
+        }
+    })();
+    </script>
     <style>
     * {
         box-sizing: border-box;
