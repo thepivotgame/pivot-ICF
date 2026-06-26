@@ -872,16 +872,16 @@
     // everyone plays until you swap it out. To put up a new puzzle, edit the
     // values below and replace this file wherever it's hosted. That's it.
     const P = {
-        theme: "EPH. 4:17-32",
-        words: ["TRUTH", "SPEAK", "ANGER", "HANDS", "SHARE", "KIND", "HOLY"],
+        theme: "EPH. 5:8-20 & 6:1-4",
+        words: ["LIGHT", "FRUIT", "TRUTH", "SONGS", "WISE", "OBEY", "HYMN"],
         SIZE: 6,
-        target: "VIRAL",
-        pivot: "SHARE",
-        noise: "AEIOVBCFTM",
-        latHint: "Think social media, not generosity.",
-        pivHint: "In Ephesians 4, SHARE means giving to those in need. But when something gets SHARED millions of times online, what do we say it's gone?",
-        winText: "Gone viral! SHARE was the pivot — giving to the needy becomes sharing online.",
-        lossText: "VIRAL — what happens when something gets shared millions of times. SHARE was the pivot: giving to the needy to sharing online.",
+        target: "RISEN",
+        pivot: "LIGHT",
+        noise: "AEOUBCLTMP",
+        latHint: "Paul quotes an ancient hymn in verse 14. What happened to the one who makes the light shine on you?",
+        pivHint: "LIGHT is what you are in the Lord — but in verse 14, Christ shines on the sleeper to do something. LIGHT triggers a response. What is it?",
+        winText: "RISEN! Christ rose — and his light woke you too. LIGHT was the pivot: you are light in the Lord because he is risen.",
+        lossText: "RISEN — the answer hidden in verse 14. Christ shines on you because he is risen. LIGHT was the pivot.",
     };
 
     function todayISO() {
@@ -2012,7 +2012,7 @@
         if (p2PendingHint) p2Lines.push('ℹ️'); // hint taken after the last guess (shouldn't normally happen, but don't drop it)
         const guessEmoji = p2Lines.join('\n');
 
-        return 'PIVOT — ' + P.theme + '\n'  + timeStr + '\n' + p1Emoji + '\n' + guessEmoji + '\n\nI played the ICF version EPHESIANS 4:17-32\nhttp://www.tinyurl.com/bible-words-ICF\nLike it? Then play the daily word puzzle here:\nhttps://tinyurl.com/pivot-en';}
+        return 'PIVOT — ' + P.theme + '\n'  + timeStr + '\n' + p1Emoji + '\n' + guessEmoji + '\n\nI played the ICF version EPHESIANS 5:8-20 & 6:1-4\nhttp://www.tinyurl.com/bible-words-ICF\nLike it? Then play the daily word puzzle here:\nhttps://tinyurl.com/pivot-en';}
     function showSharePrompt() {
         document.getElementById('shareresult').textContent = buildShareText();
         document.getElementById('shareoverlay').style.display = 'flex';
