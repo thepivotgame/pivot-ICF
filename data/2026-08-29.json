@@ -1,0 +1,25 @@
+{
+  "theme": "REFUGE",
+  "words": [
+    "EARTH",
+    "QUAKE",
+    "HEART",
+    "HELP",
+    "FEAR",
+    "GIVE",
+    "FALL"
+  ],
+  "SIZE": 6,
+  "pivot": "HELP",
+  "target": "GUARD",
+  "noise": "EIN",
+  "latHint": "Think Proverbs and watching over your heart above all else.",
+  "pivHint": "HELP in this psalm is what God is in times of trouble - an ever-present HELP. What do you call someone whose whole job is to protect and HELP keep you safe?",
+  "winText": "You found it. God is our ever-present HELP, standing GUARD over us like a protector who never leaves his post.",
+  "lossText": "The word was GUARD. HELP was the pivot - God's ever-present HELP in trouble, and the protector who stands GUARD over those in danger.",
+  "gridString": "FEIEPHADKLEFLGEAEULHRAUNHTRAEQGIVEAR",
+  "votdRef": "Psalm 46:1",
+  "votdVerse": "God is our refuge and strength, an ever-present help in trouble.",
+  "passRef": "Psalm 46:1-3",
+  "passageText": "God is our refuge and strength, an ever-present help in trouble. Therefore we will not fear, though the earth give way and the mountains fall into the heart of the sea, though its waters roar and foam and the mountains quake with their surging."
+}

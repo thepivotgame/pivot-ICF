@@ -1,0 +1,25 @@
+{
+  "theme": "COMMANDMENT",
+  "words": [
+    "HEART",
+    "FIRST",
+    "TEACH",
+    "MIND",
+    "SOUL",
+    "LOVE",
+    "TEST"
+  ],
+  "SIZE": 6,
+  "pivot": "MIND",
+  "target": "HEEDS",
+  "noise": "ORTU",
+  "latHint": "Think doctor's orders and following advice carefully.",
+  "pivHint": "MIND in this commandment means your intellect - love God with all of it. But think of a child who actually listens and obeys when a parent gives advice, rather than ignoring it. What word describes what that child does with the advice?",
+  "winText": "You found it. Love God with all your MIND, and one who \"MINDS\" a warning HEEDS it - paying full attention either way.",
+  "lossText": "The word was HEEDS. MIND was the pivot - your intellect in Matthew's greatest commandment, and what you do when you pay attention to a warning.",
+  "gridString": "MHCAETFIRTHSEINUEEHVRDATLUOSRDOEELTS",
+  "votdRef": "Matthew 22:37",
+  "votdVerse": "Love the Lord your God with all your heart and with all your soul and with all your mind.",
+  "passRef": "Matthew 22:34-38",
+  "passageText": "When the Pharisees heard that Jesus had silenced the Sadducees, they got together. One of them, an expert in the law, tested him with this question: 'Teacher, which is the greatest commandment in the Law?' Jesus replied: 'Love the Lord your God with all your heart and with all your soul and with all your mind.' This is the first and greatest commandment."
+}

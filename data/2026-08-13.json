@@ -1,0 +1,25 @@
+{
+  "theme": "LOVE",
+  "words": [
+    "ENEMY",
+    "GOOD",
+    "CHILD",
+    "PAGAN",
+    "RAIN",
+    "LOVE",
+    "PRAY"
+  ],
+  "SIZE": 6,
+  "pivot": "ENEMY",
+  "target": "PEACE",
+  "noise": "HSU",
+  "latHint": "Think conflict and the agreement that ends a war.",
+  "pivHint": "ENEMY is who Jesus tells us to love in this passage. But here's the twist - in military terms, what is the only thing that can exist between two sides when the fighting finally stops?",
+  "winText": "You found it. Love your ENEMY and you open the door to PEACE - and Jesus says that's exactly what children of the Father are called to do.",
+  "lossText": "The word was PEACE. ENEMY was the pivot - who Jesus commands us to love, and the only one with whom we can make PEACE.",
+  "gridString": "PCHILDANGOODGIHYVUAAACEPNRESEAPENEMY",
+  "votdRef": "Matthew 5:44",
+  "votdVerse": "But I tell you, love your enemies and pray for those who persecute you.",
+  "passRef": "Matthew 5:43-48",
+  "passageText": "You have heard that it was said, Love your neighbor and hate your enemy. But I tell you, love your enemies and pray for those who persecute you, that you may be children of your Father in heaven. He causes his sun to rise on the evil and the good, and sends rain on the righteous and the unrighteous. If you love those who love you, what reward will you get? Are not even the tax collectors doing that? And if you greet only your own people, what are you doing more than others? Do not even pagans do that? Be perfect, therefore, as your heavenly Father is perfect."
+}

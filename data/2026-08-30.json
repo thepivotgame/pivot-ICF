@@ -1,0 +1,25 @@
+{
+  "theme": "GUIDANCE",
+  "words": [
+    "PLANS",
+    "HEART",
+    "STEPS",
+    "WAYS",
+    "PURE",
+    "LORD",
+    "WORK"
+  ],
+  "SIZE": 6,
+  "pivot": "STEPS",
+  "target": "DANCE",
+  "noise": "LO",
+  "latHint": "Think beehives and bees sharing directions to flowers.",
+  "pivHint": "STEPS in this proverb is what the Lord establishes for our lives. But STEPS also describes something you'd learn in a ballroom class, moving in rhythm to music. What's that whole activity called?",
+  "winText": "You found it. The Lord establishes our STEPS, and a sequence of STEPS in rhythm is called a DANCE - even when we plan our own course, He leads.",
+  "lossText": "The word was DANCE. STEPS was the pivot - what the Lord establishes for our lives, and what you'd call a sequence of STEPS set to music.",
+  "gridString": "TRAEHSWORKTDLUSEDRPCPYAONSOEALSNALPW",
+  "votdRef": "Proverbs 16:9",
+  "votdVerse": "In their hearts humans plan their course, but the LORD establishes their steps.",
+  "passRef": "Proverbs 16:1-4, 9",
+  "passageText": "To humans belong the plans of the heart, but from the LORD comes the proper answer of the tongue. All a person's ways seem pure to them, but motives are weighed by the LORD. Commit to the LORD whatever you do, and he will establish your plans. The LORD works out everything to its proper end -- even the wicked for a day of disaster. ... In their hearts humans plan their course, but the LORD establishes their steps."
+}

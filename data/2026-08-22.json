@@ -1,0 +1,25 @@
+{
+  "theme": "GRACE",
+  "words": [
+    "FLESH",
+    "GRACE",
+    "GLORY",
+    "WORD",
+    "LIFE",
+    "MADE",
+    "FULL"
+  ],
+  "SIZE": 6,
+  "pivot": "WORD",
+  "target": "VOWED",
+  "noise": "AIR",
+  "latHint": "Think courtroom and a witness's sworn promise.",
+  "pivHint": "WORD in John 1 is who Jesus is - the WORD made flesh. But \"give your WORD\" means something else too - a solemn promise you intend to keep. What's another WORD for having given your WORD?",
+  "winText": "You found it. The WORD became flesh, and to give your WORD is to have VOWED - a promise made flesh in action, just like Jesus.",
+  "lossText": "The word was VOWED. WORD was the pivot - who Jesus is in John 1, and what you've done when you give your WORD and mean it.",
+  "gridString": "HWORDEYSIFRCMREUDAVAOLORAWDLFGLIFEGE",
+  "votdRef": "John 1:14",
+  "votdVerse": "The Word became flesh and made his dwelling among us. We have seen his glory, the glory of the one and only Son, who came from the Father, full of grace and truth.",
+  "passRef": "John 1:1-5, 14",
+  "passageText": "In the beginning was the Word, and the Word was with God, and the Word was God. He was with God in the beginning. Through him all things were made; without him nothing was made that has been made. In him was life, and that life was the light of all mankind. The light shines in the darkness, and the darkness has not overcome it. ... The Word became flesh and made his dwelling among us. We have seen his glory, the glory of the one and only Son, who came from the Father, full of grace and truth."
+}

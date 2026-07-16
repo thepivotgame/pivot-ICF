@@ -1,0 +1,25 @@
+{
+  "theme": "RETIRED",
+  "words": [
+    "LIFE",
+    "CROPS",
+    "BARNS",
+    "RICH",
+    "FOOL",
+    "STORE",
+    "ROOM"
+  ],
+  "SIZE": 6,
+  "pivot": "STORE",
+  "target": "GOODS",
+  "noise": "EL",
+  "latHint": "Think retail and what a shop sells.",
+  "pivHint": "STORE isn't just what the rich fool did with his grain. Walk into any shop and you'll see what a STORE is really full of.",
+  "winText": "You found it. STORE is full of GOODS - and so were the rich fool's barns. The difference is God called one of them a fool.",
+  "lossText": "The word was GOODS. A STORE is full of them. So were the rich fool's barns - right up until the night they weren't his anymore.",
+  "gridString": "SNRABSMLGHETODCFOOOIIOERRLOOFECROPSS",
+  "votdRef": "Luke 12:15",
+  "votdVerse": "Then he said to them, Watch out! Be on your guard against all kinds of greed; life does not consist in an abundance of possessions.",
+  "passRef": "Luke 12:13-21",
+  "passageText": "Someone in the crowd said to him, Teacher, tell my brother to divide the inheritance with me. Jesus replied, Man, who appointed me a judge or an arbiter between you? Then he said to them, Watch out! Be on your guard against all kinds of greed; life does not consist in an abundance of possessions. And he told them this parable: The ground of a certain rich man yielded an abundant harvest. He thought to himself, What shall I do? I have no room to store my crops. Then he said, This is what I'll do. I will tear down my barns and build bigger ones, and there I will store my surplus grain. And I'll say to myself, You have plenty of grain laid up for many years. Take life easy; eat, drink and be merry. But God said to him, You fool! This very night your life will be demanded from you. Then who will get what you have prepared for yourself? This is how it will be with whoever stores up things for themselves but is not rich toward God."
+}

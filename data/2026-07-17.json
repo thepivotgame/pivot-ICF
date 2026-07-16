@@ -1,0 +1,25 @@
+{
+  "theme": "FORTRESS",
+  "words": [
+    "TIMES",
+    "WRATH",
+    "EARTH",
+    "SING",
+    "LOVE",
+    "DOGS",
+    "FOOD"
+  ],
+  "SIZE": 6,
+  "pivot": "TIMES",
+  "target": "PAPER",
+  "noise": "IS",
+  "latHint": "Think journalism and yesterday's headlines.",
+  "pivHint": "TIMES isn't just what David endures. Years ago, some cities delivered a version of this to your doorstep each day.",
+  "winText": "You found it. TIMES isn't just what David sings through - it's also part of famous newspaper names, and at the heart of every one is PAPER.",
+  "lossText": "The word was PAPER. TIMES was the pivot - as in The TIMES, one of many newspapers printed on PAPER.",
+  "gridString": "SDOGSHWPEITSERNREFVGAMPOOEITAOLTIRHD",
+  "votdRef": "Psalm 59:16",
+  "votdVerse": "But I will sing of your strength, in the morning I will sing of your love; for you are my fortress, my refuge in times of trouble.",
+  "passRef": "Psalm 59:9-17",
+  "passageText": "You are my strength, I watch for you; you, God, are my fortress, my God on whom I can rely. God will go before me and will let me gloat over those who slander me. But do not kill them, Lord our shield, or my people will forget. In your might uproot them and bring them down. For the sins of their mouths, for the words of their lips, let them be caught in their pride. For the curses and lies they utter, consume them in your wrath, consume them till they are no more. Then it will be known to the ends of the earth that God rules over Jacob. They return at evening, snarling like dogs, and prowl about the city. They wander about for food and howl if not satisfied. But I will sing of your strength, in the morning I will sing of your love; for you are my fortress, my refuge in times of trouble. You are my strength, I sing praise to you; you, God, are my fortress, my God on whom I can rely."
+}

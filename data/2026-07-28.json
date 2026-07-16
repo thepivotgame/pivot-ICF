@@ -1,0 +1,25 @@
+{
+  "theme": "HOPE",
+  "words": [
+    "ORDER",
+    "EARTH",
+    "DWELL",
+    "DEATH",
+    "HOLY",
+    "WIPE",
+    "PAIN"
+  ],
+  "SIZE": 6,
+  "pivot": "ORDER",
+  "target": "MONKS",
+  "noise": "EI",
+  "latHint": "Think mystery and hooded figures chanting in darkened halls.",
+  "pivHint": "ORDER isn't just what passes away in Revelation 21. Throughout church history, groups of men committed to a life of prayer have gathered under a common rule. What do we call those men?",
+  "winText": "You found it. The old ORDER passes away and everything becomes new - just as a monastic ORDER of MONKS leaves the old world behind to live entirely for God.",
+  "lossText": "The word was MONKS. ORDER was the pivot - the old ORDER that passes away in Revelation, and the religious ORDER that MONKS commit their lives to.",
+  "gridString": "OPAINDRIYMLEDKWLOAENEIOTRWESPHDHTRAE",
+  "votdRef": "Revelation 21:4",
+  "votdVerse": "He will wipe every tear from their eyes. There will be no more death' or mourning or crying or pain, for the old order of things has passed away.",
+  "passRef": "Revelation 21:1-4",
+  "passageText": "Then I saw a new heaven and a new earth, for the first heaven and the first earth had passed away, and there was no longer any sea. I saw the Holy City, the new Jerusalem, coming down out of heaven from God, prepared as a bride beautifully dressed for her husband. And I heard a loud voice from the throne saying, Look! God's dwelling place is now among the people, and he will dwell with them. They will be his people, and God himself will be with them and be their God. He will wipe every tear from their eyes. There will be no more death or mourning or crying or pain, for the old order of things has passed away."
+}

@@ -1,0 +1,25 @@
+{
+  "theme": "PERSPECTIVE",
+  "words": [
+    "HEART",
+    "RIGHT",
+    "GLORY",
+    "HAND",
+    "DIED",
+    "LIFE",
+    "SEAT"
+  ],
+  "SIZE": 6,
+  "pivot": "RIGHT",
+  "target": "CROWN",
+  "noise": "AE",
+  "latHint": "Think fairy tales and what a frog needs to become a king.",
+  "pivHint": "RIGHT in this passage describes where Christ is seated - at God's RIGHT hand, the seat of highest honor. What symbol do kings and queens wear to show that same kind of honor?",
+  "winText": "You found it. Christ is seated at God's RIGHT hand, the seat of honor a king would wear a CROWN to symbolize - the ultimate place of authority.",
+  "lossText": "The word was CROWN. RIGHT was the pivot - the hand where Christ is seated, the same seat of honor a king's CROWN represents.",
+  "gridString": "RAHANDDICWHGETGERLIFAHOODRIETRTENLSY",
+  "votdRef": "Colossians 3:1",
+  "votdVerse": "Since, then, you have been raised with Christ, set your hearts on things above, where Christ is, seated at the right hand of God.",
+  "passRef": "Colossians 3:1-4",
+  "passageText": "Since, then, you have been raised with Christ, set your hearts on things above, where Christ is, seated at the right hand of God. Set your minds on things above, not on earthly things. For you died, and your life is now hidden with Christ in God. When Christ, who is your life, appears, then you also will appear with him in glory."
+}

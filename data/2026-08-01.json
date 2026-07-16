@@ -1,0 +1,25 @@
+{
+  "theme": "RETIRED",
+  "words": [
+    "FAINT",
+    "GROW",
+    "WINGS",
+    "SOAR",
+    "WALK",
+    "HOPE",
+    "WEARY"
+  ],
+  "SIZE": 6,
+  "pivot": "WEARY",
+  "target": "SPENT",
+  "noise": "IU",
+  "latHint": "Think finances, not fatigue, and running out of both.",
+  "pivHint": "WEARY isn't just a feeling. It's also what you say about a battery, a budget, or a bullet after it's been used up completely.",
+  "winText": "You found it. WEARY means SPENT - used up, emptied out. Isaiah knew that feeling. So does God.",
+  "lossText": "The word was SPENT. WEARY doesn't just mean tired - it means completely SPENT. That was the connection.",
+  "gridString": "RYUSSKATRGLHONNAONSIWPEPWAEEIWTFGROW",
+  "votdRef": "Isaiah 40:31",
+  "votdVerse": "But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.",
+  "passRef": "Isaiah 40:28-31",
+  "passageText": "Do you not know? Have you not heard? The Lord is the everlasting God, the Creator of the ends of the earth. He will not grow tired or weary, and his understanding no one can fathom. He gives strength to the weary and increases the power of the weak. Even youths grow tired and weary, and young men stumble and fall; but those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint."
+}

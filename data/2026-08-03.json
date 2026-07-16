@@ -1,0 +1,25 @@
+{
+  "theme": "RETIRED",
+  "words": [
+    "BROKE",
+    "SAVE",
+    "BONES",
+    "FACE",
+    "EVIL",
+    "EYES",
+    "RIGHT"
+  ],
+  "SIZE": 6,
+  "pivot": "BROKE",
+  "target": "WHOLE",
+  "noise": "EIT",
+  "latHint": "Think health and full restoration, nothing broken.",
+  "pivHint": "BROKE in this psalm means crushed in spirit. But BROKE also describes your phone when it hits the pavement. What do you hope happens next?",
+  "winText": "You found it. BROKE leads to WHOLE - and that's exactly what the psalm promises. God doesn't leave broken things broken.",
+  "lossText": "The word was WHOLE. BROKE was the pivot - shattered in spirit or shattered on the pavement. Either way, the psalm says God moves toward the BROKE, not away.",
+  "gridString": "IEVASRFACEIETENGLKWOHIHOBTVEORLEYESB",
+  "votdRef": "Psalm 34:19",
+  "votdVerse": "The righteous person may have many troubles, but the Lord delivers him out of them all.",
+  "passRef": "Psalm 34:15-22",
+  "passageText": "The eyes of the Lord are on the righteous, and his ears are attentive to their cry; but the face of the Lord is against those who do evil, to blot out their name from the earth. The righteous cry out, and the Lord hears them; he delivers them from all their troubles. The Lord is close to the brokenhearted and saves those who are crushed in spirit. The righteous person may have many troubles, but the Lord delivers him out of them all. He protects all his bones, not one of them will be broken. Evil will slay the wicked; the foes of the righteous will be condemned. The Lord will rescue his servants; no one who takes refuge in him will be condemned."
+}

@@ -1,0 +1,25 @@
+{
+  "theme": "KINDNESS",
+  "words": [
+    "KIND",
+    "TALK",
+    "HOLY",
+    "RAGE",
+    "MOUTH",
+    "ANGER",
+    "NEEDS"
+  ],
+  "SIZE": 6,
+  "pivot": "KIND",
+  "target": "MODEL",
+  "noise": "ABRTU",
+  "latHint": "Think fashion show.",
+  "pivHint": "KIND isn't just how Paul tells us to treat each other in Ephesians 4. It's also how we live - a _____ lifestyle.",
+  "winText": "You found it. KIND isn't just how Paul says to treat one another - living that out makes you an example worth following, a MODEL lifestyle.",
+  "lossText": "The word was MODEL. KIND was the pivot - be KIND in Ephesians 4, and living it out makes you a MODEL for others.",
+  "gridString": "HTURTASTAYDNDGULOGENBOKEELIHMRNAMKER",
+  "votdRef": "Ephesians 4:32",
+  "votdVerse": "Be kind and compassionate to one another, forgiving each other, just as in Christ God forgave you.",
+  "passRef": "Ephesians 4:29-32",
+  "passageText": "Do not let any unwholesome talk come out of your mouths, but only what is helpful for building others up according to their needs, that it may benefit those who listen. And do not grieve the Holy Spirit of God, with whom you were sealed for the day of redemption. Get rid of all bitterness, rage and anger, brawling and slander, along with every form of malice. Be kind and compassionate to one another, forgiving each other, just as in Christ God forgave you."
+}

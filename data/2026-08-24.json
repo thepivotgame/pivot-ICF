@@ -1,0 +1,25 @@
+{
+  "theme": "NEIGHBOR",
+  "words": [
+    "FLESH",
+    "SERVE",
+    "WATCH",
+    "FREE",
+    "BITE",
+    "LOVE",
+    "CALL"
+  ],
+  "SIZE": 6,
+  "pivot": "WATCH",
+  "target": "STARE",
+  "noise": "HO",
+  "latHint": "Think decor and a mannequin's unblinking look.",
+  "pivHint": "WATCH in this passage means stay alert, be careful. But WATCH can also mean simply looking at something intently, unable to look away. What's a stronger word for that?",
+  "winText": "You found it. To WATCH out can mean caution, or it can mean to STARE - and Paul says WATCH out for each other in love, keeping a close eye out.",
+  "lossText": "The word was STARE. WATCH was the pivot - staying alert in Galatians, and the intense kind of looking that can't look away.",
+  "gridString": "COSBFWRAITRAATLHETEVOLECSERVEHFLESHE",
+  "votdRef": "Galatians 5:14",
+  "votdVerse": "For the entire law is fulfilled in keeping this one command: 'Love your neighbor as yourself.'",
+  "passRef": "Galatians 5:13-15",
+  "passageText": "You, my brothers and sisters, were called to be free. But do not use your freedom to indulge the flesh; rather, serve one another humbly in love. For the entire law is fulfilled in keeping this one command: 'Love your neighbor as yourself.' If you bite and devour each other, watch out or you will be destroyed by each other."
+}

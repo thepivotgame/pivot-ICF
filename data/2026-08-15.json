@@ -1,0 +1,25 @@
+{
+  "theme": "PATIENCE",
+  "words": [
+    "WAITS",
+    "BLESS",
+    "COUNT",
+    "RAIN",
+    "FIRM",
+    "NEAR",
+    "DOOR"
+  ],
+  "SIZE": 6,
+  "pivot": "WAITS",
+  "target": "HOPES",
+  "noise": "ARU",
+  "latHint": "Think relationships and happy anticipation.",
+  "pivHint": "WAITS isn't just what the farmer does for rain. In Hebrews 11, the great heroes of faith never received what was promised in their lifetime. If we follow their example, we never give up in our _______.",
+  "winText": "You found it. WAITS and HOPES are the same thing in God's economy - James says be patient, and Romans says we wait for what we hope for. Same farmer, same field, same God.",
+  "lossText": "The word was HOPES. WAITS was the pivot - what the farmer does for rain, and what every believer does who trusts that God will bring the harvest.",
+  "gridString": "MRRUSCRSASOWIHEUADFLNIOOBTTAPOESNIAR",
+  "votdRef": "James 5:8",
+  "votdVerse": "You too, be patient and stand firm, because the Lord's coming is near.",
+  "passRef": "James 5:7-11",
+  "passageText": "Be patient, then, brothers and sisters, until the Lord's coming. See how the farmer waits for the land to yield its valuable crop, patiently waiting for the autumn and spring rains. You too, be patient and stand firm, because the Lord's coming is near. Don't grumble against one another, brothers and sisters, or you will be judged. The Judge is standing at the door! Brothers and sisters, as an example of patience in the face of suffering, take the prophets who spoke in the name of the Lord. As you know, we count as blessed those who have persevered. You have heard of Job's perseverance and have seen what the Lord finally brought about. The Lord is full of compassion and mercy."
+}

@@ -1,0 +1,25 @@
+{
+  "theme": "LISTEN",
+  "words": [
+    "ANGRY",
+    "QUICK",
+    "PLANT",
+    "SLOW",
+    "EVIL",
+    "WORD",
+    "SAVE"
+  ],
+  "SIZE": 6,
+  "pivot": "ANGRY",
+  "target": "BIRDS",
+  "noise": "AE",
+  "latHint": "Think feathers.",
+  "pivHint": "ANGRY isn't just what James says to be slow to become. It's also the first word in the name of a hit mobile game about small cartoon creatures flung at towers built by pigs.",
+  "winText": "You found it. ANGRY isn't just what James says to slow down before you become - it's also the first word in a hit mobile game about flinging small cartoon BIRDS at pig-built towers.",
+  "lossText": "The word was BIRDS. ANGRY was the pivot - slow to become ANGRY in James 1:19, and ANGRY BIRDS, the mobile game.",
+  "gridString": "SABDWPQAIROLUEVILAIESESNCDROWTKANGRY",
+  "votdRef": "James 1:19",
+  "votdVerse": "My dear brothers and sisters, take note of this: Everyone should be quick to listen, slow to speak and slow to become angry,",
+  "passRef": "James 1:19-21",
+  "passageText": "My dear brothers and sisters, take note of this: Everyone should be quick to listen, slow to speak and slow to become angry, because human anger does not produce the righteousness that God desires. Therefore, get rid of all moral filth and the evil that is so prevalent and humbly accept the word planted in you, which can save you."
+}

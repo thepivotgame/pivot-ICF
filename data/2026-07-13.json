@@ -1,0 +1,25 @@
+{
+  "theme": "GOODNESS",
+  "words": [
+    "EARTH",
+    "SONGS",
+    "SHEEP",
+    "GOOD",
+    "LOVE",
+    "NAME",
+    "MADE"
+  ],
+  "SIZE": 6,
+  "pivot": "GOOD",
+  "target": "MORAL",
+  "noise": "EGIN",
+  "latHint": "Think Aesop and a fable's one-line takeaway.",
+  "pivHint": "GOOD in this psalm describes the Lord's character. But every fable has a lesson at the end too - a \"GOOD\" lesson about right and wrong. What do we call that kind of lesson?",
+  "winText": "You found it. The Lord is GOOD, and every story's lesson about right and wrong is called its MORAL - goodness has a way of teaching itself.",
+  "lossText": "The word was MORAL. GOOD was the pivot - the Lord's unchanging character in the psalm, and the lesson every GOOD story leaves behind.",
+  "gridString": "HTRAESSGENGHEOMADEVONAMEODMGAPLIORSL",
+  "votdRef": "Psalm 100:5",
+  "votdVerse": "For the LORD is good and his love endures forever; his faithfulness continues through all generations.",
+  "passRef": "Psalm 100:1-5",
+  "passageText": "Shout for joy to the LORD, all the earth. Worship the LORD with gladness; come before him with joyful songs. Know that the LORD is God. It is he who made us, and we are his; we are his people, the sheep of his pasture. Enter his gates with thanksgiving and his courts with praise; give thanks to him and praise his name. For the LORD is good and his love endures forever; his faithfulness continues through all generations."
+}

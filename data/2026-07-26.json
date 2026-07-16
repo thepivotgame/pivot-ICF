@@ -1,0 +1,25 @@
+{
+  "theme": "WORTHY",
+  "words": [
+    "HONOR",
+    "GLORY",
+    "CROWN",
+    "HOLY",
+    "WILL",
+    "EYES",
+    "LIVE"
+  ],
+  "SIZE": 6,
+  "pivot": "HONOR",
+  "target": "MEDAL",
+  "noise": "IRTU",
+  "latHint": "Think ribbons plus.",
+  "pivHint": "HONOR isn't just what the twenty-four elders give God in Revelation 4. It's also the highest award at the Olympic Games.",
+  "winText": "You found it. HONOR isn't just what's due to God in Revelation 4 - Olympic winners are also given a ribbon with a gold, silver or bronze MEDAL attached as the highest award.",
+  "lossText": "The word was MEDAL. HONOR was the pivot - HONOR given to God in Revelation 4, and the Olympic MEDAL, the highest award at the Games.",
+  "gridString": "HLLIWROCYIOELRRNVYYIOOUEMHLAWSTEGDLN",
+  "votdRef": "Revelation 4:11",
+  "votdVerse": "You are worthy, our Lord and God, to receive glory and honor and power, for you created all things, and by your will they were created and have their being.",
+  "passRef": "Revelation 4:8-11",
+  "passageText": "Each of the four living creatures had six wings and was covered with eyes all around, even under its wings. Day and night they never stop saying: 'Holy, holy, holy is the Lord God Almighty,' who was, and is, and is to come. Whenever the living creatures give glory, honor and thanks to him who sits on the throne and who lives for ever and ever, the twenty-four elders fall down before him who sits on the throne and worship him who lives for ever and ever. They lay their crowns before the throne and say: 'You are worthy, our Lord and God, to receive glory and honor and power, for you created all things, and by your will they were created and have their being.'"
+}

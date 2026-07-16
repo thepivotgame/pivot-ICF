@@ -1,0 +1,25 @@
+{
+  "theme": "WORRY",
+  "words": [
+    "BODY",
+    "LIFE",
+    "WEAR",
+    "FOOD",
+    "WORRY",
+    "BIRDS",
+    "VALUE"
+  ],
+  "SIZE": 6,
+  "pivot": "BODY",
+  "target": "OCEAN",
+  "noise": "HSTU",
+  "latHint": "Think tides.",
+  "pivHint": "BODY isn't just what Jesus says not to worry about in Matthew 6. Geographers use the same word for any large area of water, from a lake to the biggest one of all. What's the biggest one called?",
+  "winText": "You found it. BODY isn't just what Jesus says not to worry about - it's also how geographers describe water, and the biggest BODY of water is the OCEAN.",
+  "lossText": "The word was OCEAN. BODY was the pivot - your BODY in Matthew 6, and a BODY of water like the OCEAN.",
+  "gridString": "TVALUEWSSUWYEODOADAFROHORRICOBYEBLNF",
+  "votdRef": "Matthew 6:25",
+  "votdVerse": "Therefore I tell you, do not worry about your life, what you will eat or drink; or about your body, what you will wear. Is not life more than food, and the body more than clothes?",
+  "passRef": "Matthew 6:25-27",
+  "passageText": "Therefore I tell you, do not worry about your life, what you will eat or drink; or about your body, what you will wear. Is not life more than food, and the body more than clothes? Look at the birds of the air; they do not sow or reap or store away in barns, and yet your heavenly Father feeds them. Are you not much more valuable than they? Can any one of you by worrying add a single hour to your life?"
+}

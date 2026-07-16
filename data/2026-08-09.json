@@ -1,0 +1,25 @@
+{
+  "theme": "GENEROUS",
+  "words": [
+    "CURSE",
+    "MORE",
+    "GRAIN",
+    "BLESS",
+    "GAIN",
+    "SELL",
+    "PRAY"
+  ],
+  "SIZE": 6,
+  "pivot": "CURSE",
+  "target": "SWEAR",
+  "noise": "OT",
+  "latHint": "Think bad language and stubbing your toe.",
+  "pivHint": "CURSE isn't just what the crowd does to the one who hoards grain in this proverb. It's also what your grandmother told you never to do when you're angry. What's the polite word for that?",
+  "winText": "You found it. To CURSE someone is to SWEAR at them - and this proverb has both a hoarder who gets cursed and a generous soul who gets blessed instead.",
+  "lossText": "The word was SWEAR. CURSE was the pivot - what the crowd does to the hoarder in Proverbs, and what your grandmother told you never to do in anger.",
+  "gridString": "EOMORESSSELBRSENAYUWILEACATRLRGRAINP",
+  "votdRef": "Proverbs 11:25",
+  "votdVerse": "A generous person will prosper; whoever refreshes others will be refreshed.",
+  "passRef": "Proverbs 11:24-26",
+  "passageText": "One person gives freely, yet gains even more; another withholds unduly, but comes to poverty. A generous person will prosper; whoever refreshes others will be refreshed. People curse the one who hoards grain, but they pray God's blessing on the one who is willing to sell."
+}

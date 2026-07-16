@@ -1,0 +1,25 @@
+{
+  "theme": "FELLOWSHIP",
+  "words": [
+    "JESUS",
+    "LIGHT",
+    "LIVE",
+    "TRUTH",
+    "BLOOD",
+    "WALK",
+    "DARK"
+  ],
+  "SIZE": 6,
+  "pivot": "JESUS",
+  "target": "SAVES",
+  "noise": "ILU",
+  "latHint": "Think sport and a goalkeeper stopping the ball.",
+  "pivHint": "JESUS isn't just a name in the Bible. In the Spanish speaking world it is one of the most common first names a boy can be given. But the original Hebrew meaning of the name JESUS tells you exactly what He came to do. What is it?",
+  "winText": "You found it. JESUS means God SAVES - and John says His blood purifies us from all sin. The name says it all.",
+  "lossText": "The word was SAVES. JESUS was the pivot - the most common boy's name in the Spanish speaking world, and the one whose name literally means God SAVES.",
+  "gridString": "LTKLAWBHRUESLGAUSIOIDATVOLIVEHDJESUS",
+  "votdRef": "1 John 1:7",
+  "votdVerse": "But if we walk in the light, as he is in the light, we have fellowship with one another, and the blood of Jesus, his Son, purifies us from all sin.",
+  "passRef": "1 John 1:5-7",
+  "passageText": "This is the message we have heard from him and declare to you: God is light; in him there is no darkness at all. If we claim to have fellowship with him and yet walk in the darkness, we lie and do not live out the truth. But if we walk in the light, as he is in the light, we have fellowship with one another, and the blood of Jesus, his Son, purifies us from all sin."
+}

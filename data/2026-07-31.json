@@ -1,0 +1,25 @@
+{
+  "theme": "POWER",
+  "words": [
+    "POWER",
+    "GLORY",
+    "KNEEL",
+    "FAITH",
+    "DEEP",
+    "WIDE",
+    "AMEN"
+  ],
+  "SIZE": 6,
+  "pivot": "POWER",
+  "target": "REIGN",
+  "noise": "AET",
+  "latHint": "Think history and a monarch's rule over a kingdom.",
+  "pivHint": "POWER isn't just what God gives us through His Spirit. What does Paul say God will do with His POWER throughout all generations, for ever and ever?",
+  "winText": "You found it. God's POWER leads to His eternal REIGN - and Paul says that POWER is at work within us, for ever and ever. Amen.",
+  "lossText": "The word was REIGN. POWER was the pivot - what God gives through His Spirit, and what belongs to the King of kings for ever and ever.",
+  "gridString": "YROLGDKNEELETNAWDENERIOPEMWEIPFAITHG",
+  "votdRef": "Ephesians 3:20-21",
+  "votdVerse": "Now to him who is able to do immeasurably more than all we ask or imagine, according to his power that is at work within us, to him be glory in the church and in Christ Jesus throughout all generations, for ever and ever! Amen.",
+  "passRef": "Ephesians 3:14-21",
+  "passageText": "For this reason I kneel before the Father, from whom every family in heaven and on earth derives its name. I pray that out of his glorious riches he may strengthen you with power through his Spirit in your inner being, so that Christ may dwell in your hearts through faith. And I pray that you, being rooted and established in love, may have power, together with all the Lord's holy people, to grasp how wide and long and high and deep is the love of Christ, and to know this love that surpasses knowledge - that you may be filled to the measure of all the fullness of God. Now to him who is able to do immeasurably more than all we ask or imagine, according to his power that is at work within us, to him be glory in the church and in Christ Jesus throughout all generations, for ever and ever! Amen."
+}

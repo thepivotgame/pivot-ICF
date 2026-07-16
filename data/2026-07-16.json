@@ -1,0 +1,25 @@
+{
+  "theme": "ARMOR",
+  "words": [
+    "ARMOR",
+    "STAND",
+    "FAITH",
+    "FULL",
+    "EVIL",
+    "TAKE",
+    "WORD"
+  ],
+  "SIZE": 6,
+  "pivot": "ARMOR",
+  "target": "PLATE",
+  "noise": "ES",
+  "latHint": "Think table settings and good china.",
+  "pivHint": "ARMOR isn't just what protects a soldier in battle. Paul names it in relation to righteousness. What is it?",
+  "winText": "You found it. ARMOR isn't just what soldiers wear - Paul's own breastplate of righteousness already had PLATE hiding inside it, the same word for what's stacked in your kitchen cupboard.",
+  "lossText": "The word was PLATE. ARMOR was the pivot - Paul's breastplate of righteousness already held the answer, and PLATE is also your dinner PLATE.",
+  "gridString": "HDROWEATNPTERLIAKLMLAATSOUTEFSRFLIVE",
+  "votdRef": "Ephesians 6:13",
+  "votdVerse": "Therefore put on the full armor of God, so that when the day of evil comes, you may be able to stand your ground, and after you have done everything, to stand.",
+  "passRef": "Ephesians 6:10-17",
+  "passageText": "Finally, be strong in the Lord and in his mighty power. Put on the full armor of God, so that you can take your stand against the devil's schemes. For our struggle is not against flesh and blood, but against the rulers, against the authorities, against the powers of this dark world and against the spiritual forces of evil in the heavenly realms. Therefore put on the full armor of God, so that when the day of evil comes, you may be able to stand your ground, and after you have done everything, to stand. Stand firm then, with the belt of truth buckled around your waist, with the breastplate of righteousness in place, and with your feet fitted with the readiness that comes from the gospel of peace. In addition to all this, take up the shield of faith, with which you can extinguish all the flaming arrows of the evil one. Take the helmet of salvation and the sword of the Spirit, which is the word of God."
+}

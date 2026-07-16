@@ -1,0 +1,25 @@
+{
+  "theme": "SHINE",
+  "words": [
+    "SHINE",
+    "STARS",
+    "ARISE",
+    "WISE",
+    "LEAD",
+    "MANY",
+    "LIFE"
+  ],
+  "SIZE": 6,
+  "pivot": "LEAD",
+  "target": "METAL",
+  "noise": "IS",
+  "latHint": "Think airport security and what might set off the inspection.",
+  "pivHint": "LEAD in this verse means to guide others toward righteousness. But spell it the same way and pronounce it differently, and LEAD becomes a heavy gray element on the periodic table. What kind of element is that?",
+  "winText": "You found it. Those who LEAD many to righteousness will shine like stars - and spelled the same way, LEAD is also a heavy METAL, though this LEAD is nothing but light.",
+  "lossText": "The word was METAL. LEAD was the pivot - guiding others to righteousness in Daniel, and the heavy gray element that shares its spelling.",
+  "gridString": "EARISEMNSMASAEIDWTNTAHIAYEILSRLLIFES",
+  "votdRef": "Daniel 12:3",
+  "votdVerse": "Those who are wise will shine like the brightness of the heavens, and those who lead many to righteousness, like the stars for ever and ever.",
+  "passRef": "Daniel 12:1-3",
+  "passageText": "At that time Michael, the great prince who protects your people, will arise. There will be a time of distress such as has not happened from the beginning of nations until then. But at that time your people -- everyone whose name is found written in the book -- will be delivered. Multitudes who sleep in the dust of the earth will awake: some to everlasting life, others to shame and everlasting contempt. Those who are wise will shine like the brightness of the heavens, and those who lead many to righteousness, like the stars for ever and ever."
+}

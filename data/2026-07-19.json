@@ -1,0 +1,25 @@
+{
+  "theme": "PURPOSE",
+  "words": [
+    "HEART",
+    "PLANS",
+    "LEADS",
+    "WISE",
+    "MANY",
+    "LOVE",
+    "FEAR"
+  ],
+  "SIZE": 6,
+  "pivot": "HEART",
+  "target": "SUITS",
+  "noise": "AEGLR",
+  "latHint": "Think formal dress code.",
+  "pivHint": "HEART isn't just where a person's plans take shape. When something is pleasing to your HEART, we often say that it _____ you.",
+  "winText": "You found it. HEART isn't just where plans form - it's also what a well-fitted jacket and pants are called, and we say it \"SUITS\" you.",
+  "lossText": "The word was SUITS. HEART was the pivot - the HEART of a person's plans, and a matching jacket and pants that \"SUITS\" you.",
+  "gridString": "TPLANSERERLMWUAASAGIDETNRSSFHYLOVEIA",
+  "votdRef": "Proverbs 19:21",
+  "votdVerse": "Many are the plans in a person's heart, but it is the LORD's purpose that prevails.",
+  "passRef": "Proverbs 19:20-23",
+  "passageText": "Listen to advice and accept discipline, and at the end you will be counted among the wise. Many are the plans in a person's heart, but it is the LORD's purpose that prevails. What a person desires is unfailing love; better to be poor than a liar. The fear of the LORD leads to life; then one rests content, untouched by trouble."
+}

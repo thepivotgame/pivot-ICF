@@ -1,0 +1,25 @@
+{
+  "theme": "TREASURE",
+  "words": [
+    "BREAK",
+    "STORE",
+    "HEART",
+    "MOTH",
+    "DARK",
+    "HATE",
+    "LOVE"
+  ],
+  "SIZE": 6,
+  "pivot": "BREAK",
+  "target": "PAUSE",
+  "noise": "HOR",
+  "latHint": "Think remote control and freezing a video.",
+  "pivHint": "BREAK in this passage is what thieves do to steal your treasure. But ask any tired worker and BREAK means something completely different - a short rest before getting back to it. What do we call that?",
+  "winText": "You found it. Thieves BREAK in to steal, but everyone needs to PAUSE for a rest - same word, and Jesus says store your treasure somewhere no BREAK-in can ever reach it.",
+  "lossText": "The word was PAUSE. BREAK was the pivot - what a thief does to steal, and what every tired worker takes to rest.",
+  "gridString": "ETAHHHSBREAKRTAMLDEROOAPTTVRAOHEKUES",
+  "votdRef": "Matthew 6:19",
+  "votdVerse": "Do not store up for yourselves treasures on earth, where moths and vermin destroy, and where thieves break in and steal.",
+  "passRef": "Matthew 6:19-24",
+  "passageText": "Do not store up for yourselves treasures on earth, where moths and vermin destroy, and where thieves break in and steal. But store up for yourselves treasures in heaven, where moths and vermin do not destroy, and where thieves do not break in and steal. For where your treasure is, there your heart will be also. The eye is the lamp of the body. If your eyes are healthy, your whole body will be full of light. But if your eyes are unhealthy, your whole body will be full of darkness. If then the light within you is darkness, how great is that darkness! No one can serve two masters. Either you will hate the one and love the other, or you will be devoted to the one and despise the other. You cannot serve both God and money."
+}

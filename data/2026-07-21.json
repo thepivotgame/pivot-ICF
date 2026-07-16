@@ -1,0 +1,25 @@
+{
+  "theme": "RESTORE",
+  "words": [
+    "FAINT",
+    "WEARY",
+    "BLESS",
+    "LIVE",
+    "FARM",
+    "MOVE",
+    "LAND"
+  ],
+  "SIZE": 6,
+  "pivot": "FAINT",
+  "target": "NURSE",
+  "noise": "AGI",
+  "latHint": "Think mothers and babies.",
+  "pivHint": "FAINT isn't just what God promises to refresh and satisfy in Jeremiah. The person who cares for a patient passed out at the hospital is the ______.",
+  "winText": "You found it. FAINT isn't just the weary soul God refreshes - the answer is also the word for someone who cares for a patient at the hospital, and the same word for a mother who nurses her baby. NURSE.",
+  "lossText": "The word was NURSE. FAINT was the pivot - the FAINT soul God refreshes, and NURSE is both who cares for a patient at the hospital and what a mother does for her baby.",
+  "gridString": "ABLESSWFAINTMEDIENOVANUGVIMRAFELRSYL",
+  "votdRef": "Jeremiah 31:25 (NIV)",
+  "votdVerse": "I will refresh the weary and satisfy the faint.",
+  "passRef": "Jeremiah 31:23-25",
+  "passageText": "This is what the LORD Almighty, the God of Israel, says: 'When I bring them back from captivity, the people in the land of Judah and in its towns will once again use these words: The LORD bless you, you prosperous city, you sacred mountain.' People will live together in Judah and all its towns - farmers and those who move about with their flocks. I will refresh the weary and satisfy the faint."
+}

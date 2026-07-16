@@ -1,0 +1,25 @@
+{
+  "theme": "ENDURE",
+  "words": [
+    "BEAR",
+    "STAND",
+    "CARE",
+    "FALL",
+    "THINK",
+    "FAITH",
+    "TEMPT"
+  ],
+  "SIZE": 6,
+  "pivot": "BEAR",
+  "target": "PANDA",
+  "noise": "EILS",
+  "latHint": "Think black-and-white.",
+  "pivHint": "BEAR isn't just what Paul says you can endure with God's help in 1 Corinthians 10. Sometimes it makes us grizzly, but this is a much more cuddly kind of BEAR.",
+  "winText": "You found it. BEAR isn't just what Paul says you can endure - it's also an animal, not the grizzly BEAR, but the bamboo-eating black-and-white kind - the PANDA.",
+  "lossText": "The word was PANDA. BEAR was the pivot - what you can BEAR in 1 Corinthians 10, and not the grizzly but the bamboo-eating PANDA BEAR.",
+  "gridString": "LDNATSSLIBPKCLENENAAAADIRFAITHETEMPT",
+  "votdRef": "1 Corinthians 10:13",
+  "votdVerse": "No temptation has overtaken you except what is common to mankind. And God is faithful; he will not let you be tempted beyond what you can bear. But when you are tempted, he will also provide a way out so that you can endure it.",
+  "passRef": "1 Corinthians 10:12-13",
+  "passageText": "So, if you think you are standing firm, be careful that you don't fall! No temptation has overtaken you except what is common to mankind. And God is faithful; he will not let you be tempted beyond what you can bear. But when you are tempted, he will also provide a way out so that you can endure it."
+}

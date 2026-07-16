@@ -1,0 +1,25 @@
+{
+  "theme": "PRAISE",
+  "words": [
+    "PLACE",
+    "GLORY",
+    "EARTH",
+    "LOOK",
+    "LORD",
+    "NAME",
+    "SETS"
+  ],
+  "SIZE": 6,
+  "pivot": "SETS",
+  "target": "GROUP",
+  "noise": "AES",
+  "latHint": "Think classroom and splitting into teams.",
+  "pivHint": "SETS in this psalm describes where the sun goes at the end of the day. But say the word differently and a SET can also mean a whole collection of things gathered together - like the twelve disciples, or the twelve tribes of Israel. What word describes that kind of collection?",
+  "winText": "You found it. The sun SETS at the end of the day, and a SET can also mean a GROUP of things gathered together. Same word, different meaning.",
+  "lossText": "The word was GROUP. SETS was the pivot - where the sun goes at day's end, and the word for a collection of things gathered as one.",
+  "gridString": "SYROLGTNAMEHEKALTSSPORGRERAOOUDECALP",
+  "votdRef": "Psalm 113:3",
+  "votdVerse": "From the rising of the sun to the place where it sets, the name of the LORD is to be praised.",
+  "passRef": "Psalm 113:1-6",
+  "passageText": "Praise the LORD. Praise the LORD, you his servants; praise the name of the LORD. Let the name of the LORD be praised, both now and forevermore. From the rising of the sun to the place where it sets, the name of the LORD is to be praised. The LORD is exalted over all the nations, his glory above the heavens. Who is like the LORD our God, the One who sits enthroned on high, who stoops down to look on the heavens and the earth?"
+}

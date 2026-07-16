@@ -1,0 +1,25 @@
+{
+  "theme": "LOVE",
+  "words": [
+    "LOVED",
+    "GOING",
+    "LOOK",
+    "COME",
+    "GIVE",
+    "JEWS",
+    "TOLD"
+  ],
+  "SIZE": 6,
+  "pivot": "LOVED",
+  "target": "CARED",
+  "noise": "IOT",
+  "latHint": "Think babysitting and looking after kids all evening.",
+  "pivHint": "LOVED is what Jesus says He has done for His disciples. It's also the word for the people closest to you - your LOVED ones. If you gave them constant attention and concern, what would you say you'd done for them?",
+  "winText": "You found it. To be LOVED is to be CARED for - and Jesus says as I have LOVED you, so love one another. That's what love looks like in action.",
+  "lossText": "The word was CARED. LOVED was the pivot - what Jesus says He has done for us, and the everyday word for looking after someone.",
+  "gridString": "GEMOCIOLSWEJITOLETNDOVCAGOILEOKGREDD",
+  "votdRef": "John 13:34",
+  "votdVerse": "A new command I give you: Love one another. As I have loved you, so you must love one another.",
+  "passRef": "John 13:33-34",
+  "passageText": "My children, I will be with you only a little longer. You will look for me, and just as I told the Jews, so I tell you now: Where I am going, you cannot come. A new command I give you: Love one another. As I have loved you, so you must love one another."
+}

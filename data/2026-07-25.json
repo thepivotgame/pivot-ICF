@@ -1,0 +1,25 @@
+{
+  "theme": "LOYALTY",
+  "words": [
+    "LOVE",
+    "BORN",
+    "RUIN",
+    "TIMES",
+    "COMES",
+    "STICK",
+    "CLOSE"
+  ],
+  "SIZE": 6,
+  "pivot": "LOVE",
+  "target": "SIGHT",
+  "noise": "OU",
+  "latHint": "Think bird watchers.",
+  "pivHint": "LOVE isn't just what a friend gives at all times in Proverbs 17. Sometimes it strikes the moment you meet someone - we call that LOVE at first _____.",
+  "winText": "You found it. LOVE isn't just what a friend gives at all times - it's also part of the phrase \"LOVE at first SIGHT,\" and that word is SIGHT.",
+  "lossText": "The word was SIGHT. LOVE was the pivot - a friend's LOVE in Proverbs 17, and LOVE at first SIGHT.",
+  "gridString": "ELOVESSSOSEHETOMIBMIOLGOICUTCRTKRUIN",
+  "votdRef": "Proverbs 17:17",
+  "votdVerse": "A friend loves at all times, and a brother is born for a time of adversity.",
+  "passRef": "Proverbs 17:17, 18:24",
+  "passageText": "A friend loves at all times, and a brother is born for a time of adversity. One who has unreliable friends soon comes to ruin, but there is a friend who sticks closer than a brother."
+}

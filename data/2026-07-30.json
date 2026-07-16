@@ -1,0 +1,25 @@
+{
+  "theme": "WORDS",
+  "words": [
+    "MOUTH",
+    "FRUIT",
+    "POWER",
+    "DEATH",
+    "LIPS",
+    "LIFE",
+    "LOVE"
+  ],
+  "SIZE": 6,
+  "pivot": "MOUTH",
+  "target": "RIVER",
+  "noise": "ALU",
+  "latHint": "Think geography and where a waterway meets the sea.",
+  "pivHint": "MOUTH isn't just how Proverbs says we bring life or death. In Revelation, something flows from the throne of God all the way to eternity. What is it?",
+  "winText": "You found it. Your MOUTH is like a RIVER - Proverbs says it has the power of life and death, and Jesus says rivers of living water will flow from within you.",
+  "lossText": "The word was RIVER. MOUTH was the pivot - how Proverbs says we dispense life or death, and the waterway that ends at the sea with a MOUTH of its own.",
+  "gridString": "LPOWERHMSVATETOPIRRLAUIUIVRETLEFILDH",
+  "votdRef": "Proverbs 18:21",
+  "votdVerse": "The tongue has the power of life and death, and those who love it will eat its fruit.",
+  "passRef": "Proverbs 18:20-21",
+  "passageText": "From the fruit of their mouth a person's stomach is filled; with the harvest of their lips they are satisfied. The tongue has the power of life and death, and those who love it will eat its fruit."
+}

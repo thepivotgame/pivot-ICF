@@ -1,0 +1,25 @@
+{
+  "theme": "CLOTHED",
+  "words": [
+    "HOLY",
+    "LOVE",
+    "RULE",
+    "CALL",
+    "PEACE",
+    "UNITY",
+    "DWELL"
+  ],
+  "SIZE": 6,
+  "pivot": "HOLY",
+  "target": "GRAIL",
+  "noise": "ENO",
+  "latHint": "Think medieval legend and a knight's lifelong quest.",
+  "pivHint": "HOLY isn't just a word for something sacred. It's also the first word in the name of a legendary quest object sought by knights of the Round Table. What do we call that object?",
+  "winText": "You found it. HOLY isn't just something sacred - paired with GRAIL, it's the legendary object of the knights' quest.",
+  "lossText": "The word was GRAIL. HOLY was the pivot - as in the HOLY GRAIL, legend's ultimate quest object.",
+  "gridString": "ECAEPULOVERNYLNOUILLEGLTRAOWEYECAHDI",
+  "votdRef": "Colossians 3:12",
+  "votdVerse": "Therefore, as God's chosen people, holy and dearly loved, clothe yourselves with compassion, kindness, humility, gentleness and patience.",
+  "passRef": "Colossians 3:12-17",
+  "passageText": "Therefore, as God's chosen people, holy and dearly loved, clothe yourselves with compassion, kindness, humility, gentleness and patience. Bear with each other and forgive one another if any of you has a grievance against someone. Forgive as the Lord forgave you. And over all these virtues put on love, which binds them all together in perfect unity. Let the peace of Christ rule in your hearts, since as members of one body you were called to peace. And be thankful. Let the message of Christ dwell among you richly as you teach and admonish one another with all wisdom through psalms, hymns, and songs from the Spirit, singing to God with gratitude in your hearts. And whatever you do, whether in word or deed, do it all in the name of the Lord Jesus, giving thanks to God the Father through him."
+}

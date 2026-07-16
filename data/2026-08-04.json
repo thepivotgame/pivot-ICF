@@ -1,0 +1,25 @@
+{
+  "theme": "WISDOM",
+  "words": [
+    "DEEDS",
+    "PEACE",
+    "MERCY",
+    "GOOD",
+    "WISE",
+    "PURE",
+    "ENVY"
+  ],
+  "SIZE": 6,
+  "pivot": "DEEDS",
+  "target": "TITLE",
+  "noise": "AR",
+  "latHint": "Think ownership and legal belonging.",
+  "pivHint": "DEEDS aren't just good works. In property law, a DEED is a legal document that proves something very important about a piece of land. What does it prove?",
+  "winText": "You found it. DEEDS transfer TITLE - and James says your good DEEDS are the proof of who you truly belong to.",
+  "lossText": "The word was TITLE. DEEDS was the pivot - good works in James, legal documents in property law. Either way, they show who holds the TITLE.",
+  "gridString": "SYVNEDDERTOWERLOITEUGSIADPEACEMERCYE",
+  "votdRef": "James 3:13",
+  "votdVerse": "Who is wise and understanding among you? Let them show it by their good life, by deeds done in the humility that comes from wisdom.",
+  "passRef": "James 3:13-18",
+  "passageText": "Who is wise and understanding among you? Let them show it by their good life, by deeds done in the humility that comes from wisdom. But if you harbor bitter envy and selfish ambition in your hearts, do not boast about it or deny the truth. Such \"wisdom\" does not come down from heaven but is earthly, unspiritual, demonic. For where you have envy and selfish ambition, there you find disorder and every evil practice. But the wisdom that comes from heaven is first of all pure; then peace-loving, considerate, submissive, full of mercy and good fruit, impartial and sincere. Peacemakers who sow in peace reap a harvest of righteousness."
+}

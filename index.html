@@ -1,24 +1,36 @@
 <!DOCTYPE html>
+<!-- PIVOT Daily Puzzle © 2026 Roland Heersink. All rights reserved.
+     Unauthorised copying, reproduction or redistribution of this code
+     or puzzle content is prohibited without prior written permission. -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>How to Play — PIVOT</title>
+    
+        
+    <meta property="og:title" content="BiblePIVOT — Verse of the Day">
+    <meta property="og:description" content="Go deeper. Gain wisdom.">
+    <meta property="og:image" content="https://www.biblepivot.com/preview.png">
+    <meta property="og:url" content="https://www.biblepivot.com/">
+    <meta property="og:type" content="website">
+    
+    <title>BIBLE PIVOT: Go deeper. Gain wisdom.</title>
+
+    
+    <script data-goatcounter="https://pivot.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+   
+    
     <script>
-    // If they've already played today's puzzle, skip the instructions
-    // entirely and go straight back to play.html, which will show their
-    // saved result instead of a fresh puzzle.
-    (function () {
-        try {
-    var saved = JSON.parse(localStorage.getItem('pivot_result') || 'null');
+(function () {
+    try {
+    var saved = JSON.parse(localStorage.getItem('pivot_result_votd') || 'null');
     if (saved) {
         window.location.replace('play.html');
     }
-        } catch (e) {
-            // localStorage unavailable or bad data — just show the intro as normal.
-        }
-    })();
-    </script>
+    } catch (e) {}
+})();
+</script>
+    
     <style>
     * {
         box-sizing: border-box;
@@ -70,6 +82,33 @@
         gap: 0;
         flex-shrink: 0;
     }/* Grid label + frame */
+    /* VOTD verse box (mini, matches in-game verse banner) */
+    .verse-box {
+        background: #ffffff;
+        border-radius: 8px;
+        padding: 8px 9px;
+        margin-bottom: 10px;
+        text-align: center;
+        width: 180px;
+    }
+
+    .verse-text {
+        font-family: Georgia, serif;
+        font-size: 11px;
+        color: #0d3349;
+        line-height: 1.5;
+        margin: 0 0 3px;
+    }
+
+    .verse-ref {
+        font-family: Georgia, serif;
+        font-size: 9px;
+        color: #5a7a95;
+        letter-spacing: 1px;
+        margin: 0;
+        text-transform: uppercase;
+    }
+
     .grid-label {
         font-size: 9px;
         letter-spacing: 2px;
@@ -120,10 +159,51 @@
         border-color: #1e8449;
     }
 
+    .mc.found3 {
+        background: #16a085;
+        color: #fff;
+        border-color: #117a65;
+    }
+
     .mc.pivot {
         background: #e8734a;
         color: #fff;
         border-color: #c85a2e;
+    }
+
+    /* Mini hint / listen buttons — shown below the word search */
+    .mini-actions {
+        display: flex;
+        flex-direction: row;
+        gap: 6px;
+        width: 180px;
+        margin-bottom: 4px;
+    }
+
+    .mini-btn {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        font-family: Georgia, serif;
+        font-size: 10px;
+        font-weight: bold;
+        letter-spacing: 0.3px;
+        border-radius: 7px;
+        padding: 7px 4px;
+        white-space: nowrap;
+    }
+
+    .mini-hint {
+        background: rgba(52, 152, 219, 0.8);
+        color: #f0ede6;
+    }
+
+    .mini-listen {
+        background: #e8b84b;
+        color: #1a1200;
+        border: 1.5px solid #c49020;
     }
 
     .section-label {
@@ -272,49 +352,63 @@
         <!-- LEFT col -->
         <div class="left-col">
 
+            <!-- Verse of the Day -->
+            <div class="verse-box">
+                <p class="verse-text">"Jesus Christ is the same yesterday and today and forever." - Hebrews 13:8</p>
+            </div>
+            <div class="step-gap"></div>
+            
+            
             <!-- Word Search label + framed grid -->
             <p class="grid-label">Word Search</p>
             <div class="grid-frame">
                 <div class="mini-grid">
-                    <div class="mc">K</div>
-                    <div class="mc found">S</div>
-                    <div class="mc found">H</div>
-                    <div class="mc found">E</div>
-                    <div class="mc found">L</div>
-                    <div class="mc found">L</div>
-                    <div class="mc">T</div>
-                    <div class="mc">D</div>
-                    <div class="mc">N</div>
-                    <div class="mc">B</div>
-                    <div class="mc">I</div>
-                    <div class="mc">P</div>
-                    <div class="mc pivot">C</div>
-                    <div class="mc pivot">O</div>
-                    <div class="mc pivot">R</div>
-                    <div class="mc pivot">A</div>
-                    <div class="mc pivot">L</div>
-                    <div class="mc found2">W</div>
-                    <div class="mc">U</div>
-                    <div class="mc">F</div>
-                    <div class="mc">M</div>
-                    <div class="mc">G</div>
                     <div class="mc">Y</div>
-                    <div class="mc found2">A</div>
-                    <div class="mc">J</div>
-                    <div class="mc">X</div>
-                    <div class="mc">E</div>
-                    <div class="mc">N</div>
-                    <div class="mc">R</div>
-                    <div class="mc found2">V</div>
-                    <div class="mc">B</div>
-                    <div class="mc">I</div>
+                    <div class="mc found3">J</div>
+                    <div class="mc">D</div>
                     <div class="mc">O</div>
+                    <div class="mc">O</div>
+                    <div class="mc">G</div>
+                    <div class="mc found2">D</div>
+                    <div class="mc">A</div>
+                    <div class="mc found3">E</div>
+                    <div class="mc found">F</div>
+                    <div class="mc found">I</div>
+                    <div class="mc found">L</div>
+                    <div class="mc found2">R</div>
+                    <div class="mc">R</div>
+                    <div class="mc">D</div>
+                    <div class="mc pivot">S</div>
+                    <div class="mc">E</div>
+                    <div class="mc">A</div>
+                    <div class="mc found2">O</div>
+                    <div class="mc">Q</div>
+                    <div class="mc pivot">A</div>
+                    <div class="mc">O</div>
+                    <div class="mc found3">U</div>
+                    <div class="mc">U</div>
+                    <div class="mc found2">W</div>
+                    <div class="mc pivot">M</div>
                     <div class="mc">T</div>
-                    <div class="mc">S</div>
-                    <div class="mc found2">E</div>
+                    <div class="mc">L</div>
+                    <div class="mc">T</div>
+                    <div class="mc found3">S</div>
+                    <div class="mc pivot">E</div>
+                    <div class="mc">H</div>
+                    <div class="mc">T</div>
+                    <div class="mc">I</div>
+                    <div class="mc">A</div>
+                    <div class="mc">F</div>
                 </div>
             </div>
 
+            <!-- Hint + Listen actions -->
+            <div class="mini-actions">
+                <div class="mini-btn mini-hint">Get Hint</div>
+                <div class="mini-btn mini-listen">🎧 Listen</div>
+            </div>
+
+            <div class="step-gap"></div>
             <!-- Letter Inventory -->
             <div style="margin-bottom:8px;">
                 <p class="section-label">
@@ -324,20 +418,36 @@
                 </p>
                 <div class="pool-row">
                     <div class="mp">A</div>
-                    <div class="mp">B</div>
+                    <div class="mp">A</div>
+                    <div class="mp">A</div>
+                    <div class="mp">D</div>
+                    <div class="mp">D</div>
+                </div>
+                     
+                <div class="pool-row">
                     <div class="mp">E</div>
+                    <div class="mp">F</div>
+                    <div class="mp">G</div>
+                    <div class="mp">H</div>
                     <div class="mp">I</div>
-                    <div class="mp">M</div>
+                </div>
+                
+                <div class="pool-row">
+                    <div class="mp">L</div>
+                    <div class="mp">O</div>
+                    <div class="mp">O</div>
+                    <div class="mp">O</div>
+                    <div class="mp">Q</div>
                 </div>
                 <div class="pool-row">
-                    <div class="mp">N</div>
-                    <div class="mp">O</div>
                     <div class="mp">R</div>
+                    <div class="mp">T</div>
+                    <div class="mp">T</div>
                     <div class="mp">T</div>
                     <div class="mp">U</div>
                 </div>
                 <div class="pool-row">
-                    <div class="mp">V</div>
+                    <div class="mp">Y</div>
                 </div>
             </div>
 
@@ -349,18 +459,18 @@
                     to find today's word
                 </p>
                 <div class="wrow">
-                    <div class="wc correct">M</div>
                     <div class="wc present">A</div>
-                    <div class="wc absent">N</div>
-                    <div class="wc absent">O</div>
-                    <div class="wc absent">R</div>
+                    <div class="wc absent">D</div>
+                    <div class="wc correct">U</div>
+                    <div class="wc present">L</div>
+                    <div class="wc absent">T</div>
                 </div>
                 <div class="wrow">
-                    <div class="wc correct">M</div>
-                    <div class="wc correct">A</div>
-                    <div class="wc correct">U</div>
-                    <div class="wc correct">V</div>
                     <div class="wc correct">E</div>
+                    <div class="wc correct">Q</div>
+                    <div class="wc correct">U</div>
+                    <div class="wc correct">A</div>
+                    <div class="wc correct">L</div>
                 </div>
             </div>
 
@@ -377,13 +487,12 @@
                     <span style="font-size:13px;font-weight:bold;color:#2ecc71;letter-spacing:0.5px;">FIND 7 WORDS</span>
                 </div>
                 <p>
-                    Search to find the 
+                    <span style="color:#f0ede6;">Play a word search to find the </span>
                     <strong class="hl">PIVOT WORD</strong>
-                    related to today's theme.
+                    .
                 </p>
             </div>
-
-            <div class="step-gap"></div>
+            
             <div class="step-gap"></div>
 
             <div class="step">
@@ -392,21 +501,49 @@
                     <span style="font-size:13px;font-weight:bold;color:#e8734a;letter-spacing:0.5px;">CRACK THE PIVOT</span>
                 </div>
                 <p>
-                    The 
+                    <span style="color:#f0ede6;">The </span>
                     <strong class="hl">PIVOT WORD</strong>
-                     appears in orange, and unlocks a clue to find the word of the day.
+                    <span style="color:#f0ede6;">appears in </span><span style="color:#e8734a;">orange</span><span style="color:#f0ede6;">, and unlocks a clue to find the word of the day.</span>
                 </p>
             </div>
-
-            <div class="step-gap"></div>
             <div class="step-gap"></div>
 
             <div class="step">
                 <div class="step-header">
-                    <div class="snum" style="background:rgba(255,255,255,0.2);color:#fff;">3</div>
+                    <div class="snum" style="background:#e8b84b;color:#1a1200;">3</div>
+                    <span style="font-size:13px;font-weight:bold;color:#e8b84b;letter-spacing:0.5px;">GET HELP</span>
+                </div>
+                <p>
+                    <span style="color:#f0ede6;">See which words to look for by clicking the </span>
+                    <strong class="hl">🎧 Listen</strong>
+                    <span style="color:#f0ede6;"> button. Or just click </span>
+                    <strong class="hl">Get Hint</strong>
+                    <span style="color:#f0ede6;">.</span>
+                </p>
+            </div>
+
+            <div class="step-gap"></div>
+
+         <div class="step">
+                <div class="step-header">
+                    <div class="snum" style="background:#3498db;color:#fff;">4</div>
+                    <span style="font-size:13px;font-weight:bold;color:#3498db;letter-spacing:0.5px;">CHOOSE YOUR LEVEL</span>
+                </div>
+                <p>
+                    <span style="color:#f0ede6;">Choose <strong>CLASSIC</strong> to keep searching or <strong>ADVANCED</strong> to lock the search and earn <strong class="hl">⭐</strong> in your score report.</span>
+
+                    .
+                </p>
+            </div>
+            
+            <div class="step-gap"></div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="snum" style="background:rgba(255,255,255,0.2);color:#fff;">5</div>
                     <span style="font-size:13px;font-weight:bold;color:#fff;letter-spacing:0.5px;">GUESS THE WORD</span>
                 </div>
-                <p>Play like Wordle to find the word of the day.</p>
+                <p><span style="color:#f0ede6;">Play like Wordle to find the word of the day.</span></p>
             </div>
 
         </div>
@@ -414,7 +551,7 @@
 
     <a href="play.html" class="cta">Let's Play →</a>
 
-    <p class="footer">PIVOT · CHURCH EDITION</p>
+    <p class="footer">PIVOT · DAILY PUZZLE</p>
 
 </body>
 </html>

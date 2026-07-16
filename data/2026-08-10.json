@@ -1,0 +1,25 @@
+{
+  "theme": "MERCIFUL",
+  "words": [
+    "CURSE",
+    "COAT",
+    "YES",
+    "BLESS",
+    "LOVE",
+    "LEND",
+    "PRAY"
+  ],
+  "SIZE": 6,
+  "pivot": "COAT",
+  "target": "PAINT",
+  "noise": "EHORS",
+  "latHint": "Think art class and what a brush needs.",
+  "pivHint": "COAT isn't just the garment Jesus says to give away in this passage. Ask any decorator and they'll tell you a wall usually needs at least two coats before the job is done. What is it?",
+  "winText": "You found it. Give away your COAT, or give a wall a fresh COAT of PAINT - either way, something old gets covered by something new.",
+  "lossText": "The word was PAINT. COAT was the pivot - the garment Jesus says to give freely, and the layer a decorator applies to freshen up a room.",
+  "gridString": "SCOLSIASOHYLSVEATEEERLTNYPPNBDRESRUC",
+  "votdRef": "Luke 6:36",
+  "votdVerse": "Be merciful, just as your Father is merciful.",
+  "passRef": "Luke 6:27-36",
+  "passageText": "But to you who are listening I say: Love your enemies, do good to those who hate you, bless those who curse you, pray for those who mistreat you. If someone slaps you on one cheek, turn to them the other also. If someone takes your coat, do not withhold your shirt from them. Give to everyone who asks you, and if anyone takes what belongs to you, do not demand it back. Do to others as you would have them do to you. If you love those who love you, what credit is that to you? Even sinners love those who love them. And if you do good to those who are good to you, what credit is that to you? Even sinners do that. And if you lend to those from whom you expect repayment, what credit is that to you? Even sinners lend to sinners, expecting to be repaid in full. But love your enemies, do good to them, and lend to them without expecting to get anything back. Then your reward will be great, and you will be children of the Most High, because he is kind to the ungrateful and wicked. Be merciful, just as your Father is merciful."
+}

@@ -1,0 +1,25 @@
+{
+  "theme": "PEACE",
+  "words": [
+    "GUARD",
+    "PEACE",
+    "MINDS",
+    "TRUE",
+    "PURE",
+    "PRAY",
+    "LOVE"
+  ],
+  "SIZE": 6,
+  "pivot": "GUARD",
+  "target": "COURT",
+  "noise": "AES",
+  "latHint": "Think handcuffs or dating.",
+  "pivHint": "GUARD isn't just what Paul says will protect your heart and mind. Historically, the royal GUARD protects the king and his _______.",
+  "winText": "You found it. GUARD isn't just protection for your heart - historically, a royal GUARD protects the king and his COURT.",
+  "lossText": "The word was COURT. GUARD was the pivot - Paul's GUARD for your heart, and the royal GUARD who protects the king and his COURT.",
+  "gridString": "ECAEPGSDNIMULASPTAOTURCRVRUAODEEEYUR",
+  "votdRef": "Philippians 4:7",
+  "votdVerse": "And the peace of God, which transcends all understanding, will guard your hearts and your minds in Christ Jesus.",
+  "passRef": "Philippians 4:4-9",
+  "passageText": "Rejoice in the Lord always. I will say it again: Rejoice! Let your gentleness be evident to all. The Lord is near. Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. And the peace of God, which transcends all understanding, will guard your hearts and your minds in Christ Jesus. Finally, brothers and sisters, whatever is true, whatever is noble, whatever is right, whatever is pure, whatever is lovely, whatever is admirable-if anything is excellent or praiseworthy-think about such things. Whatever you have learned or received or heard from me, or seen in me-put it into practice. And the God of peace will be with you."
+}

@@ -1,0 +1,25 @@
+{
+  "theme": "WORSHIP",
+  "words": [
+    "OFFER",
+    "MERCY",
+    "RENEW",
+    "GOOD",
+    "HOLY",
+    "MIND",
+    "URGE"
+  ],
+  "SIZE": 6,
+  "pivot": "OFFER",
+  "target": "BRIDE",
+  "noise": "AOT",
+  "latHint": "Think romance and getting down on one knee.",
+  "pivHint": "OFFER isn't just what Paul asks us to do with our bodies in Romans 12. Christ died for us - what does the Bible say that this makes the Church?",
+  "winText": "You found it. Paul's call to OFFER ourselves is essentially a proposal - and Revelation says the Church is the BRIDE of Christ, dressed and ready for the wedding.",
+  "lossText": "The word was BRIDE. OFFER was the pivot - Paul urges us to OFFER our bodies as a living sacrifice, and Christ made the ultimate OFFER when He died for us. The Bible says that makes the Church His BRIDE.",
+  "gridString": "RAOEDWEBRNOEFTIIONFMURGEOHOLYRYCREMD",
+  "votdRef": "Romans 12:1",
+  "votdVerse": "Therefore, I urge you, brothers and sisters, in view of God's mercy, to offer your bodies as a living sacrifice, holy and pleasing to God - this is your true and proper worship.",
+  "passRef": "Romans 12:1-2",
+  "passageText": "Therefore, I urge you, brothers and sisters, in view of God's mercy, to offer your bodies as a living sacrifice, holy and pleasing to God - this is your true and proper worship. Do not conform to the pattern of this world, but be transformed by the renewing of your mind. Then you will be able to test and approve what God's will is - his good, pleasing and perfect will."
+}

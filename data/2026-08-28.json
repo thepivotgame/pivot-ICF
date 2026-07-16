@@ -1,0 +1,25 @@
+{
+  "theme": "UNCHANGING",
+  "words": [
+    "JESUS",
+    "TODAY",
+    "FAITH",
+    "WORD",
+    "LIFE",
+    "SAME",
+    "GOOD"
+  ],
+  "SIZE": 6,
+  "pivot": "SAME",
+  "target": "EQUAL",
+  "noise": "RT",
+  "latHint": "Think math class and symbols used.",
+  "pivHint": "SAME in this verse describes Jesus - unchanging, yesterday, today, forever. Genesis says every person is made in God's image, meaning no one stands above another in worth. What word describes people who all share that SAME standing?",
+  "winText": "You found it. Jesus is the SAME yesterday, today, and forever - unchanging and EQUAL to Himself in every generation.",
+  "lossText": "The word was EQUAL. SAME was the pivot - what never changes about Jesus, and the word for two things that match exactly.",
+  "gridString": "YJDOOGDAEFILRRDSEAOQAOUUWMTLTSEHTIAF",
+  "votdRef": "Hebrews 13:8",
+  "votdVerse": "Jesus Christ is the same yesterday and today and forever.",
+  "passRef": "Hebrews 13:7-9",
+  "passageText": "Remember your leaders, who spoke the word of God to you. Consider the outcome of their way of life and imitate their faith. Jesus Christ is the same yesterday and today and forever. Do not be carried away by all kinds of strange teachings. It is good for our hearts to be strengthened by grace, not by ceremonial foods, which are of no benefit to those who eat them."
+}

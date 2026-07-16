@@ -1,0 +1,25 @@
+{
+  "theme": "HARVEST",
+  "words": [
+    "TEARS",
+    "SONGS",
+    "NEGEV",
+    "ZION",
+    "REAP",
+    "SEED",
+    "LORD"
+  ],
+  "SIZE": 6,
+  "pivot": "TEARS",
+  "target": "SHRED",
+  "noise": "AI",
+  "latHint": "Think paper and an office machine's confetti-like strips.",
+  "pivHint": "TEARS in this psalm means weeping. But spell it exactly the same way, say it differently, and it becomes the present-tense verb for what happens when something rips. What's that word?",
+  "winText": "You found it. TEARS can mean weeping, or it can mean SHRED - say it differently and a shirt that TEARS gets shredded. Same letters, two completely different words.",
+  "lossText": "The word was SHRED. TEARS was the pivot - sow with weeping TEARS, or watch fabric tear and SHRED. Same spelling, different sound, different meaning.",
+  "gridString": "SSGNOSLREPAZSOAEEIHEREDORRIDTNVEGEND",
+  "votdRef": "Psalm 126:5",
+  "votdVerse": "Those who sow with tears will reap with songs of joy.",
+  "passRef": "Psalm 126:1-6",
+  "passageText": "When the LORD restored the fortunes of Zion, we were like those who dreamed. Our mouths were filled with laughter, our tongues with songs of joy. Then it was said among the nations, 'The LORD has done great things for them.' The LORD has done great things for us, and we are filled with joy. Restore our fortunes, LORD, like streams in the Negev. Those who sow with tears will reap with songs of joy. Those who go out weeping, carrying seed to sow, will return with songs of joy, carrying sheaves with them."
+}

@@ -1,0 +1,25 @@
+{
+  "theme": "PRAYER",
+  "words": [
+    "YOURS",
+    "FAITH",
+    "DOUBT",
+    "DONE",
+    "PRAY",
+    "HAVE",
+    "TREE"
+  ],
+  "SIZE": 6,
+  "pivot": "YOURS",
+  "target": "BLESS",
+  "noise": "AIU",
+  "latHint": "Think everyday life and the instinctive response to a sneeze.",
+  "pivHint": "YOURS is what Jesus promises to those who pray in faith. But in God's economy, what is YOURS is never just for you - He fills you up so that you can overflow into the lives of others. What word describes that overflow?",
+  "winText": "You found it. What God makes YOURS is always meant to flow outward - and those who receive in faith are called to BLESS others in return.",
+  "lossText": "The word was BLESS. YOURS was the pivot - what Jesus promises in prayer, and what God intends you to do with it for others.",
+  "gridString": "DPIASSFORBHRALUAUUIEVBYOTEERTYHDONES",
+  "votdRef": "Mark 11:24",
+  "votdVerse": "Therefore I tell you, whatever you ask for in prayer, believe that you have received it, and it will be yours.",
+  "passRef": "Mark 11:20-24",
+  "passageText": "In the morning, as they went along, they saw the fig tree withered from the roots. Peter remembered and said to Jesus, Rabbi, look! The fig tree you cursed has withered! Have faith in God, Jesus answered. Truly I tell you, if anyone says to this mountain, Go, throw yourself into the sea, and does not doubt in their heart but believes that what they say will happen, it will be done for them. Therefore I tell you, whatever you ask for in prayer, believe that you have received it, and it will be yours."
+}

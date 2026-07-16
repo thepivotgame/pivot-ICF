@@ -1,0 +1,25 @@
+{
+  "theme": "LIGHT",
+  "words": [
+    "LIGHT",
+    "LIFT",
+    "GLORY",
+    "KINGS",
+    "SEAS",
+    "DARK",
+    "DAWN"
+  ],
+  "SIZE": 6,
+  "pivot": "LIGHT",
+  "target": "SHINE",
+  "noise": "ORTU",
+  "latHint": "Think worship and reflecting the gifts God gives.",
+  "pivHint": "LIGHT isn't just what God sends. In Isaiah, His people don't generate it - they reflect it. And when they do, what exactly do they do?",
+  "winText": "You found it. LIGHT is what God gives - and when His people reflect it, they SHINE. That's Isaiah's whole point.",
+  "lossText": "The word was SHINE. LIGHT was the pivot - what God radiates, and what His people are called to do with it.",
+  "gridString": "RKRADSTLULAGSNIEWNOFSGNITHIEHKYROLGT",
+  "votdRef": "Isaiah 60:3",
+  "votdVerse": "Nations will come to your light, and kings to the brightness of your dawn.",
+  "passRef": "Isaiah 60:1-5",
+  "passageText": "Arise, shine, for your light has come, and the glory of the LORD rises upon you. See, darkness covers the earth and thick darkness is over the peoples, but the LORD rises upon you and his glory appears over you. Nations will come to your light, and kings to the brightness of your dawn. Lift up your eyes and look about you: All assemble and come to you; your sons come from afar, and your daughters are carried on the hip. Then you will look and be radiant, your heart will throb and swell with joy; the wealth on the seas will be brought to you, to you the riches of the nations will come."
+}
