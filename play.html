@@ -2452,20 +2452,19 @@
 
         const hints = totalHintsUsed();
         const p2Guesses = p2EventLog.filter(e => e.type === 'guess').length;
-        let performanceLine = '';
+        let hintsLine;
         if (hints === 0) {
-            performanceLine = 'No hints used. 😇 😇 😇';
+            hintsLine = 'BIBLE PIVOT: No hints used 😇 😇 😇';
         } else if (hints === 1) {
-            performanceLine = 'Only 1 hint used. 😇 😇';
+            hintsLine = 'BIBLE PIVOT: 1 hint used 😇 😇';
         } else if (hints === 2) {
-            performanceLine = 'Just 2 hints used. 😇';
-        } else if (hints === 3 ) {
-            performanceLine = 'Phew! I made it with 3 hints!! 😅';
-        } else if (hints > 3) {
-            performanceLine = 'Oh-oh.. ' + hints + ' hints used, but I finished! 🙏';
+            hintsLine = 'BIBLE PIVOT: 2 hints used 😇';
+        } else if (hints === 3) {
+            hintsLine = 'BIBLE PIVOT: 3 hints used 😅';
+        } else {
+            hintsLine = 'BIBLE PIVOT: ' + hints + ' hints used 🙏';
         }
-        const perfSuffix = performanceLine ? '\n' + performanceLine : '';
-        return 'PIVOT: ' + P.votdRef + perfSuffix + '\n' + p1Emoji + '\n' + guessEmoji  + '\nPlay at BiblePivot(dot)com';
+        return hintsLine + '\n' + p1Emoji + '\n' + guessEmoji + '\nPlay at BiblePivot(dot)com';
         
     }
     function showSharePrompt() {
@@ -2502,12 +2501,20 @@
         }
         const sumVotd = document.getElementById('sum-votd-btn');
         if (sumVotd) {
-            sumVotd.addEventListener('click', function() {
+            sumVotd.addEventListener('click', function(e) {
+                e.preventDefault();
+                const url = sumVotd.getAttribute('href');
                 const txt = buildShareText();
                 if (navigator.clipboard && navigator.clipboard.writeText) {
                     navigator.clipboard.writeText(txt).catch(function() {});
                 }
                 showToast('Copied your result — paste it in the comments on today\'s verse!');
+                setTimeout(function() {
+                    const win = window.open(url, '_blank');
+                    if (!win) {
+                        window.location.href = url;
+                    }
+                }, 900);
             });
         }
 
