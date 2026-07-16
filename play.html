@@ -696,15 +696,16 @@
         box-sizing: border-box;
     }
     #summarybox .sum-btn-secondary {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
         width: 100%;
         margin-top: 10px;
         padding: 14px;
-        background: rgba(255,255,255,0.08);
-        color: #e8e4d9;
         font-size: 15px;
         font-weight: 600;
-        border: 1px solid #2e2e5a;
+        border: none;
         border-radius: 10px;
         cursor: pointer;
         touch-action: manipulation;
@@ -712,9 +713,22 @@
         text-decoration: none;
         box-sizing: border-box;
     }
-    #summarybox .sum-btn-secondary:hover {
-        background: rgba(255,255,255,0.14);
+    #summarybox .sum-btn-secondary img {
+        width: 20px;
+        height: 20px;
+        border-radius: 4px;
+        flex-shrink: 0;
     }
+    #summarybox .sum-btn-votd {
+        background: #8a4a2e;
+        color: #ffe9c7;
+    }
+    #summarybox .sum-btn-votd:hover { background: #a05938; }
+    #summarybox .sum-btn-feedback {
+        background: #2e6a5e;
+        color: #e8f5f0;
+    }
+    #summarybox .sum-btn-feedback:hover { background: #37806f; }
     #summarybox .sum-notnow {
         text-align: center;
         margin-top: 12px;
@@ -920,14 +934,13 @@
             <div class="sum-success" id="sum-heading">SUCCESS!</div>
             <div class="sum-target-label">Today's word was</div>
             <div class="sum-target" id="sum-target"></div>
-            <div class="sum-intro">Here is a summary:</div>
             <div class="sum-section">
                 <div class="sum-label">💡 The connection</div>
                 <div id="sum-wintext"></div>
             </div>
             <button class="sum-closebtn" id="sum-closebtn">Share my result →</button>
-            <a class="sum-btn-secondary" id="sum-votd-btn" href="https://www.bible.com/verse-of-the-day" target="_blank" rel="noopener">📖 YouVersion Verse of the Day</a>
-            <a class="sum-btn-secondary" id="sum-feedback-btn" href="#">💬 Give Feedback</a>
+            <a class="sum-btn-secondary sum-btn-votd" id="sum-votd-btn" href="https://www.bible.com/verse-of-the-day" target="_blank" rel="noopener"><img src="assets/youversion-icon.png" alt=""> YouVersion Verse of the Day</a>
+            <a class="sum-btn-secondary sum-btn-feedback" id="sum-feedback-btn" href="#">💬 Give Feedback</a>
             <div class="sum-notnow" id="sum-notnow">not now</div>
         </div>
     </div>
