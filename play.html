@@ -723,7 +723,6 @@
     #summarybox .sum-btn-share {
         background: #e8b84b;
         color: #1a1200;
-        margin-top: 16px;
     }
     #summarybox .sum-btn-share:hover { background: #f0c563; }
     #summarybox .sum-btn-votd {
@@ -734,7 +733,6 @@
     #summarybox .sum-btn-devo {
         background: #2f7d4f;
         color: #eafbf0;
-        margin-top: 14px;
     }
     #summarybox .sum-btn-devo:hover { background: #37934f; }
     #summarybox .sum-btn-feedback {
@@ -2429,7 +2427,7 @@
     }
 
     // ── SHARE ─────────────────────────────────────────────────────────────────────
-    function buildShareText() {
+    function buildResultParts() {
         // Part 1: one continuous line — circles in order found, with an ℹ️
         // inserted right where each hint was taken, magnifying glass for any
         // words never found tacked onto the end.
@@ -2468,9 +2466,7 @@
         if (p2PendingHint) p2Lines.push('ℹ️'); // hint taken after the last guess (shouldn't normally happen, but don't drop it)
         const guessEmoji = p2Lines.join('\n');
 
-
         const hints = totalHintsUsed();
-        const p2Guesses = p2EventLog.filter(e => e.type === 'guess').length;
         let hintsLine;
         if (hints === 0) {
             hintsLine = 'BIBLE PIVOT: No hints used 😇 😇 😇';
@@ -2483,8 +2479,16 @@
         } else {
             hintsLine = 'BIBLE PIVOT: ' + hints + ' hints used 🙏';
         }
+
+        return { hintsLine, p1Emoji, guessEmoji };
+    }
+    function buildShareText() {
+        const { hintsLine, p1Emoji, guessEmoji } = buildResultParts();
         return hintsLine + '\n' + p1Emoji + '\n' + guessEmoji + '\nPlay at BiblePivot(dot)com';
-        
+    }
+    function buildYouVersionShareText() {
+        const { hintsLine, p1Emoji, guessEmoji } = buildResultParts();
+        return 'I played at BiblePivot(dot)com ❤️' + '\n' + hintsLine + '\n' + p1Emoji + '\n' + guessEmoji;
     }
     function showSharePrompt() {
         document.getElementById('shareresult').textContent = buildShareText();
@@ -2513,6 +2517,13 @@
             sumClose.addEventListener('touchend', function(e) { e.preventDefault(); closeSummary(); showSharePrompt(); });
             sumClose.addEventListener('click', function(e) { closeSummary(); showSharePrompt(); });
         }
+        const sumDevo = document.getElementById('sum-devo-btn');
+        if (sumDevo) {
+            sumDevo.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('This feature is not yet active, pending release of new set of devotionals starting August 1.');
+            });
+        }
         const sumNotNow = document.getElementById('sum-notnow');
         if (sumNotNow) {
             sumNotNow.addEventListener('touchend', function(e) { e.preventDefault(); closeSummary(); });
@@ -2523,7 +2534,7 @@
             sumVotd.addEventListener('click', function(e) {
                 e.preventDefault();
                 const url = sumVotd.getAttribute('href');
-                const txt = buildShareText();
+                const txt = buildYouVersionShareText();
                 if (navigator.clipboard && navigator.clipboard.writeText) {
                     navigator.clipboard.writeText(txt).catch(function() {});
                 }
