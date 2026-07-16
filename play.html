@@ -2489,15 +2489,15 @@
         const hints = totalHintsUsed();
         let hintsLine;
         if (hints === 0) {
-            hintsLine = 'BIBLE PIVOT: No hints used 😇 😇 😇';
+            hintsLine = 'No hints used 😇 😇 😇';
         } else if (hints === 1) {
-            hintsLine = 'BIBLE PIVOT: 1 hint used 😇 😇';
+            hintsLine = '1 hint used 😇 😇';
         } else if (hints === 2) {
-            hintsLine = 'BIBLE PIVOT: 2 hints used 😇';
+            hintsLine = '2 hints used 😇';
         } else if (hints === 3) {
-            hintsLine = 'BIBLE PIVOT: 3 hints used 😅';
+            hintsLine = '3 hints used 😅';
         } else {
-            hintsLine = 'BIBLE PIVOT: ' + hints + ' hints used 🙏';
+            hintsLine = hints + ' hints used 🙏';
         }
 
         return { hintsLine, p1Emoji, guessEmoji };
@@ -2508,7 +2508,7 @@
     }
     function buildYouVersionShareText() {
         const { hintsLine, p1Emoji, guessEmoji } = buildResultParts();
-        return 'I played at BiblePivot(dot)com ❤️' + '\n' + hintsLine + '\n' + p1Emoji + '\n' + guessEmoji;
+        return 'I played BIBLE PIVOT at BiblePivot(dot)com ❤️' + '\n' + hintsLine + '\n' + p1Emoji + '\n' + guessEmoji;
     }
     function showSharePrompt() {
         document.getElementById('shareresult').textContent = buildShareText();
