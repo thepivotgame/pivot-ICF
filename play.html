@@ -2512,6 +2512,8 @@
     }
     function showSharePrompt() {
         document.getElementById('shareresult').textContent = buildShareText();
+        const cpBtn = document.getElementById('sharebtn-cp');
+        if (cpBtn) cpBtn.textContent = '📋 Copy to clipboard';
         document.getElementById('shareoverlay').style.display = 'flex';
     }
     function closeShare() {
@@ -2558,7 +2560,7 @@
                 if (navigator.clipboard && navigator.clipboard.writeText) {
                     navigator.clipboard.writeText(txt).catch(function() {});
                 }
-                showToast('Copied your result — paste it in the comments on today\'s verse!', 3125);
+                showToast('Copied your result — paste it in the comments on today\'s verse!', 4688);
                 setTimeout(function() {
                     const win = window.open(url, '_blank');
                     if (!win) {
@@ -2585,10 +2587,6 @@
                 fn();
             });
         }
-        function closeShareAndSummary() {
-            closeShare();
-            closeSummary();
-        }
         addTapShare('sharebtn-wa', function() {
             const txt = encodeURIComponent(buildShareText());
             const a = document.createElement('a');
@@ -2598,18 +2596,15 @@
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            setTimeout(closeShareAndSummary, 2000);
         });
         addTapShare('sharebtn-em', function() {
             window.location.href = 'mailto:?subject=PIVOT&body=' + encodeURIComponent(buildShareText());
-            setTimeout(closeShareAndSummary, 1000);
         });
         addTapShare('sharebtn-cp', function() {
             const txt = buildShareText();
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(txt).then(() => {
                     document.getElementById('sharebtn-cp').textContent = '✓ Copied!';
-                    setTimeout(closeShareAndSummary, 1500);
                 });
             }
             else {
@@ -2625,7 +2620,6 @@
                 } catch (e) {}
                 document.body.removeChild(ta);
                 document.getElementById('sharebtn-cp').textContent = '✓ Copied!';
-                setTimeout(closeShareAndSummary, 1500);
             }
         });
         addTapShare('sharebtn-cl', closeShare);
