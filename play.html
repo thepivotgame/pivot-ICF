@@ -762,29 +762,31 @@
     #summarybox .sum-notnow:hover { color: #a0a0c0; }
     #sum-toast {
         position: fixed;
+        top: 50%;
         left: 50%;
-        bottom: 28px;
-        transform: translateX(-50%) translateY(10px);
+        transform: translate(-50%, -50%) scale(0.95);
         background: #ffffff;
         color: #1a1a2e;
         border: 1px solid #dcdce6;
-        border-radius: 10px;
-        padding: 12px 18px;
+        border-radius: 14px;
+        padding: 24px 22px;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        font-size: 14px;
-        font-weight: 500;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1.4;
+        box-shadow: 0 10px 34px rgba(0,0,0,0.4);
         z-index: 2200;
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.25s ease, transform 0.25s ease;
-        max-width: calc(100vw - 32px);
+        width: 240px;
+        max-width: calc(100vw - 48px);
         text-align: center;
         box-sizing: border-box;
     }
     #sum-toast.show {
         opacity: 1;
-        transform: translateX(-50%) translateY(0);
+        transform: translate(-50%, -50%) scale(1);
     }
 
 
@@ -792,7 +794,7 @@
     #shareoverlay {
         position: fixed;
         inset: 0;
-        z-index: 2001;
+        z-index: 2150;
         background: rgba(0, 0, 0, 0.7);
         display: none;
         align-items: center;
@@ -809,7 +811,7 @@
         width: 100%;
         text-align: center;
         position: relative;
-        z-index: 2002;
+        z-index: 2151;
     }
 
     #sharebox h3 {
@@ -1039,7 +1041,7 @@
             <button class="share-btn share-wa" id="sharebtn-wa">📱 WhatsApp</button>
             <button class="share-btn share-em" id="sharebtn-em">✉️ Email</button>
             <button class="share-btn share-cp" id="sharebtn-cp">📋 Copy to clipboard</button>
-            <button class="share-btn share-cl" id="sharebtn-cl">Not now</button>
+            <button class="share-btn share-cl" id="sharebtn-cl">Close</button>
         </div>
     </div>
     <div id="modal-overlay">
@@ -2534,8 +2536,8 @@
         // Summary panel buttons
         const sumClose = document.getElementById('sum-closebtn');
         if (sumClose) {
-            sumClose.addEventListener('touchend', function(e) { e.preventDefault(); closeSummary(); showSharePrompt(); });
-            sumClose.addEventListener('click', function(e) { closeSummary(); showSharePrompt(); });
+            sumClose.addEventListener('touchend', function(e) { e.preventDefault(); showSharePrompt(); });
+            sumClose.addEventListener('click', function(e) { showSharePrompt(); });
         }
         const sumDevo = document.getElementById('sum-devo-btn');
         if (sumDevo) {
@@ -2585,6 +2587,10 @@
                 fn();
             });
         }
+        function closeShareAndSummary() {
+            closeShare();
+            closeSummary();
+        }
         addTapShare('sharebtn-wa', function() {
             const txt = encodeURIComponent(buildShareText());
             const a = document.createElement('a');
@@ -2594,18 +2600,18 @@
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            setTimeout(closeShare, 2000);
+            setTimeout(closeShareAndSummary, 2000);
         });
         addTapShare('sharebtn-em', function() {
             window.location.href = 'mailto:?subject=PIVOT&body=' + encodeURIComponent(buildShareText());
-            setTimeout(closeShare, 1000);
+            setTimeout(closeShareAndSummary, 1000);
         });
         addTapShare('sharebtn-cp', function() {
             const txt = buildShareText();
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(txt).then(() => {
                     document.getElementById('sharebtn-cp').textContent = '✓ Copied!';
-                    setTimeout(closeShare, 1500);
+                    setTimeout(closeShareAndSummary, 1500);
                 });
             }
             else {
@@ -2621,7 +2627,7 @@
                 } catch (e) {}
                 document.body.removeChild(ta);
                 document.getElementById('sharebtn-cp').textContent = '✓ Copied!';
-                setTimeout(closeShare, 1500);
+                setTimeout(closeShareAndSummary, 1500);
             }
         });
         addTapShare('sharebtn-cl', closeShare);
