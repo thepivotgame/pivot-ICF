@@ -678,47 +678,54 @@
         color: #8884aa;
         margin-bottom: 5px;
     }
-    #summarybox .sum-closebtn {
-        display: block;
+    #summarybox .sum-btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
         width: 100%;
-        margin-top: 16px;
-        padding: 14px;
-        background: #e8b84b;
-        color: #1a1200;
-        font-size: 16px;
-        font-weight: bold;
+        margin-top: 10px;
+        padding: 10px 14px;
         border: none;
         border-radius: 10px;
         cursor: pointer;
         touch-action: manipulation;
-        text-align: center;
+        text-align: left;
         text-decoration: none;
         box-sizing: border-box;
+        font-family: inherit;
     }
-    #summarybox .sum-btn-secondary {
+    #summarybox .sum-btn-icon {
+        width: 26px;
+        height: 26px;
+        border-radius: 6px;
+        flex-shrink: 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
-        width: 100%;
-        margin-top: 10px;
-        padding: 14px;
+    }
+    #summarybox .sum-btn-icon img {
+        width: 26px;
+        height: 26px;
+        border-radius: 6px;
+        display: block;
+    }
+    #summarybox .sum-btn-label {
+        display: flex;
+        flex-direction: column;
+    }
+    #summarybox .sum-btn-title {
         font-size: 15px;
-        font-weight: 600;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        touch-action: manipulation;
-        text-align: center;
-        text-decoration: none;
-        box-sizing: border-box;
+        font-weight: 500;
     }
-    #summarybox .sum-btn-secondary img {
-        width: 36px;
-        height: 36px;
-        border-radius: 7px;
-        flex-shrink: 0;
+    #summarybox .sum-btn-subtitle {
+        font-size: 13px;
     }
+    #summarybox .sum-btn-share {
+        background: #e8b84b;
+        color: #1a1200;
+        margin-top: 16px;
+    }
+    #summarybox .sum-btn-share:hover { background: #f0c563; }
     #summarybox .sum-btn-votd {
         background: #8a4a2e;
         color: #ffe9c7;
@@ -739,6 +746,31 @@
         touch-action: manipulation;
     }
     #summarybox .sum-notnow:hover { color: #a0a0c0; }
+    #sum-toast {
+        position: fixed;
+        left: 50%;
+        bottom: 28px;
+        transform: translateX(-50%) translateY(10px);
+        background: #12122a;
+        color: #e8e4d9;
+        border: 1px solid #2e2e5a;
+        border-radius: 10px;
+        padding: 12px 18px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-size: 14px;
+        z-index: 2200;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease, transform 0.25s ease;
+        max-width: calc(100vw - 32px);
+        text-align: center;
+        box-sizing: border-box;
+    }
+    #sum-toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
 
     /* Share */
     #shareoverlay {
@@ -938,12 +970,34 @@
                 <div class="sum-label">💡 The connection</div>
                 <div id="sum-wintext"></div>
             </div>
-            <button class="sum-closebtn" id="sum-closebtn">Share my result →</button>
-            <a class="sum-btn-secondary sum-btn-votd" id="sum-votd-btn" href="https://www.bible.com/verse-of-the-day" target="_blank" rel="noopener"><img src="assets/youversion-icon.png" alt=""> YouVersion Verse of the Day</a>
-            <a class="sum-btn-secondary sum-btn-feedback" id="sum-feedback-btn" href="#">💬 Give Feedback</a>
+            <button class="sum-btn sum-btn-share" id="sum-closebtn">
+                <span class="sum-btn-icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1200" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                </span>
+                <span class="sum-btn-label">
+                    <span class="sum-btn-title">Share my result via</span>
+                    <span class="sum-btn-subtitle">WhatsApp &middot; Email &middot; Other</span>
+                </span>
+            </button>
+            <a class="sum-btn sum-btn-votd" id="sum-votd-btn" href="https://www.bible.com/verse-of-the-day" target="_blank" rel="noopener">
+                <span class="sum-btn-icon"><img src="assets/youversion-icon.png" alt=""></span>
+                <span class="sum-btn-label">
+                    <span class="sum-btn-title">Share my result via</span>
+                    <span class="sum-btn-subtitle">YouVersion Verse of the Day</span>
+                </span>
+            </a>
+            <a class="sum-btn sum-btn-feedback" id="sum-feedback-btn" href="#">
+                <span class="sum-btn-icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e8f5f0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                </span>
+                <span class="sum-btn-label">
+                    <span class="sum-btn-title">Give feedback</span>
+                </span>
+            </a>
             <div class="sum-notnow" id="sum-notnow">not now</div>
         </div>
     </div>
+    <div id="sum-toast" role="status" aria-live="polite"></div>
 
     <div id="shareoverlay">
         <div id="sharebox">
@@ -2424,6 +2478,16 @@
     function closeSummary() {
         document.getElementById('summaryoverlay').style.display = 'none';
     }
+    function showToast(msg, duration) {
+        const t = document.getElementById('sum-toast');
+        if (!t) return;
+        t.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(showToast._timer);
+        showToast._timer = setTimeout(function() {
+            t.classList.remove('show');
+        }, duration || 2500);
+    }
     (function() {
         // Summary panel buttons
         const sumClose = document.getElementById('sum-closebtn');
@@ -2435,6 +2499,16 @@
         if (sumNotNow) {
             sumNotNow.addEventListener('touchend', function(e) { e.preventDefault(); closeSummary(); });
             sumNotNow.addEventListener('click', function(e) { closeSummary(); });
+        }
+        const sumVotd = document.getElementById('sum-votd-btn');
+        if (sumVotd) {
+            sumVotd.addEventListener('click', function() {
+                const txt = buildShareText();
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(txt).catch(function() {});
+                }
+                showToast('Copied your result — paste it in the comments on today\'s verse!');
+            });
         }
 
         function addTapShare(id, fn) {
