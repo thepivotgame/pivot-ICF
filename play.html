@@ -731,6 +731,12 @@
         color: #ffe9c7;
     }
     #summarybox .sum-btn-votd:hover { background: #a05938; }
+    #summarybox .sum-btn-devo {
+        background: #2f7d4f;
+        color: #eafbf0;
+        margin-top: 14px;
+    }
+    #summarybox .sum-btn-devo:hover { background: #37934f; }
     #summarybox .sum-btn-feedback {
         background: #2e6a5e;
         color: #e8f5f0;
@@ -970,6 +976,13 @@
                 <div class="sum-label">💡 The connection</div>
                 <div id="sum-wintext"></div>
             </div>
+            <a class="sum-btn sum-btn-devo" id="sum-devo-btn" href="https://www.bible.com/verse-of-the-day" target="_blank" rel="noopener">
+                <span class="sum-btn-icon"><img src="assets/youversion-icon.png" alt=""></span>
+                <span class="sum-btn-label">
+                    <span class="sum-btn-title">Read today's devotional</span>
+                    <span class="sum-btn-subtitle" id="sum-devo-ref"></span>
+                </span>
+            </a>
             <button class="sum-btn sum-btn-share" id="sum-closebtn">
                 <span class="sum-btn-icon" aria-hidden="true">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1200" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
@@ -2400,6 +2413,10 @@
         heading.classList.toggle('sum-loss', !won);
         document.getElementById('sum-target').textContent = P.target;
         document.getElementById('sum-wintext').textContent = won ? P.winText : P.lossText;
+        const devoRef = document.getElementById('sum-devo-ref');
+        if (devoRef) {
+            devoRef.textContent = P.votdRef;
+        }
         const feedbackBtn = document.getElementById('sum-feedback-btn');
         if (feedbackBtn) {
             const fbSubject = encodeURIComponent('PIVOT feedback — ' + todayISO());
