@@ -98,6 +98,51 @@
         border: 2px solid rgba(231, 76, 60, 0.5);
     }
 
+    #votd-stats-panel {
+        display: none;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(249, 217, 118, 0.35);
+        border-radius: 13px;
+        padding: 12px 14px;
+        margin-bottom: 8px;
+        text-align: center;
+    }
+
+    .stats-hero {
+        font-size: 26px;
+        font-weight: bold;
+        color: #f9d976;
+        margin: 4px 0;
+    }
+
+    .stats-hero-sub {
+        font-size: 11px;
+        font-weight: normal;
+        color: #a8c8e8;
+        letter-spacing: 1px;
+    }
+
+    .stats-sub {
+        font-size: 12px;
+        color: #a8c8e8;
+    }
+
+    .stats-nudge {
+        margin-top: 8px;
+        font-size: 12.5px;
+        color: #f0ede6;
+        background: rgba(232, 115, 74, 0.22);
+        border: 1px solid rgba(232, 115, 74, 0.5);
+        border-radius: 8px;
+        padding: 6px 10px;
+    }
+
+    .stats-final {
+        background: rgba(46, 204, 113, 0.22);
+        border-color: rgba(46, 204, 113, 0.55);
+        font-weight: bold;
+    }
+
     .slabel {
         font-size: 10px;
         letter-spacing: 3px;
@@ -981,6 +1026,7 @@
             <h2 style="color:#e74c3c;margin:0 0 6px;font-size:20px;" id="lossword"></h2>
             <p style="color:#a8c8e8;font-size:13px;" id="losstext"></p>
         </div>
+        <div id="votd-stats-panel"></div>
     </div>
 
     <p class="footer">PIVOT · DAILY PUZZLE</p>
@@ -1109,6 +1155,129 @@
         const resp = await fetch(`${PUZZLE_DATA_DIR}/${today}.json`);
         if (!resp.ok) throw new Error('No puzzle found for ' + today);
         return await resp.json();
+    }
+
+    // ── MONTHLY STATS / STREAK TRACKING (VOTD) ──────────────────────────────────
+    // Scoped to the calendar month, aligned with the one-month VOTD reading plan.
+    // Stored entirely in localStorage on this device — no server, no accounts,
+    // nothing aggregated or visible to us. A device change loses at most the
+    // current month's progress, never an open-ended streak. Only same-day play
+    // counts (no catch-up credit), so "days" here always means same-day completions.
+    function statsMonthKey(dateStr) {
+        const parts = dateStr.split('-');
+        return 'pivot_votd_stats_' + parts[0] + '_' + parts[1];
+    }
+    function statsDaysInMonth(dateStr) {
+        const parts = dateStr.split('-').map(Number);
+        return new Date(parts[0], parts[1], 0).getDate();
+    }
+    function statsMonthName(dateStr) {
+        const parts = dateStr.split('-').map(Number);
+        return new Date(parts[0], parts[1] - 1, 1).toLocaleString('en-US', { month: 'long' });
+    }
+    function statsComputeScore(won, hints) {
+        // 0–5 scale: a loss is 0; a win scores higher the fewer hints it took.
+        if (!won) return 0;
+        if (hints <= 0) return 5;
+        if (hints === 1) return 4;
+        if (hints === 2) return 3;
+        if (hints === 3) return 2;
+        return 1;
+    }
+    function loadMonthStats(dateStr) {
+        try {
+            const raw = localStorage.getItem(statsMonthKey(dateStr));
+            if (raw) return JSON.parse(raw);
+        } catch (e) {}
+        return { days: {} };
+    }
+    function saveMonthStats(dateStr, stats) {
+        try {
+            localStorage.setItem(statsMonthKey(dateStr), JSON.stringify(stats));
+        } catch (e) {}
+    }
+    function pruneOldMonthStats(dateStr) {
+        // Archive rather than let localStorage grow forever — keep roughly the
+        // last 3 months so a light "last month" comparison stays possible.
+        try {
+            const parts = dateStr.split('-').map(Number);
+            const cutoff = new Date(parts[0], parts[1] - 1 - 3, 1);
+            for (let i = localStorage.length - 1; i >= 0; i--) {
+                const key = localStorage.key(i);
+                if (!key || key.indexOf('pivot_votd_stats_') !== 0) continue;
+                const kp = key.replace('pivot_votd_stats_', '').split('_');
+                if (kp.length !== 2) continue;
+                const keyDate = new Date(Number(kp[0]), Number(kp[1]) - 1, 1);
+                if (keyDate < cutoff) localStorage.removeItem(key);
+            }
+        } catch (e) {}
+    }
+    function recordDayResult(dateStr, won, hints) {
+        // Idempotent: safe to call again on a same-day reload (e.g. showAlreadyPlayed)
+        // since it just rewrites today's entry with the same values.
+        const stats = loadMonthStats(dateStr);
+        const dayNum = String(parseInt(dateStr.split('-')[2], 10));
+        stats.days[dayNum] = { won: won, hints: hints, score: statsComputeScore(won, hints) };
+        saveMonthStats(dateStr, stats);
+        pruneOldMonthStats(dateStr);
+        return stats;
+    }
+    function statsSummary(dateStr) {
+        const stats = loadMonthStats(dateStr);
+        const daysInMonth = statsDaysInMonth(dateStr);
+        const todayDayNum = parseInt(dateStr.split('-')[2], 10);
+        const entries = Object.keys(stats.days).map(k => stats.days[k]);
+        const dayNums = Object.keys(stats.days).map(Number);
+        const played = entries.length;
+        const avgScore = played ? (entries.reduce((s, d) => s + d.score, 0) / played) : 0;
+        let bestScore = 0;
+        entries.forEach(d => { if (d.score > bestScore) bestScore = d.score; });
+        // Denominator is days elapsed since THIS user's first play this month,
+        // not the calendar day-of-month — otherwise someone who starts on the
+        // 23rd with a perfect record would see "9/23" instead of "9/9".
+        // For anyone who's been playing since the 1st, this works out to the
+        // same number as todayDayNum anyway, so one formula covers both a
+        // mid-month launch and normal steady-state use.
+        const firstDayPlayed = played ? Math.min.apply(null, dayNums) : todayDayNum;
+        const elapsedDays = played ? (todayDayNum - firstDayPlayed + 1) : 0;
+        return {
+            monthName: statsMonthName(dateStr),
+            daysInMonth: daysInMonth,
+            todayDayNum: todayDayNum,
+            elapsedDays: elapsedDays,
+            played: played,
+            avgScore: avgScore,
+            bestScore: bestScore,
+            isLastDay: todayDayNum === daysInMonth
+        };
+    }
+    function renderStatsPanel(dateStr) {
+        const panel = document.getElementById('votd-stats-panel');
+        if (!panel) return;
+        const s = statsSummary(dateStr);
+        let html = '<div class="slabel">' + s.monthName + ' progress</div>' +
+            '<div class="stats-hero">' + s.played + '/' + s.elapsedDays +
+            ' <span class="stats-hero-sub">days this month</span></div>' +
+            '<div class="stats-sub">Average score: ' + s.avgScore.toFixed(1) + ' / 5' +
+            (s.played ? ' &middot; Best day: ' + s.bestScore + '/5' : '') + '</div>';
+
+        const remaining = s.daysInMonth - s.todayDayNum;
+        if (!s.isLastDay && remaining > 0 && remaining <= 7 && s.played >= s.elapsedDays - 2) {
+            html += '<div class="stats-nudge">' + remaining + (remaining === 1 ? ' day' : ' days') +
+                ' left to complete ' + s.monthName + ' — you\'re at ' + s.played + '/' + s.elapsedDays + '</div>';
+        }
+        if (s.isLastDay) {
+            html += '<div class="stats-nudge stats-final">Completed ' + s.monthName + "'s VOTD Pivot — " +
+                s.played + '/' + s.elapsedDays + ' days, average score ' + s.avgScore.toFixed(1) + '</div>';
+        }
+        panel.innerHTML = html;
+        panel.style.display = 'block';
+    }
+    function statsMonthEndShareLine(dateStr) {
+        const s = statsSummary(dateStr);
+        if (!s.isLastDay) return '';
+        return '\nCompleted ' + s.monthName + "'s VOTD Pivot — " + s.played + '/' + s.elapsedDays +
+            ' days, average score ' + s.avgScore.toFixed(1);
     }
 
     // ── VALID WORDS (pre-computed for this puzzle) ─────────────────────────────
@@ -2112,7 +2281,9 @@
         document.getElementById('winword').textContent = P.target;
         document.getElementById('wintext').textContent = P.winText;
         const hints = totalHintsUsed();
-        
+        recordDayResult(todayISO(), true, hints);
+        renderStatsPanel(todayISO());
+
         const p2Guesses = p2EventLog.filter(e => e.type === 'guess').length;
         let scoreMsg = '';
         if (hints === 0) {
@@ -2141,6 +2312,8 @@
         document.getElementById('losscard').classList.remove('hidden');
         document.getElementById('lossword').textContent = 'The word was ' + P.target;
         const hints = totalHintsUsed();
+        recordDayResult(todayISO(), false, hints);
+        renderStatsPanel(todayISO());
         document.getElementById('losstext').textContent = P.lossText + (hints > 0 ? ' (' + hints + (hints === 1 ? ' hint' : ' hints') + ' used)' : '');
         setTimeout(() => {
             document.getElementById('losscard').scrollIntoView({
@@ -2504,11 +2677,11 @@
     }
     function buildShareText() {
         const { hintsLine, p1Emoji, guessEmoji } = buildResultParts();
-        return hintsLine + '\n' + p1Emoji + '\n' + guessEmoji + '\nPlay at BiblePivot(dot)com';
+        return hintsLine + '\n' + p1Emoji + '\n' + guessEmoji + '\nPlay at BiblePivot(dot)com' + statsMonthEndShareLine(todayISO());
     }
     function buildYouVersionShareText() {
         const { hintsLine, p1Emoji, guessEmoji } = buildResultParts();
-        return 'I played BIBLE PIVOT ❤️' + '\n' + hintsLine + '\n' + p1Emoji + '\n' + guessEmoji + '\nPlay at BiblePivot(dot)com';;
+        return 'I played BIBLE PIVOT ❤️' + '\n' + hintsLine + '\n' + p1Emoji + '\n' + guessEmoji + '\nPlay at BiblePivot(dot)com' + statsMonthEndShareLine(todayISO());
     }
     function showSharePrompt() {
         document.getElementById('shareresult').textContent = buildShareText();
