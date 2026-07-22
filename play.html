@@ -1028,11 +1028,11 @@
                 <span id="fc">(0/7)</span>
             </p>
             <div id="word-chips"></div>
-            <div style="display:flex;align-items:stretch;gap:10px;margin-top:6px;flex-wrap:nowrap;">
-                <button class="btn bh btn-2line" id="hintbtn">
+            <div style="display:grid;grid-template-columns:repeat(4, 1fr);align-items:stretch;gap:10px;margin-top:6px;">
+                <button class="btn bh btn-2line" id="hintbtn" style="grid-column:1;">
                     <span>Get</span><span>Hint</span>
                 </button>
-                <div id="scroll-down-arrow" style="display:none;align-items:center;justify-content:center;gap:8px;cursor:pointer;touch-action:manipulation;background:#e8734a;border-radius:9px;padding:8px 13px;height:54px;font-family:Georgia,serif;box-sizing:border-box;" onclick="document.getElementById('s2').scrollIntoView({behavior:'smooth',block:'start'})">
+                <div id="scroll-down-arrow" style="grid-column:2;display:none;align-items:center;justify-content:center;gap:8px;cursor:pointer;touch-action:manipulation;background:#e8734a;border-radius:9px;padding:8px 13px;height:54px;font-family:Georgia,serif;box-sizing:border-box;" onclick="document.getElementById('s2').scrollIntoView({behavior:'smooth',block:'start'})">
                     <span style="display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.25;">
                         <span style="font-size:12px;color:#fff;font-weight:bold;letter-spacing:1px;text-transform:uppercase;">Part</span>
                         <span style="font-size:12px;color:#fff;font-weight:bold;letter-spacing:1px;text-transform:uppercase;">2</span>
@@ -1041,12 +1041,12 @@
                         <path d="M9 2 L9 16 M3 11 L9 18 L15 11" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </div>
-                <button onclick="openNarration()" style="background:#e8b84b;color:#1a1200;border:2px solid #c49020;border-radius:9px;padding:8px 13px;height:54px;font-size:12px;font-weight:bold;letter-spacing:1px;cursor:pointer;font-family:Georgia,serif;touch-action:manipulation;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 2px 6px rgba(232,184,75,0.4);box-sizing:border-box;">
+                <button onclick="openNarration()" style="grid-column:3;background:#e8b84b;color:#1a1200;border:2px solid #c49020;border-radius:9px;padding:8px 13px;height:54px;font-size:12px;font-weight:bold;letter-spacing:1px;cursor:pointer;font-family:Georgia,serif;touch-action:manipulation;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 2px 6px rgba(232,184,75,0.4);box-sizing:border-box;">
                     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M18.36 5.64a9 9 0 0 1 0 12.72"/></svg>
                     Listen
                 </button>
-                <a href="index.html" rel="noopener" style="background:#2f7d4f;color:#eafbf0;border:none;border-radius:9px;padding:8px 13px;height:54px;font-size:12px;font-weight:bold;letter-spacing:1px;cursor:pointer;font-family:Georgia,serif;touch-action:manipulation;text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.25;gap:0;box-sizing:border-box;">
-                    <span>Get</span><span>Help</span>
+                <a href="index.html" rel="noopener" style="grid-column:4;background:#2f7d4f;color:#eafbf0;border:none;border-radius:9px;padding:8px 13px;height:54px;font-size:12px;font-weight:bold;letter-spacing:1px;cursor:pointer;font-family:Georgia,serif;touch-action:manipulation;text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.25;gap:0;box-sizing:border-box;">
+                    <span>How to</span><span>Play</span>
                 </a>
             </div>
         </div>
