@@ -1372,11 +1372,17 @@
             '<div class="stats-row">' +
                 '<div class="stats-row-visual">' + wordsRow + '</div>' +
                 '<div class="stats-row-text">' + s.avgWordsFound.toFixed(1) + ' words found per search puzzle</div>' +
-            '</div>' +
-            '<div class="stats-row">' +
+            '</div>';
+
+        // Only show the stars row once there's actually something to show —
+        // a "0.0 stars" line is just noise for someone who hasn't jumped
+        // ahead yet this month.
+        if (s.avgStarsEarned > 0) {
+            html += '<div class="stats-row">' +
                 '<div class="stats-row-visual"><span class="stats-star-mini">' + starsRow + '</span></div>' +
                 '<div class="stats-row-text">' + s.avgStarsEarned.toFixed(1) + ' stars collected per game play by locking the search puzzle once the pivot word is found</div>' +
             '</div>';
+        }
 
         const remaining = s.daysInMonth - s.todayDayNum;
         if (!s.isLastDay && remaining > 0 && remaining <= 7 && s.played >= s.elapsedDays - 2) {
