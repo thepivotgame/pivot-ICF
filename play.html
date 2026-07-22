@@ -1371,7 +1371,7 @@
             '</div>' +
             '<div class="stats-row">' +
                 '<div class="stats-row-visual">' + wordsRow + '</div>' +
-                '<div class="stats-row-text">' + s.avgWordsFound.toFixed(1) + ' words found per search puzzle</div>' +
+                '<div class="stats-row-text">' + s.avgWordsFound.toFixed(1) + ' search words found per game</div>' +
             '</div>';
 
         // Only show the stars row once there's actually something to show —
@@ -1380,7 +1380,7 @@
         if (s.avgStarsEarned > 0) {
             html += '<div class="stats-row">' +
                 '<div class="stats-row-visual"><span class="stats-star-mini">' + starsRow + '</span></div>' +
-                '<div class="stats-row-text">' + s.avgStarsEarned.toFixed(1) + ' stars collected per game play by locking the search puzzle once the pivot word is found</div>' +
+                '<div class="stats-row-text">' + s.avgStarsEarned.toFixed(1) + ' stars earned per game (by locking the search puzzle early)</div>' +
             '</div>';
         }
 
