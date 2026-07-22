@@ -145,8 +145,8 @@
     }
 
     .stats-row-num {
-        flex: 0 0 100px;
-        width: 100px;
+        flex: 0 0 110px;
+        width: 110px;
         font-size: 28px;
         font-weight: bold;
         color: #1a5276;
@@ -154,8 +154,8 @@
     }
 
     .stats-row-visual {
-        flex: 0 0 100px;
-        width: 100px;
+        flex: 0 0 110px;
+        width: 110px;
         display: flex;
         flex-wrap: nowrap;
         gap: 3px;
@@ -1260,8 +1260,10 @@
         } catch (e) {}
     }
     function pruneOldMonthStats(dateStr) {
-        // Archive rather than let localStorage grow forever — keep roughly the
-        // last 3 months so a light "last month" comparison stays possible.
+        // NOTE: currently unused by design. We keep every month's data
+        // indefinitely (each month is a tiny JSON blob) so a future feature
+        // can show a compilation of history across multiple months. Left
+        // in place in case a storage cap is wanted later.
         try {
             const parts = dateStr.split('-').map(Number);
             const cutoff = new Date(parts[0], parts[1] - 1 - 3, 1);
@@ -1289,32 +1291,18 @@
             starsEarned: starsEarned || 0
         };
         saveMonthStats(dateStr, stats);
-        pruneOldMonthStats(dateStr);
         return stats;
     }
-    function computeCurrentStreak(dateStr) {
-        // Counts consecutive days played, walking backward from today. "Played"
-        // means any completed day (win or loss) counts toward the streak — this
-        // rewards showing up, not just winning. Crosses month boundaries by
-        // re-loading whichever month each day falls into, since streaks
-        // naturally span the 1st of the month. Note: pruneOldMonthStats keeps
-        // roughly 3 months of history, so an exceptionally long streak (~90+
-        // days) could get truncated once the oldest month is pruned — an
-        // acceptable tradeoff given the monthly-plan design, but worth knowing.
+    function computeCurrentStreak(daysMap, todayDayNum) {
+        // Counts consecutive days played, walking backward from today —
+        // scoped to the current month only (resets each month, no
+        // carryover from the previous month). Counts ANY completed day
+        // (win or loss) toward the streak, not just wins — this rewards
+        // showing up daily, not a perfect score.
         let count = 0;
-        const cursor = new Date(dateStr + 'T00:00:00');
-        while (true) {
-            const y = cursor.getFullYear();
-            const m = String(cursor.getMonth() + 1).padStart(2, '0');
-            const d = String(cursor.getDate()).padStart(2, '0');
-            const cursorStr = y + '-' + m + '-' + d;
-            const monthStats = loadMonthStats(cursorStr);
-            if (monthStats.days[String(cursor.getDate())]) {
-                count++;
-                cursor.setDate(cursor.getDate() - 1);
-            } else {
-                break;
-            }
+        for (let d = todayDayNum; d >= 1; d--) {
+            if (daysMap[String(d)]) count++;
+            else break;
         }
         return count;
     }
@@ -1345,7 +1333,7 @@
             firstDayPlayed: firstDayPlayed,
             elapsedDays: elapsedDays,
             played: played,
-            currentStreak: computeCurrentStreak(dateStr),
+            currentStreak: computeCurrentStreak(stats.days, todayDayNum),
             avgScore: avgScore,
             avgWordsFound: avgWordsFound,
             avgStarsEarned: avgStarsEarned,
