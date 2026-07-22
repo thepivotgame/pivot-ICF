@@ -127,8 +127,8 @@
     }
 
     .stats-row-num {
-        flex: 0 0 70px;
-        width: 70px;
+        flex: 0 0 100px;
+        width: 100px;
         font-size: 28px;
         font-weight: bold;
         color: #1a5276;
@@ -136,13 +136,13 @@
     }
 
     .stats-row-visual {
-        flex: 0 0 70px;
-        width: 70px;
+        flex: 0 0 100px;
+        width: 100px;
         display: flex;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         gap: 3px;
         justify-content: center;
-        align-content: center;
+        align-items: center;
     }
 
     .stats-row-text {
@@ -154,23 +154,20 @@
     }
 
     .stats-dot-mini {
-        width: 13px;
-        height: 13px;
+        width: 11px;
+        height: 11px;
         border-radius: 50%;
         background: #2ecc71;
         box-shadow: 0 0 0 1px #229954 inset;
-    }
-
-    .stats-dot-mini.empty {
-        background: rgba(44, 62, 80, 0.12);
-        border: 1.5px dashed rgba(44, 62, 80, 0.3);
+        flex-shrink: 0;
     }
 
     .stats-star-mini {
-        font-size: 17px;
+        font-size: 15px;
         color: #e6910e;
         line-height: 1;
-        letter-spacing: 1px;
+        letter-spacing: 0;
+        white-space: nowrap;
     }
 
     .stats-nudge {
@@ -1326,12 +1323,12 @@
         const starsFilled = Math.min(STARS_MAX, Math.round(s.avgStarsEarned));
 
         let wordsRow = '';
-        for (let i = 0; i < WORDS_MAX; i++) {
-            wordsRow += '<span class="stats-dot-mini' + (i < wordsFilled ? '' : ' empty') + '"></span>';
+        for (let i = 0; i < wordsFilled; i++) {
+            wordsRow += '<span class="stats-dot-mini"></span>';
         }
         let starsRow = '';
-        for (let i = 0; i < STARS_MAX; i++) {
-            starsRow += (i < starsFilled ? '★' : '☆');
+        for (let i = 0; i < starsFilled; i++) {
+            starsRow += '★';
         }
 
         let html = '<div class="stats-title">🔥 Monthly Progress Report 📈</div>' +
