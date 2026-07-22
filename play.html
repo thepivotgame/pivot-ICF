@@ -167,6 +167,14 @@
         border: 2px dashed rgba(44, 62, 80, 0.35);
     }
 
+    .stats-dot.stats-star {
+        width: auto;
+        height: auto;
+        border-radius: 0;
+        font-size: 18px;
+        line-height: 1;
+    }
+
     .stats-legend {
         font-size: 12.5px;
         color: #6a7f8f;
@@ -1271,12 +1279,12 @@
             }
         } catch (e) {}
     }
-    function recordDayResult(dateStr, won, hints) {
+    function recordDayResult(dateStr, won, hints, jumpedAhead) {
         // Idempotent: safe to call again on a same-day reload (e.g. showAlreadyPlayed)
         // since it just rewrites today's entry with the same values.
         const stats = loadMonthStats(dateStr);
         const dayNum = String(parseInt(dateStr.split('-')[2], 10));
-        stats.days[dayNum] = { won: won, hints: hints, score: statsComputeScore(won, hints) };
+        stats.days[dayNum] = { won: won, hints: hints, score: statsComputeScore(won, hints), jumpedAhead: !!jumpedAhead };
         saveMonthStats(dateStr, stats);
         pruneOldMonthStats(dateStr);
         return stats;
@@ -1317,24 +1325,30 @@
         if (!panel) return;
         const s = statsSummary(dateStr);
 
-        // Day-by-day trend: one dot per day since this user's first play this
-        // month — green (solved), red (missed the word), or a dashed hollow dot
-        // (missed the day entirely, since there's no catch-up credit).
+        // Day-by-day trend: one marker per day since this user's first play
+        // this month — green dot (solved the classic way), gold star (solved
+        // after jumping ahead to guessing early — a harder path, so it's shown
+        // as a reward rather than a plain dot), red dot (missed the word), or
+        // a dashed hollow dot (missed the day entirely, no catch-up credit).
         let dots = '';
         for (let d = s.firstDayPlayed; d <= s.todayDayNum; d++) {
             const entry = s.daysMap[String(d)];
-            let cls = 'stats-dot';
-            if (entry && entry.won) cls += ' win';
-            else if (entry) cls += ' loss';
-            else cls += ' miss';
-            dots += '<span class="' + cls + '"></span>';
+            if (entry && entry.won && entry.jumpedAhead) {
+                dots += '<span class="stats-dot stats-star">⭐</span>';
+            } else {
+                let cls = 'stats-dot';
+                if (entry && entry.won) cls += ' win';
+                else if (entry) cls += ' loss';
+                else cls += ' miss';
+                dots += '<span class="' + cls + '"></span>';
+            }
         }
 
         let html = '<div class="stats-header">🔥 ' + s.monthName + ' Progress</div>' +
             '<div class="stats-hero">' + s.played + '/' + s.elapsedDays +
             '<span class="stats-hero-sub">days played this month</span></div>' +
             '<div class="stats-trend">' + dots + '</div>' +
-            '<div class="stats-legend">🟢 Solved &nbsp; 🔴 Missed the word &nbsp; ⚪ Missed the day</div>' +
+            '<div class="stats-legend">🟢 Solved &nbsp; ⭐ Solved after jumping ahead &nbsp; 🔴 Missed the word &nbsp; ⚪ Missed the day</div>' +
             '<div class="stats-sub">Average score: ' + s.avgScore.toFixed(1) + ' out of 5</div>' +
             '<div class="stats-sub-note">(5 = solved with no hints, 0 = missed the word)</div>';
 
@@ -2213,7 +2227,8 @@
                 foundWords: Array.from(foundWords),
                 foundOrder: foundOrder,
                 p1EventLog: p1EventLog,
-                p2EventLog: p2EventLog
+                p2EventLog: p2EventLog,
+                advancedMode: advancedMode
             }));
         } catch (e) {
             // storage unavailable — nothing to do
@@ -2358,7 +2373,7 @@
         document.getElementById('winword').textContent = P.target;
         document.getElementById('wintext').textContent = P.winText;
         const hints = totalHintsUsed();
-        recordDayResult(todayISO(), true, hints);
+        recordDayResult(todayISO(), true, hints, advancedMode);
         renderStatsPanel(todayISO());
 
         const p2Guesses = p2EventLog.filter(e => e.type === 'guess').length;
@@ -2393,7 +2408,7 @@
         document.getElementById('losscard').classList.remove('hidden');
         document.getElementById('lossword').textContent = 'The word was ' + P.target;
         const hints = totalHintsUsed();
-        recordDayResult(todayISO(), false, hints);
+        recordDayResult(todayISO(), false, hints, advancedMode);
         renderStatsPanel(todayISO());
         document.getElementById('losstext').textContent = P.lossText + (hints > 0 ? ' (' + hints + (hints === 1 ? ' hint' : ' hints') + ' used)' : '');
         setTimeout(() => {
@@ -2991,6 +3006,7 @@
         pastGuesses = saved.pastGuesses || [];
         p1EventLog = saved.p1EventLog || [];
         p2EventLog = saved.p2EventLog || [];
+        advancedMode = saved.advancedMode || false;
         gameOver = true;
 
         // Restore Part 1's board exactly as it was found, if we have it saved
