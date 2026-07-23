@@ -645,6 +645,23 @@
         margin-bottom: 6px;
     }
 
+    .eresult-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 6px;
+    }
+
+    .eresult-row .eemoji-sm {
+        font-size: 26px;
+        line-height: 1;
+    }
+
+    .eresult-row .eword {
+        margin: 0;
+    }
+
     .eword {
         color: #f9d976;
         font-size: 24px;
@@ -1100,15 +1117,19 @@
             </div>
         </div>
         <div class="card result-win hidden" id="wincard">
-            <div class="eemoji">😇</div>
-            <h2 class="eword" id="winword"></h2>
-            <p style="color:#a8c8e8;margin:0 0 10px;font-size:13px;" id="wintext"></p>
+            <div class="eresult-row">
+                <span class="eemoji-sm">😇</span>
+                <h2 class="eword" id="winword"></h2>
+            </div>
+            <p style="color:#a8c8e8;margin:0 0 10px;font-size:16px;" id="wintext"></p>
             <div class="escore" id="winscore"></div>
         </div>
         <div class="card result-loss hidden" id="losscard">
-            <div class="eemoji">😔</div>
-            <h2 style="color:#e74c3c;margin:0 0 6px;font-size:20px;" id="lossword"></h2>
-            <p style="color:#a8c8e8;font-size:13px;" id="losstext"></p>
+            <div class="eresult-row">
+                <span class="eemoji-sm">😔</span>
+                <h2 style="color:#e74c3c;margin:0;font-size:20px;" id="lossword"></h2>
+            </div>
+            <p style="color:#a8c8e8;font-size:16px;" id="losstext"></p>
         </div>
         <p class="hidden" id="view-share-link" style="text-align:center;font-family:-apple-system,sans-serif;font-size:13px;color:#a8c8e8;text-decoration:underline;cursor:pointer;touch-action:manipulation;margin:6px 0;">click here to view sharing window</p>
         <div id="votd-stats-panel"></div>
