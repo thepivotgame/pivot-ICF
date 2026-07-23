@@ -1208,6 +1208,13 @@
     })();
 
     // ── PUZZLE ───────────────────────────────────────────────────────────────────
+    // Prevent the browser from silently restoring a previous scroll position on
+    // reload — that can fight our own scroll-to-bottom logic in showWin()/showLoss()
+    // (used both for a live finish and for redisplaying an already-played result).
+    if ('scrollRestoration' in history) {
+        try { history.scrollRestoration = 'manual'; } catch (e) {}
+    }
+
     // P is populated from Google Sheets at runtime by loadAndStart() below.
     // If the fetch fails, or there's no row for today's date, P stays null and
     // loadAndStart() shows the "no puzzle loaded" message instead of starting a
@@ -2422,11 +2429,20 @@
     }
 
     function scrollToPageBottom() {
-        const bottom = Math.max(
-            document.body.scrollHeight,
-            document.documentElement.scrollHeight
-        );
-        window.scrollTo({ top: bottom, behavior: 'smooth' });
+        // Wait two animation frames so any just-changed layout (cards being
+        // unhidden, stats panel being filled in) has actually been measured
+        // by the browser before we read scrollHeight — otherwise this can
+        // measure a too-short page and land partway down instead of at the
+        // true bottom.
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                const bottom = Math.max(
+                    document.body.scrollHeight,
+                    document.documentElement.scrollHeight
+                );
+                window.scrollTo({ top: bottom, behavior: 'smooth' });
+            });
+        });
     }
 
     function showWin() {
@@ -2460,7 +2476,7 @@
         
         setTimeout(() => {
             scrollToPageBottom();
-            setTimeout(() => launchFireworks(3500), 600);
+            setTimeout(() => { scrollToPageBottom(); launchFireworks(3500); }, 600);
         }, 300);
     }
     function showLoss() {
@@ -2480,7 +2496,7 @@
         document.getElementById('losstext').textContent = P.lossText + (hints > 0 ? ' (' + hints + (hints === 1 ? ' hint' : ' hints') + ' used)' : '');
         setTimeout(() => {
             scrollToPageBottom();
-            setTimeout(() => launchRain(3500), 600);
+            setTimeout(() => { scrollToPageBottom(); launchRain(3500); }, 600);
         }, 300);
     }
 
@@ -3078,6 +3094,13 @@
         p2EventLog = saved.p2EventLog || [];
         advancedMode = saved.advancedMode || false;
         gameOver = true;
+        // A completed/redisplayed game is obviously past the stage-2 unlock
+        // already. Without this, the window 'scroll' listener further down
+        // sees s2Initialised still at its default false and — as soon as our
+        // scroll-to-bottom logic fires a scroll event — calls goStage2()
+        // again, which resets the instrcard content and scrolls the page
+        // back up to it, undoing the scroll-to-bottom entirely.
+        s2Initialised = true;
 
         // Restore Part 1's board exactly as it was found, if we have it saved
         // (older saved results from before this existed won't have it).
