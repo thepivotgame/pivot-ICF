@@ -740,6 +740,7 @@
         padding: 16px;
     }
     #summarybox {
+        position: relative;
         background: #12122a;
         border: 1px solid #2e2e5a;
         border-radius: 16px;
@@ -751,6 +752,26 @@
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         color: #e8e4d9;
     }
+    #summarybox .sum-close-x {
+        position: absolute;
+        top: 10px;
+        right: 12px;
+        width: 30px;
+        height: 30px;
+        border: none;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.08);
+        color: #a8c8e8;
+        font-size: 20px;
+        line-height: 1;
+        cursor: pointer;
+        touch-action: manipulation;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1;
+    }
+    #summarybox .sum-close-x:hover { background: rgba(255,255,255,0.16); color: #ffffff; }
     #summarybox .sum-success {
         font-size: 22px;
         font-weight: bold;
@@ -1089,17 +1110,7 @@
             <h2 style="color:#e74c3c;margin:0 0 6px;font-size:20px;" id="lossword"></h2>
             <p style="color:#a8c8e8;font-size:13px;" id="losstext"></p>
         </div>
-        <div id="post-result-actions" style="display:none;grid-template-columns:repeat(3, minmax(0, 1fr));gap:10px;margin:10px 0;">
-            <button onclick="reopenResultSummary()" style="background:#e8b84b;color:#1a1200;border:none;border-radius:9px;padding:8px 10px;min-height:54px;font-size:13px;font-weight:bold;letter-spacing:0.3px;cursor:pointer;font-family:Georgia,serif;touch-action:manipulation;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.3;gap:0;box-sizing:border-box;box-shadow:0 2px 6px rgba(232,184,75,0.35);">
-                <span>Share&nbsp;today's</span><span>Result</span>
-            </button>
-            <button onclick="alert('This feature is not yet active, pending release of new set of devotionals starting August 1. Please check back then.');" style="background:#2f7d4f;color:#eafbf0;border:none;border-radius:9px;padding:8px 10px;min-height:54px;font-size:13px;font-weight:bold;letter-spacing:0.3px;cursor:pointer;font-family:Georgia,serif;touch-action:manipulation;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.3;gap:0;box-sizing:border-box;">
-                <span>Read&nbsp;today's</span><span>devotional</span>
-            </button>
-            <a href="index.html" rel="noopener" style="background:#2f7d4f;color:#eafbf0;border:none;border-radius:9px;padding:8px 10px;min-height:54px;font-size:13px;font-weight:bold;letter-spacing:0.3px;cursor:pointer;font-family:Georgia,serif;touch-action:manipulation;text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.3;gap:0;box-sizing:border-box;">
-                <span>How&nbsp;to</span><span>Play</span>
-            </a>
-        </div>
+        <p class="hidden" id="view-share-link" style="text-align:center;font-family:-apple-system,sans-serif;font-size:13px;color:#a8c8e8;text-decoration:underline;cursor:pointer;touch-action:manipulation;margin:6px 0;">click here to view sharing window</p>
         <div id="votd-stats-panel"></div>
     </div>
 
@@ -1109,6 +1120,7 @@
     </canvas>
     <div id="summaryoverlay">
         <div id="summarybox">
+            <button class="sum-close-x" id="sum-close-x" aria-label="Close">&times;</button>
             <div class="sum-success" id="sum-heading">SUCCESS!</div>
             <div class="sum-target-label">Today's word was</div>
             <div class="sum-target" id="sum-target"></div>
@@ -1620,7 +1632,6 @@
         jumpedEarly = false,
         s2Initialised = false,
         advancedMode = false; // true = search locked at pivot (auto, or by player's "Advanced" choice); false = classic, still open
-    let lastResultWon = null; // tracks today's win/loss so the summary panel can be reopened on demand
     let foundWords = new Set(),
         foundKeys = new Set(),
         pivotCellKeys = new Set();
@@ -2414,6 +2425,8 @@
         saveTodayResult(true);
         document.getElementById('actcard').style.display = 'none';
         document.getElementById('wincard').classList.remove('hidden');
+        const viewShareLinkWin = document.getElementById('view-share-link');
+        if (viewShareLinkWin) viewShareLinkWin.classList.remove('hidden');
         document.getElementById('winword').textContent = P.target;
         document.getElementById('wintext').textContent = P.winText;
         const hints = totalHintsUsed();
@@ -2421,9 +2434,6 @@
         const starsEarned = advancedMode ? (P.words.length - foundOrder.length) : 0;
         recordDayResult(todayISO(), true, hints, advancedMode, wordsFound, starsEarned);
         renderStatsPanel(todayISO());
-        lastResultWon = true;
-        const postActionsWin = document.getElementById('post-result-actions');
-        if (postActionsWin) postActionsWin.style.display = 'grid';
 
         const p2Guesses = p2EventLog.filter(e => e.type === 'guess').length;
         let scoreMsg = '';
@@ -2455,15 +2465,14 @@
         saveTodayResult(false);
         document.getElementById('actcard').style.display = 'none';
         document.getElementById('losscard').classList.remove('hidden');
+        const viewShareLinkLoss = document.getElementById('view-share-link');
+        if (viewShareLinkLoss) viewShareLinkLoss.classList.remove('hidden');
         document.getElementById('lossword').textContent = 'The word was ' + P.target;
         const hints = totalHintsUsed();
         const wordsFound = foundOrder.length;
         const starsEarned = advancedMode ? (P.words.length - foundOrder.length) : 0;
         recordDayResult(todayISO(), false, hints, advancedMode, wordsFound, starsEarned);
         renderStatsPanel(todayISO());
-        lastResultWon = false;
-        const postActionsLoss = document.getElementById('post-result-actions');
-        if (postActionsLoss) postActionsLoss.style.display = 'grid';
         document.getElementById('losstext').textContent = P.lossText + (hints > 0 ? ' (' + hints + (hints === 1 ? ' hint' : ' hints') + ' used)' : '');
         setTimeout(() => {
             document.getElementById('losscard').scrollIntoView({
@@ -2772,20 +2781,6 @@
         }
         document.getElementById('summaryoverlay').style.display = 'flex';
     }
-    function reopenResultSummary() {
-        let won = lastResultWon;
-        if (won === null) {
-            // Fallback: shouldn't normally be needed, since this button only
-            // shows after showWin/showLoss has already set lastResultWon —
-            // but reads the saved result just in case.
-            try {
-                const saved = JSON.parse(localStorage.getItem('pivot_result_votd'));
-                if (saved && typeof saved.won === 'boolean') won = saved.won;
-            } catch (e) {}
-        }
-        if (won === null) return; // no result to show — button shouldn't be visible in this case anyway
-        showSummaryPanel(won);
-    }
 
     // ── SHARE ─────────────────────────────────────────────────────────────────────
     function buildResultParts() {
@@ -2891,6 +2886,16 @@
         if (sumNotNow) {
             sumNotNow.addEventListener('touchend', function(e) { e.preventDefault(); closeSummary(); });
             sumNotNow.addEventListener('click', function(e) { closeSummary(); });
+        }
+        const sumCloseX = document.getElementById('sum-close-x');
+        if (sumCloseX) {
+            sumCloseX.addEventListener('touchend', function(e) { e.preventDefault(); closeSummary(); });
+            sumCloseX.addEventListener('click', function(e) { closeSummary(); });
+        }
+        const viewShareLink = document.getElementById('view-share-link');
+        if (viewShareLink) {
+            viewShareLink.addEventListener('touchend', function(e) { e.preventDefault(); showSharePrompt(); });
+            viewShareLink.addEventListener('click', function(e) { showSharePrompt(); });
         }
         const sumVotd = document.getElementById('sum-votd-btn');
         if (sumVotd) {
