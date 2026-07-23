@@ -2421,6 +2421,14 @@
         }
     }
 
+    function scrollToPageBottom() {
+        const bottom = Math.max(
+            document.body.scrollHeight,
+            document.documentElement.scrollHeight
+        );
+        window.scrollTo({ top: bottom, behavior: 'smooth' });
+    }
+
     function showWin() {
         clearProgress();
         saveTodayResult(true);
@@ -2451,10 +2459,7 @@
         document.getElementById('winscore').textContent = scoreMsg;
         
         setTimeout(() => {
-            document.getElementById('wincard').scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            });
+            scrollToPageBottom();
             setTimeout(() => launchFireworks(3500), 600);
         }, 300);
     }
@@ -2474,10 +2479,7 @@
         renderStatsPanel(todayISO());
         document.getElementById('losstext').textContent = P.lossText + (hints > 0 ? ' (' + hints + (hints === 1 ? ' hint' : ' hints') + ' used)' : '');
         setTimeout(() => {
-            document.getElementById('losscard').scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            });
+            scrollToPageBottom();
             setTimeout(() => launchRain(3500), 600);
         }, 300);
     }
