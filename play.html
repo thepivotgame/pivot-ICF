@@ -1636,6 +1636,7 @@
         foundKeys = new Set(),
         pivotCellKeys = new Set();
     let foundOrder = []; // tracks Part 1 words in the order they were found
+    let lastGameWon = null; // tracks whether the most recent game finish was a win, for reopening the summary popup
     let p1EventLog = [], // chronological log of Part 1 word-found / hint-used events, for score report line breaks
         p2EventLog = []; // chronological log of Part 2 guess-submitted / hint-used events, same purpose
     let selCells = [],
@@ -2423,6 +2424,7 @@
     function showWin() {
         clearProgress();
         saveTodayResult(true);
+        lastGameWon = true;
         document.getElementById('actcard').style.display = 'none';
         document.getElementById('wincard').classList.remove('hidden');
         const viewShareLinkWin = document.getElementById('view-share-link');
@@ -2463,6 +2465,7 @@
     function showLoss() {
         clearProgress();
         saveTodayResult(false);
+        lastGameWon = false;
         document.getElementById('actcard').style.display = 'none';
         document.getElementById('losscard').classList.remove('hidden');
         const viewShareLinkLoss = document.getElementById('view-share-link');
@@ -2894,8 +2897,8 @@
         }
         const viewShareLink = document.getElementById('view-share-link');
         if (viewShareLink) {
-            viewShareLink.addEventListener('touchend', function(e) { e.preventDefault(); showSharePrompt(); });
-            viewShareLink.addEventListener('click', function(e) { showSharePrompt(); });
+            viewShareLink.addEventListener('touchend', function(e) { e.preventDefault(); showSummaryPanel(lastGameWon !== false); });
+            viewShareLink.addEventListener('click', function(e) { showSummaryPanel(lastGameWon !== false); });
         }
         const sumVotd = document.getElementById('sum-votd-btn');
         if (sumVotd) {
