@@ -1131,7 +1131,7 @@
             </div>
             <p style="color:#a8c8e8;font-size:16px;" id="losstext"></p>
         </div>
-        <p class="hidden" id="view-share-link" style="text-align:center;font-family:-apple-system,sans-serif;font-size:13px;color:#a8c8e8;text-decoration:underline;cursor:pointer;touch-action:manipulation;margin:6px 0;">click here to view sharing window</p>
+        <p class="hidden" id="view-share-link" style="text-align:center;font-family:-apple-system,sans-serif;font-size:13px;color:#f9d976;font-weight:bold;text-decoration:underline;cursor:pointer;touch-action:manipulation;margin:6px 0;">click here to view sharing window</p>
         <div id="votd-stats-panel"></div>
     </div>
 
@@ -2497,7 +2497,7 @@
         
         setTimeout(() => {
             scrollToPageBottom();
-            setTimeout(() => { scrollToPageBottom(); launchFireworks(3500); }, 600);
+            setTimeout(() => { scrollToPageBottom(); launchFireworks(7000); }, 600);
         }, 300);
     }
     function showLoss() {
@@ -2517,7 +2517,7 @@
         document.getElementById('losstext').textContent = P.lossText + (hints > 0 ? ' (' + hints + (hints === 1 ? ' hint' : ' hints') + ' used)' : '');
         setTimeout(() => {
             scrollToPageBottom();
-            setTimeout(() => { scrollToPageBottom(); launchRain(3500); }, 600);
+            setTimeout(() => { scrollToPageBottom(); launchRain(7000); }, 600);
         }, 300);
     }
 
