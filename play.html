@@ -2860,7 +2860,9 @@
 
         const hints = totalHintsUsed();
         let hintsLine;
-        if (hints === 0) {
+        if (lastGameWon === false) {
+            hintsLine = "Didn't quite get it today 😔";
+        } else if (hints === 0) {
             hintsLine = 'No hints used 😇 😇 😇';
         } else if (hints === 1) {
             hintsLine = '1 hint used 😇 😇';
