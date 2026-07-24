@@ -21,15 +21,16 @@
    
     
     <script>
-(function () {
-    try {
-    var saved = JSON.parse(localStorage.getItem('pivot_result_votd') || 'null');
-    if (saved) {
-        window.location.replace('play.html');
-    }
-    } catch (e) {}
-})();
-</script>
+    (function () {
+        try {
+        if (new URLSearchParams(window.location.search).get('howto')) return;
+        var saved = JSON.parse(localStorage.getItem('pivot_result_votd') || 'null');
+        if (saved) {
+            window.location.replace('play.html');
+        }
+        } catch (e) {}
+    })();
+    </script>
     
     <style>
     * {
