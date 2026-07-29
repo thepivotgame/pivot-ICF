@@ -1152,7 +1152,7 @@
         <div class="card">
             <p class="slabel">Step 1 — Word Search</p>
             <p style="font-size:14px;color:#a8c8e8;margin-bottom:10px;">Tap connected letters to spell each hidden word. Words go in any direction. Tap the last letter again to undo.</p>
-            <p style="font-size:14px;color:#f9d976;margin-bottom:10px;">+5 points for each word found<br>+20 points bonus for finding all 7 words <br>⭐ &nbsp; <span onclick="showScoreInfo()" style="text-decoration:underline;cursor:pointer;touch-action:manipulation;white-space:nowrap;">How scoring works</span>&nbsp; ⭐</p>
+            <p style="font-size:14px;color:#f9d976;margin-bottom:10px;">+5 points for each word found<br>+20 points bonus for finding all 7 words <br> &nbsp; &nbsp; &nbsp;⭐ &nbsp; <span onclick="showScoreInfo()" style="text-decoration:underline;cursor:pointer;touch-action:manipulation;white-space:nowrap;">How scoring works</span>&nbsp; ⭐</p>
             <div id="grid"></div>
         </div>
         <div class="card">
@@ -3471,11 +3471,12 @@
         shufl(allLetters).forEach(l => pool.push({ l, id: pool.length, state: 'available' }));
         // Make sure WORDBANK includes today's target
         WORDBANK.add(P.target.toUpperCase());
-        // Reveal game sections now that puzzle is ready
+        // Reveal Part 1 now that the puzzle is ready. Part 2 (#s2, which
+        // includes the "Find Today's Word" box and the guess pool) stays
+        // hidden until goStage2() reveals it — which happens once the
+        // pivot word is found.
         const s1 = document.getElementById('s1');
-        const s2 = document.getElementById('s2');
         if (s1) s1.style.display = '';
-        if (s2) s2.style.display = '';
         // Render everything
         renderGrid();
         renderChips();
