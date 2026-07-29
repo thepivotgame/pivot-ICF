@@ -3145,7 +3145,7 @@
             }
         });
         const unfoundCount = totalWords - foundOrder.length;
-        const unfoundIcon = advancedMode ? '🔒' : '🔍';
+        const unfoundIcon = advancedMode ? '🔒\uFE0E' : '🔍';
         for (let i = 0; i < unfoundCount; i++) {
             p1Emoji += unfoundIcon;
         }
@@ -3168,7 +3168,7 @@
             }
         });
         if (p2PendingHint) p2Lines.push('ℹ️'); // hint taken after the last guess (shouldn't normally happen, but don't drop it)
-        const guessEmoji = p2Lines.join('\n');
+        const guessEmoji = p2Lines.map(line => ' ' + line + ' ').join('\n');
 
         const hints = totalHintsUsed();
         let hintsLine;
@@ -3181,13 +3181,35 @@
 
         return { hintsLine, p1Emoji, guessEmoji };
     }
+    function toBoldUnicode(str) {
+        // Plain-text shares (SMS, WhatsApp, clipboard, email body) have no real
+        // bold formatting — there's no HTML to apply it to. Instead we swap
+        // ASCII letters/digits for their Unicode "Mathematical Bold" code
+        // points, which render as visually bold characters in virtually every
+        // font/platform without any markup. Punctuation (colons, spaces, etc.)
+        // has no bold variant in that Unicode block, so it's left unchanged —
+        // that's expected and looks fine alongside the bold letters/digits.
+        return str.replace(/[A-Za-z0-9]/g, ch => {
+            const code = ch.codePointAt(0);
+            if (code >= 65 && code <= 90) return String.fromCodePoint(0x1D400 + (code - 65));  // A–Z
+            if (code >= 97 && code <= 122) return String.fromCodePoint(0x1D41A + (code - 97)); // a–z
+            if (code >= 48 && code <= 57) return String.fromCodePoint(0x1D7CE + (code - 48));  // 0–9
+            return ch;
+        });
+    }
     function buildShareText() {
         const { hintsLine, p1Emoji, guessEmoji } = buildResultParts();
-        return hintsLine + '\n' + p1Emoji + '\n' + guessEmoji + '\nPlay at BiblePivot(dot)com' + statsMonthEndShareLine(todayISO());
+        const ref = (P && (P.votdRef || P.theme)) || '';
+        const refLine = ref ? ' ❯❯  ' + toBoldUnicode(ref) + '  ❮❮' : '';
+        return '❤️ I played BiblePivot ✝️' +
+            (refLine ? '\n' + refLine : '') +
+            '\n' + p1Emoji +
+            '\n' + guessEmoji +
+            '\n' + hintsLine +
+            '\nBiblePivot(dot)com' + statsMonthEndShareLine(todayISO());
     }
     function buildYouVersionShareText() {
-        const { hintsLine, p1Emoji, guessEmoji } = buildResultParts();
-        return 'I played BIBLE PIVOT ❤️' + '\n' + hintsLine + '\n' + p1Emoji + '\n' + guessEmoji + '\nPlay at BiblePivot(dot)com' + statsMonthEndShareLine(todayISO());
+        return buildShareText();
     }
     function showSharePrompt() {
         document.getElementById('shareresult').textContent = buildShareText();
