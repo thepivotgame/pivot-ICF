@@ -1152,7 +1152,7 @@
         <div class="card">
             <p class="slabel">Step 1 — Word Search</p>
             <p style="font-size:14px;color:#a8c8e8;margin-bottom:10px;">Tap connected letters to spell each hidden word. Words go in any direction. Tap the last letter again to undo.</p>
-            <p style="font-size:14px;color:#f9d976;margin-bottom:10px;">+5 points for each word found<br>+20 points bonus for finding all 7 words <span onclick="showScoreInfo()" style="text-decoration:underline;cursor:pointer;touch-action:manipulation;white-space:nowrap;">ℹ️ How scoring works</span></p>
+            <p style="font-size:14px;color:#f9d976;margin-bottom:10px;">+5 points for each word found<br>+20 points bonus for finding all 7 words <br>⭐ &nbsp; <span onclick="showScoreInfo()" style="text-decoration:underline;cursor:pointer;touch-action:manipulation;white-space:nowrap;">How scoring works</span>&nbsp; ⭐</p>
             <div id="grid"></div>
         </div>
         <div class="card">
@@ -1317,8 +1317,10 @@
             <p style="color:#f9d976;font-size:12px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;margin:0 0 6px;">Step 1 — Word Search</p>
             <p style="color:#e8e4d9;font-size:14px;line-height:1.7;margin:0 0 16px;">
                 +5 points for each word you find<br>
-                +20 bonus for finding all 7 words<br>
-                +5 points per unfound word if you lock in early (Advanced)
+                +5 points for each unfound word if you lock early<br>
+                +20 bonus if you find all 7 words<br>
+                NOTE: locking early skips the 20-point bonus, but may give a bigger bonus in part 2<br>
+
             </p>
 
             <p style="color:#f9d976;font-size:12px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;margin:0 0 6px;">Step 2 — Guess the Word</p>
