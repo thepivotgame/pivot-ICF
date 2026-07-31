@@ -3305,7 +3305,15 @@
         if (sumDevo) {
             sumDevo.addEventListener('click', function(e) {
                 e.preventDefault();
-                alert('This feature is not yet active, pending release of new set of devotionals starting August 1. Please check back then.');
+                const today = todayISO(); // 'YYYY-MM-DD', so lexical compare works
+                if (today < '2026-08-01') {
+                    alert('This feature is not yet active, pending release of new set of devotionals starting August 1. Please check back then.');
+                    return;
+                }
+                // August 1–31: reading-plan day number = calendar day of month.
+                const dayNum = parseInt(today.split('-')[2], 10);
+                const url = 'https://www.bible.com/reading-plans/74047-when-life-changes-god-doesnt-31-days-of/day/' + dayNum;
+                window.open(url, '_blank', 'noopener');
             });
         }
         const sumNotNow = document.getElementById('sum-notnow');
@@ -3675,7 +3683,8 @@
 <div id="aug-reset-notice" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9200;align-items:center;justify-content:center;padding:16px;">
   <div style="background:#12122a;border:1px solid #2e2e5a;border-radius:16px;max-width:420px;width:100%;padding:1.5rem 1.5rem 1.25rem;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;text-align:center;">
     <p style="font-size:15px;line-height:1.6;color:#e8e4d9;margin-bottom:1.25rem;">
-      New month, fresh start! Your streak and score have reset for August. Keep playing daily — we'll share a monthly recap at the end of the month.
+      <span style="font-size:17px;font-weight:bold;color:#e8b84b;">New month, fresh start!</span><br>
+      Your streak and score have reset for August. Keep playing daily — we'll share a monthly recap at the end of the month.
     </p>
     <button onclick="dismissAugResetNotice()" style="padding:10px 28px;border-radius:9px;border:2px solid #c49020;background:#e8b84b;color:#1a1200;font-size:15px;font-weight:bold;cursor:pointer;touch-action:manipulation;min-height:44px;box-shadow:0 2px 8px rgba(232,184,75,0.35);">Got it</button>
   </div>
