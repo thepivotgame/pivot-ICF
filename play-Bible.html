@@ -3203,6 +3203,8 @@
                 p1Emoji += ev.pivot ? '🟠' : '🟢';
             } else if (ev.type === 'hint') {
                 p1Emoji += 'ℹ️';
+            } else if (ev.type === 'narration') {
+                p1Emoji += '📖';
             }
         });
         const unfoundCount = totalWords - foundOrder.length;
@@ -3974,6 +3976,7 @@ function narrFinished() {
   // the same way totalScore does.
   if (typeof narrBonusAwarded !== 'undefined' && !narrBonusAwarded) {
     narrBonusAwarded = true;
+    if (typeof p1EventLog !== 'undefined') p1EventLog.push({ type: 'narration' });
     showScoreTracker();
     awardBonus(NARR_BONUS_POINTS);
     if (typeof gameOver !== 'undefined' && gameOver) {
