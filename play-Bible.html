@@ -3900,16 +3900,29 @@ function buildNarration() {
     document.getElementById('narr-votd').style.display = 'block';
   }
 
-  // Build VOTD
+// Build VOTD
   const votdEl = document.getElementById('narr-votd-text');
   votdEl.innerHTML = '';
   votdVerse.split(' ').forEach((tok, i, arr) => {
-    const clean = tok.replace(/[^a-zA-Z]/g,'').toLowerCase();
+    const letters = tok.replace(/[^a-zA-Z]/g,'');
+    const punct   = tok.slice(letters.length);
+    const clean   = letters.toLowerCase();
     const m = narrPuzzleMatch(clean);
-    const s = document.createElement('span');
-    if (m) s.style.color = '#e8b84b';
-    s.textContent = tok;
-    votdEl.appendChild(s);
+
+    if (m && letters.length > m.len) {
+      const s1 = document.createElement('span');
+      s1.style.color = '#e8b84b';
+      s1.textContent = letters.slice(0, m.len);
+      votdEl.appendChild(s1);
+      const s2 = document.createElement('span');
+      s2.textContent = letters.slice(m.len) + punct;
+      votdEl.appendChild(s2);
+    } else {
+      const s = document.createElement('span');
+      if (m) s.style.color = '#e8b84b';
+      s.textContent = tok;
+      votdEl.appendChild(s);
+    }
     if (i < arr.length-1) votdEl.appendChild(document.createTextNode(' '));
   });
 }
